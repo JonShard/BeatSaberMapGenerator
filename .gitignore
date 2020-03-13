@@ -1,0 +1,13 @@
+# Typical input files:
+*.json
+*.dat
+*.egg
+*.ogg
+*.info
+*.jpg
+
+# Executables
+*.out
+
+# Songs
+songs/
