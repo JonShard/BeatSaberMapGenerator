@@ -30,9 +30,9 @@ public:
     Map();
     Map(std::string fileName);
 
-    std::vector<Note> Load(std::string fileName);
-    void Save();
-    void Print();
+    std::vector<Note> load(std::string fileName);
+    void save();
+    void print();
 };
 
 } // Namespace OK

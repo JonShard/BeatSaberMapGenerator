@@ -1,12 +1,21 @@
 #include "../include/OK/Map.hpp"
+#include "../include/OK/Window.hpp"
+
+void printUsage() {
+    std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json");
+}
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::printf("Error: Expected 2 perameters. Json file and audio file.\n");
-        return 1;
+        std::printf("Warning: Expected audio file.\n");
+        printUsage();
     }
 
-    OK::Map* map = new OK::Map(std::string(argv[1]));
-    map->Print();
+    OK::Window window(1600, 900);
+    
+    while(window.isOpen()) {
+        window.update();
+        window.draw();
+	} 
     
 }

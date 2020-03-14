@@ -1,3 +1,6 @@
+# Visual Code project
+.vs/
+
 # Typical input files:
 *.json
 *.dat
@@ -6,7 +9,8 @@
 *.info
 *.jpg
 
-# Executables
+# Binary files
+.build/
 *.out
 
 # Songs
