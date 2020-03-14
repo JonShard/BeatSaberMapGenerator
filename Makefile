@@ -1,2 +1,2 @@
 all:
-	g++ main.cpp -o generator.out -g
+	g++ src/*.cpp -o generator.out -g

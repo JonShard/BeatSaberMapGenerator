@@ -1,34 +1,27 @@
-#include "include/nlohmann/json.hpp"
-#include <fstream>
-#include <iostream>
-#include <vector>
-#include <string>
+#include "../include/OK/Map.hpp"
 
+namespace OK {
+// for convenience
 using json = nlohmann::json;
-using namespace std;
 
-enum Type { BLUE, RED };
-enum CutDirection {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+Map::Map() {}
 
-struct Note {
-    float time;
-    int lineIndex;
-    int lineLayer;
-    int type;
-    int cutDirection;
-};
+Map::Map(std::string fileName) {
+    m_fileName = fileName;
+    m_map = Load(fileName);
+}
 
-vector<Note> importMap(string fileName) {
+std::vector<Note> Map::Load(std::string fileName) {
    // read a JSON file
     std::ifstream file(fileName);
     json jsonMap;
     file >> jsonMap;
     
-    cout << jsonMap.at("_version")  << endl;
+    jsonMap.at("_version").get_to(m_version);
     
     json jsonNotes = jsonMap["_notes"];
 
-    vector<Note> map = vector<Note>();
+    std::vector<Note> map = std::vector<Note>();
     for (json jn : jsonNotes) {
         Note n {
             jn.at("_time").get_to(n.time),
@@ -41,11 +34,11 @@ vector<Note> importMap(string fileName) {
     }
     return map;
 }
-void exportMap(string fileName, vector<Note> map) {
+void Map::Save() {
     json jsNotes;
     json jsonMap;
     
-    for (Note n : map) {
+    for (Note n : m_map) {
         json jn;
         jn["_time"] = n.time;
         jn["_lineIndex"] = n.lineIndex;
@@ -57,14 +50,14 @@ void exportMap(string fileName, vector<Note> map) {
 
     jsonMap["_version"] = "2.0.0";
     jsonMap["_notes"] = jsNotes;
-    std::ofstream o(fileName);
+    std::ofstream o(m_fileName);
     o << jsonMap;
     o.close();
 }
 
-void printMap(vector<Note> map) {
-    string dir = "";
-    for (Note n : map) {
+void Map::Print() {
+    std::string dir = "";
+    for (Note n : m_map) {
         switch (n.cutDirection)
         {
         case CutDirection::UP: dir = "UP"; break;
@@ -81,14 +74,4 @@ void printMap(vector<Note> map) {
     }
 }
 
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::printf("Error: Expected 2 perameters. Json file and audio file.\n");
-        return 1;
-    }
-
-    vector<Note> map = importMap(argv[1]);
-    printMap(map);
-    exportMap("out.json", map);
-
-}
+} // Namespace OK
