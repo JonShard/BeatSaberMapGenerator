@@ -1,5 +1,5 @@
 #include "../include/OK/Window.hpp"
-#include "../include/OK/Editor.hpp"
+#include "../include/OK/EditorPanel.hpp"
 
 const int c_windowWidth = 1600;
 const int c_windowHeight = 900;
@@ -16,18 +16,15 @@ int main(int argc, char** argv) {
     }
 
     OK::Window window(c_windowWidth, c_windowHeight);
-    OK::Editor editor;
+    OK::EditorPanel editorPanel;
     if (argc > 1) {
-        if (editor.openFromFile(argv[1])) {
+        if (editorPanel.openFromFile(argv[1])) {
             printf("Loaded song %s\n", argv[1]);
-            editor.play();
+            editorPanel.play();
         } else {
             return 1;
         }
     }
-
-    window.m_drawList = editor.getDrawListAdress();
-
 
     while(window.isOpen()) {
         window.update();

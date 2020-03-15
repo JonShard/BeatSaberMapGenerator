@@ -21,6 +21,7 @@ struct Note {
 };
 
 class Map {
+private:
     std::string m_fileName;
     std::string m_version;
     std::vector<Note> m_map;
