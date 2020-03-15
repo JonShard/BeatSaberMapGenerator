@@ -17,7 +17,7 @@ Window::Window(int width, int height) {
 
 	if(m_font.loadFromFile("FONT.ttf"))					//Loads font from file. Gives error in console if
 	{
-		std::printf("\n\nLoaded FONT.ttf");
+		std::printf("\nLoaded FONT.ttf\n");
 	}
 
     m_dt = 0;
@@ -26,15 +26,27 @@ Window::Window(int width, int height) {
 
 void Window::update() {
 
-
-		m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
-		
-		if (m_buttonTimeout > 0)
-		{
-			m_buttonTimeout -= m_dt;
+sf::Event event;
+	while(m_window.pollEvent(event)) {
+		if(m_buttonTimeout <= 0) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {				// ESC to quit.
+				m_window.close();
+				m_buttonTimeout = c_buttonTimeoutTime;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+			    m_buttonTimeout = c_buttonTimeoutTime;
+				// Create notation
+			}
+			
+		}
+		if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
+			m_window.close();
 		}
 
-        // Input
+		m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
+		if (m_buttonTimeout > 0) {
+			m_buttonTimeout -= m_dt;
+		}
 
         // Set view pos
 		// cam.setCenter(players[0]-> getPos());
@@ -51,6 +63,11 @@ void Window::draw() {
 		m_window.clear();													//Clears the canvas.
 
         // Draw all things.
+        if (m_drawList != nullptr) {
+            for (int i = 0; i < m_drawList->size(); i ++) {
+                m_window.draw(m_drawList->at(i));
+            }
+        }
 
 		m_window.display();												//Sends the buffer to the display.
 		

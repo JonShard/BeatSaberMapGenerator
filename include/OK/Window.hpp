@@ -4,6 +4,8 @@
 
 namespace OK {
 
+const float c_buttonTimeoutTime = 0.05f;
+
 class Window {
 sf::View m_view;
 sf::RenderWindow m_window;						//The window that draws the graphics on the screen.
@@ -14,6 +16,8 @@ float m_dt;
 float m_buttonTimeout;
 
 public:
+std::vector<sf::CircleShape>* m_drawList;
+
 Window();
 Window(int width, int height);
 

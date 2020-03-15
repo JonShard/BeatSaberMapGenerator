@@ -10,7 +10,7 @@ namespace OK {
 
 enum Type { BLUE, RED };
 enum CutDirection {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
-enum Annotation { SINGLE, DOUBLE, SPECIAL };
+enum Notation { SINGLE, DOUBLE, SPECIAL };
 
 struct Note {
     float time;
@@ -24,7 +24,7 @@ class Map {
     std::string m_fileName;
     std::string m_version;
     std::vector<Note> m_map;
-    std::map<float, Annotation> m_annotation;
+    std::map<float, Notation> m_annotation;
 
 public:
     Map();
