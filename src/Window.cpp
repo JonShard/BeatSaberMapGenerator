@@ -20,6 +20,7 @@ Window::Window(int width, int height) {
 		std::printf("\nLoaded FONT.ttf\n");
 	}
 
+    m_zoom = 1;
     m_dt = 0;
     m_buttonTimeout = 0;
     m_activePanel = nullptr;
@@ -28,36 +29,45 @@ Window::Window(int width, int height) {
 void Window::update() {
 
     sf::Event event;
-        while(m_window.pollEvent(event)) {
-            if(m_buttonTimeout <= 0) {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {				// ESC to quit.
-                    m_window.close();
-                    m_buttonTimeout = c_buttonTimeoutTime;
-                }
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-                    m_buttonTimeout = c_buttonTimeoutTime;
-                    // Create notation
-                }
-                
-            }
-            if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
-                m_window.close();
-            }
+    std::vector<sf::Event::KeyEvent> keyEvents;
+    while(m_window.pollEvent(event)) {
 
-            m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
-            if (m_buttonTimeout > 0) {
-                m_buttonTimeout -= m_dt;
+        if(event.type == sf::Event::EventType::KeyPressed) {
+            keyEvents.push_back(event.key);
+        }
+
+        // Very jankey but hey better than 
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) {
+            m_zoom += 0.02f * m_dt;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) {
+            m_zoom -= 0.02f * m_dt;
+        }
+
+        if (m_buttonTimeout <= 0) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {				// ESC to quit.
+                m_window.close();
+                m_buttonTimeout = c_buttonTimeoutTime;
             }
+        }
+        if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
+            m_window.close();
+        }
+
+        m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
+        if (m_buttonTimeout > 0) {
+            m_buttonTimeout -= m_dt;
+        }
 
             
 
-            // Set view pos
-            // cam.setCenter(players[0]-> getPos());
-            m_window.setView(m_view);
-            //m_view.zoom(0.6f);
+        // Set view pos
+        // cam.setCenter(players[0]-> getPos());
+        m_view.zoom(m_zoom);
+        m_window.setView(m_view);
 
-            if (m_activePanel != nullptr) {
-            m_activePanel->update(m_dt);
+        if (m_activePanel != nullptr) {
+            m_activePanel->update(m_dt, keyEvents);
         }
             
     }
@@ -66,7 +76,6 @@ void Window::update() {
 void Window::draw() {
 
     m_window.clear();													//Clears the canvas.
-    
     if (m_activePanel != nullptr) {
         m_activePanel->draw(m_window);
     }

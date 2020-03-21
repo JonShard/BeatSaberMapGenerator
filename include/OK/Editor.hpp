@@ -7,16 +7,24 @@
 
 namespace OK {
 
+enum NotationType { SINGLE, DOUBLE, SPECIAL };
+
+struct Notation {
+    int id;
+    float time;
+    NotationType type;
+};
+
 class Editor : public sf::Music {
-private:
-    std::map<float, Notation> m_notations; // <timestamp, type> 
+protected:
+    std::vector<Notation> m_notations; // <timestamp, type> 
 
 public:
     Editor();
 
     void loadSong(std::string songFile);
     void loadAnnotation(std::string annotationFile);
-    void createNotation(Notation type, float time);
+    void createNotation(Notation notation);
     void saveAnnotation();
 
 };

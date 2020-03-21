@@ -5,15 +5,17 @@
 namespace OK {
 
 class Panel {
-private:
+protected:
     float m_UIScale;
 
 public:
-    Panel() {}
+    Panel() {
+        m_UIScale = 1;
+    }
 
     // Pure. Require child to implement:
-    virtual void update(float dt) = 0;  
-    virtual void draw(sf::Window & window) = 0;
+    virtual void update(float dt, std::vector<sf::Event::KeyEvent> keyEvents) = 0;  
+    virtual void draw(sf::RenderWindow & window) = 0;
     virtual void setUIScale(float scale) = 0;
     
     float getUIScale() {

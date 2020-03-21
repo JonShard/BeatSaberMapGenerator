@@ -1,8 +1,12 @@
 #include "../include/OK/Window.hpp"
 #include "../include/OK/EditorPanel.hpp"
 
-const int c_windowWidth = 1600;
-const int c_windowHeight = 900;
+
+namespace OK {
+int c_windowWidth;
+int c_windowHeight;
+}
+
 
 
 void printUsage() {
@@ -15,8 +19,23 @@ int main(int argc, char** argv) {
         printUsage();
     }
 
-    OK::Window window(c_windowWidth, c_windowHeight);
+    // If argv 1 is directory:
+        // Load thumbnail as sprite.
+        // Load song
+        // Load Annotation save
+    // Else if argv is audiofile
+        // Load audio file.
+        // Assume Cover.jpg exist.
+
+    OK::c_windowWidth;    
+    OK::c_windowHeight;
+
+    OK::c_windowWidth = 1600;
+    OK::c_windowHeight = 900;
+
+    OK::Window window(OK::c_windowWidth, OK::c_windowHeight);
     OK::EditorPanel editorPanel;
+    window.m_activePanel = &editorPanel;
     if (argc > 1) {
         if (editorPanel.openFromFile(argv[1])) {
             printf("Loaded song %s\n", argv[1]);

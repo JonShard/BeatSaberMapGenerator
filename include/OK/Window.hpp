@@ -14,6 +14,7 @@ sf::RenderWindow m_window;						//The window that draws the graphics on the scre
 sf::Clock m_deltaTime;
 sf::Font m_font;									//The font imported from file used to print text on Screen.
 
+float m_zoom;
 float m_dt;
 float m_buttonTimeout;
 
