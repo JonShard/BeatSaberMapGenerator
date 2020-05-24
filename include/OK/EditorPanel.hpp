@@ -4,6 +4,7 @@
 #include "Panel.hpp"
 #include "Editor.hpp"
 #include "Map.hpp"
+#include "Input.hpp"
 
 namespace OK {
 
@@ -24,7 +25,7 @@ public:
     EditorPanel();
 
     sf::Vector2f getCurrentPosition();
-    void update(float dt, std::vector<sf::Event::KeyEvent> keyEvents);
+    void update(float dt);
     void draw(sf::RenderWindow & window);
     void setUIScale(float scale);
     void createNotation(NotationType type, int concurrent);

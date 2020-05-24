@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>		//for Graphics stuff
 #include "Panel.hpp"
+#include "Input.hpp"
 
 namespace OK {
 
@@ -18,7 +19,6 @@ float m_dt;
 
 public:
 Panel* m_activePanel;
-std::vector<sf::Event::KeyEvent> m_keyEvents;
 Window();
 Window(int width, int height);
 

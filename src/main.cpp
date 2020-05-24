@@ -1,13 +1,15 @@
 #include "../include/OK/Window.hpp"
 #include "../include/OK/EditorPanel.hpp"
-
+#include "../include/OK/Input.hpp"
 
 namespace OK {
 // Constatnts
 int c_windowWidth;
 int c_windowHeight;
 // Statics:
-float Panel::s_buttonTimeout = 0;
+float Input::s_buttonTimeout = 0;
+std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
+std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyEvent>();
 }
 
 

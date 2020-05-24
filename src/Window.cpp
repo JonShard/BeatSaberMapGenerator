@@ -15,7 +15,6 @@ Window::Window(int width, int height) {
 	m_window.setFramerateLimit(60);
     m_window.setKeyRepeatEnabled(false);
 
-
 	if(m_font.loadFromFile("FONT.ttf"))					//Loads font from file. Gives error in console if
 	{
 		std::printf("\nLoaded FONT.ttf\n");
@@ -30,39 +29,30 @@ Window::Window(int width, int height) {
 
 
 void Window::update() {
-    sf::Event event;
-    m_keyEvents.clear();
-    while(m_window.pollEvent(event)) {
-        if(event.type == sf::Event::EventType::KeyPressed) {
-            m_keyEvents.push_back(event.key);
-        }
-        // Very jankey but hey better than 
-        if (Panel::canPressButton() && sf::Keyboard::isKeyPressed(sf::Keyboard::Add)) {
-            m_zoom += 0.02f * m_dt;
-        }
-        if (Panel::canPressButton() && sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract)) {
-            m_zoom -= 0.02f * m_dt;
-        }
-        if (Panel::canPressButton() && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {				// ESC to quit.
-            m_window.close();
-        }
-        
-        if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
-            m_window.close();
-        }
-
-        m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
-
-        // Set view pos
-        // cam.setCenter(players[0]-> getPos());
-        m_view.zoom(m_zoom);
-        m_window.setView(m_view);
-
-        if (m_activePanel != nullptr) {
-            m_activePanel->update(m_dt, m_keyEvents);
-        }
-            
+    Input::update(m_dt, m_window);
+    
+    // Very jankey but hey better than nothing:
+    m_zoom = 1;
+    if (Input::isKeyDown(sf::Keyboard::Add)) {
+        m_zoom += 0.5f;
     }
+    if (Input::isKeyDown(sf::Keyboard::Subtract)) {
+        m_zoom -= 0.5f;
+    }
+    if (Input::isKeyDown(sf::Keyboard::Escape)) {				// ESC to quit.
+        m_window.close();
+    }
+    
+
+    m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
+
+    m_view.zoom(m_zoom);
+    m_window.setView(m_view);
+
+    if (m_activePanel != nullptr) {
+        m_activePanel->update(m_dt);
+    }
+        
 }
 
 void Window::draw() {

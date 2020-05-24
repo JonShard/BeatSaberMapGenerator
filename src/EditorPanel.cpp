@@ -17,32 +17,31 @@ sf::Vector2f EditorPanel::getCurrentPosition() {
     return sf::Vector2f(c_windowWidth / 2, c_windowHeight / 2 + Editor::getPlayingOffset().asSeconds() * c_spaceModifier * m_UIScale * -1);
 }
 
-void EditorPanel::update(float dt, std::vector<sf::Event::KeyEvent> keyEvents) {
-    Panel::update(dt, keyEvents);
+void EditorPanel::update(float dt) {
 
-
-    int concurrent = 0;
-    bool special = false;
-    for (sf::Event::KeyEvent e : keyEvents) {
-        if (e.code == sf::Keyboard::Space) {
-            if (Editor::getStatus() == Editor::Playing) {
-                Editor::pause();
-                printf("Paused\n");
-            }
-            else {
-                Editor::play();
-                printf("Play\n");
-            }
+    if (Input::isKeyDown(sf::Keyboard::Space)) {
+        if (Editor::getStatus() == Editor::Playing) {
+            Editor::pause();
+            printf("Paused\n");
         }
-
-        if (e.code > 0 && e.code < 36) {    // A-Z + 0-9
-            concurrent++;
-            
-        }
-        if (e.code > 25 && e.code < 36) {   // 0-9
-            special = true;
+        else {
+            Editor::play();
+            printf("Play\n");
         }
     }
+    if (Input::isKeyDown(sf::Keyboard::BackSpace)) {
+        Editor::setPlayingOffset(sf::seconds(0));
+    }
+        
+    int concurrent = 0;
+    bool special = false;
+    for (auto k : Input::s_downKeys) {
+        if (k.code > 0 && k.code < 36)     // A-Z + 0-9
+            concurrent++;
+        if (k.code > 25 && k.code < 36)    // 0-9
+            special = true; 
+    }
+
     if (special == true) {
         createNotation(NotationType::SPECIAL, concurrent);
     } else if (concurrent == 1) {
