@@ -26,6 +26,7 @@ bool Input::isKeyDown(sf::Keyboard::Key key) {
 
 void Input::update(float dt, sf::RenderWindow & w) {
     sf::Event event;
+    s_scrollDelta = 0;
     s_downKeys.clear();
     for (auto & k : s_keys) {           // Add time to keys that are not shelved.
         if (k.first >= 0) k.first += dt;
@@ -67,16 +68,15 @@ void Input::update(float dt, sf::RenderWindow & w) {
             s_keys.at(indexOfKey(event.key.code)).first = -1;
             printf("Key: %d released\n", event.key.code);
         }
-        
+        if (event.type == sf::Event::MouseWheelScrolled)
+        {
+            s_scrollDelta = event.mouseWheelScroll.delta;
+        }
 
 
         if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
             w.close();
         }  
-    }
-
-        if (s_buttonTimeout > 0) {
-        s_buttonTimeout -= dt;
     }
 }
 

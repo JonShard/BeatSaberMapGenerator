@@ -20,6 +20,7 @@ private:
     std::vector<sf::CircleShape> m_notationShapes;
     std::vector<sf::Text> m_timelineStamps;
     sf::RectangleShape m_timelineShape;
+    sf::RectangleShape m_cursorShape;
 
 public:
     EditorPanel();
