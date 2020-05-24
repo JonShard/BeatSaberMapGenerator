@@ -12,6 +12,7 @@ enum NotationType { SINGLE, DOUBLE, SPECIAL };
 struct Notation {
     int id;
     float time;
+    int concurrent;
     NotationType type;
 };
 

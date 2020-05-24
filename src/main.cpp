@@ -3,15 +3,18 @@
 
 
 namespace OK {
+// Constatnts
 int c_windowWidth;
 int c_windowHeight;
+// Statics:
+float Panel::s_buttonTimeout = 0;
 }
-
 
 
 void printUsage() {
     std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json");
 }
+
 
 int main(int argc, char** argv) {
     if (argc < 2) {

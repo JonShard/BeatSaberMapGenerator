@@ -5,7 +5,6 @@
 
 namespace OK {
 
-const float c_buttonTimeoutTime = 0.05f;
 
 class Window {
 private:
@@ -16,11 +15,10 @@ sf::Font m_font;									//The font imported from file used to print text on Scr
 
 float m_zoom;
 float m_dt;
-float m_buttonTimeout;
 
 public:
 Panel* m_activePanel;
-
+std::vector<sf::Event::KeyEvent> m_keyEvents;
 Window();
 Window(int width, int height);
 
