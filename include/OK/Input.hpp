@@ -20,4 +20,4 @@ static void update(float dt, sf::RenderWindow & w);
 
 };
 
-} // Namesapce OK
+} // Namespace OK

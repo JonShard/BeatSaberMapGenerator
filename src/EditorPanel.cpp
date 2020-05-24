@@ -37,10 +37,16 @@ void EditorPanel::update(float dt) {
     if (Input::isKeyDown(sf::Keyboard::BackSpace)) {
         Editor::setPlayingOffset(sf::seconds(0));
     }
-
     if (Input::s_scrollDelta) { // 1 or -1 if moved.
         Editor::setPlayingOffset(std::max(sf::seconds(0), Editor::getPlayingOffset() + sf::seconds(1 * Input::s_scrollDelta)));
     }
+    if (Input::isKeyDown(sf::Keyboard::PageUp)) {
+        Editor::setPitch(Editor::getPitch() + 0.1f);
+    }
+    if (Input::isKeyDown(sf::Keyboard::PageDown)) {
+        Editor::setPitch(Editor::getPitch() - 0.1f);
+    }
+
         
 
         
