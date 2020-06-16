@@ -10,4 +10,8 @@ void Editor::createNotation(Notation notation) {
     m_notations.push_back(notation);
 }
 
+void Editor::saveAnnotation() {
+    
+}
+
 } // namespace OK

@@ -27,11 +27,9 @@ void EditorPanel::update(float dt) {
     if (Input::isKeyDown(sf::Keyboard::Space)) {
         if (Editor::getStatus() == Editor::Playing) {
             Editor::pause();
-            printf("Paused\n");
         }
         else {
             Editor::play();
-            printf("Play\n");
         }
     }
     if (Input::isKeyDown(sf::Keyboard::BackSpace)) {
@@ -46,9 +44,7 @@ void EditorPanel::update(float dt) {
     if (Input::isKeyDown(sf::Keyboard::PageDown)) {
         Editor::setPitch(Editor::getPitch() - 0.1f);
     }
-
         
-
         
     int concurrent = 0;
     bool special = false;
