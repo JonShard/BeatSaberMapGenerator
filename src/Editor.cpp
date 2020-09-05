@@ -11,7 +11,7 @@ void Editor::createNotation(Notation notation) {
 }
 
 void Editor::saveAnnotation() {
-    
+    printf("Saving annontation to file.\n");
 }
 
 } // namespace OK

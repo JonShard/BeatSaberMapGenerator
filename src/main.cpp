@@ -1,15 +1,22 @@
 #include "../include/OK/Window.hpp"
 #include "../include/OK/EditorPanel.hpp"
 #include "../include/OK/Input.hpp"
+#include "../include/OK/factories/Factory.hpp"
+#include "../include/OK/validators/Validator.hpp"
+
 
 namespace OK {
-// Constatnts
+// Constants
 int c_windowWidth;
 int c_windowHeight;
 // Statics:
 float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
 std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyEvent>();
+int Factory::s_totalProduceAttempts = 0;
+int Validator::s_passes = 0;
+int Validator::s_fails = 0;
+std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 }
 
 
@@ -32,7 +39,7 @@ int main(int argc, char** argv) {
         // Load audio file.
         // Assume Cover.jpg exist.
 
-    OK::c_windowWidth;    
+    OK::c_windowWidth;
     OK::c_windowHeight;
 
     OK::c_windowWidth = 1600;

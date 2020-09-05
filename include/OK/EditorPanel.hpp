@@ -5,6 +5,7 @@
 #include "Editor.hpp"
 #include "Map.hpp"
 #include "Input.hpp"
+#include "Generator.hpp"
 
 namespace OK {
 
@@ -30,6 +31,7 @@ public:
     void draw(sf::RenderWindow & window);
     void setUIScale(float scale);
     void createNotation(NotationType type, int concurrent);
+    bool openFromFile(const std::string fileName);
 };
 
 } // namespace OK

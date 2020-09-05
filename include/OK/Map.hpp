@@ -9,7 +9,15 @@
 namespace OK {
 
 enum Type { BLUE, RED };
-enum CutDirection {UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+enum CutDirection { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT };
+enum NotationType { SINGLE, DOUBLE, SPECIAL };
+
+struct Notation {
+    int id;
+    float time;
+    int concurrent;
+    NotationType type;
+};
 
 struct Note {
     float time;
@@ -18,6 +26,7 @@ struct Note {
     int type;
     int cutDirection;
 };
+
 
 class Map {
 private:

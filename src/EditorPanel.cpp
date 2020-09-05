@@ -44,8 +44,13 @@ void EditorPanel::update(float dt) {
     if (Input::isKeyDown(sf::Keyboard::PageDown)) {
         Editor::setPitch(Editor::getPitch() - 0.1f);
     }
-        
-        
+    if (Input::isKeyDown(sf::Keyboard::F5)) {
+        Editor::saveAnnotation();
+    }
+    if (Input::isKeyDown(sf::Keyboard::F10)) {  // TODO: Make new panel for generating map.
+        Generator::GenerateMap(Editor::m_notations);
+    }
+
     int concurrent = 0;
     bool special = false;
     for (auto k : Input::s_downKeys) {
@@ -102,6 +107,9 @@ void EditorPanel::createNotation(NotationType type, int concurrent) {
     Editor::createNotation(n);
 }
 
-
+bool EditorPanel::openFromFile(const std::string fileName) {
+    Editor::m_songName = fileName;
+    return Music::openFromFile(fileName);
+}
 
 } // namespace OK

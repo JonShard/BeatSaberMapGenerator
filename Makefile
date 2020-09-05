@@ -7,7 +7,21 @@ all:
 		g++ -g -c src/EditorPanel.cpp -o .build/EditorPanel.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 		g++ -g -c src/Window.cpp -o .build/Window.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 		g++ -g -c src/Input.cpp -o .build/Input.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
-
+		g++ -g -c src/Generator.cpp -o .build/Generator.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
+		
 		g++ -g -c src/Map.cpp -o .build/Map.o
 
-		g++ .build/main.o -o generator.out .build/EditorPanel.o .build/Map.o .build/Window.o .build/Editor.o .build/Input.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
+		# Factories:
+		g++ -g -c include/OK/factories/RandomMatrixFactory.hpp -o .build/RandomMatrixFactory.o
+
+		# Validators:
+
+		g++ .build/main.o -o generator.out \
+			.build/EditorPanel.o  \
+			.build/Map.o \
+			.build/Window.o \
+			.build/Editor.o \
+			.build/Input.o \
+			.build/Generator.o \
+			.build/RandomMatrixFactory.o \
+			-lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
