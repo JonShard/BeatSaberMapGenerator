@@ -32,13 +32,14 @@ class Map {
 private:
     std::string m_fileName;
     std::string m_version;
-    std::vector<Note> m_map;
 
 public:
+    std::vector<Note> m_map;
+    
     Map();
     Map(std::string fileName);
 
-    std::vector<Note> load(std::string fileName);
+    void load(std::string fileName);
     void save();
     void print();
 };

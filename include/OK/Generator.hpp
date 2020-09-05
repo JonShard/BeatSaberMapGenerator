@@ -1,8 +1,12 @@
 #pragma once
 
 #include "Map.hpp"
+
 #include "factories/Factory.hpp"
+#include "factories/RandomMatrixFactory.hpp"
+
 #include "validators/Validator.hpp"
+
 
 namespace OK {
 
@@ -15,6 +19,7 @@ protected:
 
 public:
     Generator();
+    static void Init();
 
     static void GenerateMap(std::vector<Notation> notations, std::string songName);
 };

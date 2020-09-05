@@ -16,6 +16,7 @@ std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyE
 int Factory::s_totalProduceAttempts = 0;
 int Validator::s_passes = 0;
 int Validator::s_fails = 0;
+std::vector<Factory*> Generator::s_factories = std::vector<Factory*>();
 std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 }
 
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
     OK::Window window(OK::c_windowWidth, OK::c_windowHeight);
     OK::EditorPanel editorPanel;
     window.m_activePanel = &editorPanel;
+    OK::Generator::Init();
     if (argc > 1) {
         if (editorPanel.openFromFile(argv[1])) {
             printf("Loaded song %s\n", argv[1]);

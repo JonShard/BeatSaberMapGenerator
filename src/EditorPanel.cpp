@@ -48,7 +48,7 @@ void EditorPanel::update(float dt) {
         Editor::saveAnnotation();
     }
     if (Input::isKeyDown(sf::Keyboard::F10)) {  // TODO: Make new panel for generating map.
-        Generator::GenerateMap(Editor::m_notations);
+        Generator::GenerateMap(Editor::m_notations, m_songName);
     }
 
     int concurrent = 0;

@@ -8,10 +8,10 @@ Map::Map() {}
 
 Map::Map(std::string fileName) {
     m_fileName = fileName;
-    m_map = load(fileName);
+    m_map = std::vector<Note>();
 }
 
-std::vector<Note> Map::load(std::string fileName) {
+void Map::load(std::string fileName) {
    // read a JSON file
     std::ifstream file(fileName);
     json jsonMap;
@@ -21,7 +21,6 @@ std::vector<Note> Map::load(std::string fileName) {
     
     json jsonNotes = jsonMap["_notes"];
 
-    std::vector<Note> map = std::vector<Note>();
     for (json jn : jsonNotes) {
         Note n {
             jn.at("_time").get_to(n.time),
@@ -30,11 +29,12 @@ std::vector<Note> Map::load(std::string fileName) {
             jn.at("_type").get_to(n.type),
             jn.at("_cutDirection").get_to(n.cutDirection)
         };
-        map.push_back(n);
+        m_map.push_back(n);
     }
-    return map;
 }
 void Map::save() {
+    printf("Saving map with notes: %ld\n", m_map.size());
+
     json jsNotes;
     json jsonMap;
     
