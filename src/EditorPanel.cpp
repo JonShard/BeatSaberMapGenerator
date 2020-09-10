@@ -66,7 +66,6 @@ void EditorPanel::update(float dt) {
     } else if (concurrent > 1) {
         createNotation(NotationType::DOUBLE, concurrent);
     }
-    
 }
 
 void EditorPanel::draw(sf::RenderWindow & w) { 

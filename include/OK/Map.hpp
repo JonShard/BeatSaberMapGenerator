@@ -42,6 +42,9 @@ public:
     void load(std::string fileName);
     void save();
     void print();
+    Map operator+=(Note n);
+    Map operator+=(std::vector<Note> notes);
+
 };
 
 } // Namespace OK

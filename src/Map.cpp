@@ -74,4 +74,17 @@ void Map::print() {
     }
 }
 
+Map Map::operator+=(Note n) {
+    m_map.push_back(n);
+    return *this;
+}
+
+Map Map::operator+=(std::vector<Note> notes) {
+    for (Note n : notes) {
+        m_map.push_back(n);
+    }
+    return *this;
+}
+
+
 } // Namespace OK

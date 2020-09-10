@@ -11,7 +11,6 @@ class RandomMatrixFactory : public Factory {
     virtual void loadConfig() {
         // load maxAttempts
         // load notes to generate
-        // load notes to generGeneratorate deviation
         // load matrix
     }
 
@@ -24,7 +23,6 @@ public:
     }
 
     virtual std::vector<Note> produce(Map map) {
-        // int dev = random +- deviation
          for (int i = 0; i < maxAttempts; i++) {
             std::vector<Note> notes;
              for (int j = 0; j < notesToGenerate; j ++) {

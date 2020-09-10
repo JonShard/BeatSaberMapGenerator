@@ -1,8 +1,12 @@
 all:
 	mkdir -p .build
+	mkdir -p songs
+	mkdir -p imports
+	mkdir -p exports
 	g++ -g -c src/main.cpp -o .build/main.o
 	g++ -g -c src/Map.cpp -o .build/Map.o
 	g++ -g -c src/Generator.cpp -o .build/Generator.o
+	g++ -g -c src/TransitionMatrix.cpp -o .build/TransitionMatrix.o
 
 	g++ -g -c src/Editor.cpp -o .build/Editor.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	g++ -g -c src/EditorPanel.cpp -o .build/EditorPanel.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
@@ -17,5 +21,7 @@ all:
 		.build/Input.o \
 		.build/Generator.o \
 		include/OK/factories/RandomMatrixFactory.hpp \
+		include/OK/validators/MatrixValidator.hpp \
+		.build/TransitionMatrix.o \
 		-lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	rm -r .build
