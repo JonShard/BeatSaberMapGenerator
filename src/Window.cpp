@@ -2,7 +2,7 @@
 
 namespace OK {
 
-Window::Window() {}
+Window::Window() { Window(500, 500);}
 
 Window::Window(int width, int height) {
     m_view = sf::View(sf::Vector2f(0,0), sf::Vector2f(width, height));

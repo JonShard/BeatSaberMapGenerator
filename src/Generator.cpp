@@ -14,7 +14,7 @@ namespace OK {
         printf("Generating map from nototions: %ld\n", notations.size());
         
         for (int i = 0; i < notations.size(); i++) {
-            map += s_factories[0]->produce(map);
+            map += s_factories[0]->produce(notations, map);
         }
         
         map.save();

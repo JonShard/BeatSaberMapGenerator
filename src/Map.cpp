@@ -39,6 +39,7 @@ void Map::save() {
     json jsonMap;
     
     for (Note n : m_map) {
+        printf("Adding note at time: %f\n", n.time);
         json jn;
         jn["_time"] = n.time;
         jn["_lineIndex"] = n.lineIndex;

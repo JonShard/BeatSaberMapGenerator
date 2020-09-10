@@ -87,7 +87,6 @@ void EditorPanel::setUIScale(float scale) {
 void EditorPanel::createNotation(NotationType type, int concurrent) {
 
     Notation n;
-
     n.time = Editor::getPlayingOffset().asSeconds();
     n.concurrent = concurrent;
     n.type = type;
