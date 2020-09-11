@@ -22,24 +22,20 @@ std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 
 
 void printUsage() {
-    std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json");
+    std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json\n");
 }
 
+void analyseMaps(std::vector<std::string> mapFiles) {
+    // Verify only .dat files.
+    printf("Analyse!\n");
+}
 
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::printf("Warning: Expected audio file.\n");
-        printUsage();
-    }
+void generateFromAnnotation(std::string annontationFile) {
+    // Verify only .json file.
+    printf("Generate!\n");
+}
 
-    // If argv 1 is directory:
-        // Load thumbnail as sprite.
-        // Load song
-        // Load Annotation save
-    // Else if argv is audiofile
-        // Load audio file.
-        // Assume Cover.jpg exist.
-
+void openEditorWindow(std::string songFile) {
     OK::c_windowWidth;
     OK::c_windowHeight;
 
@@ -50,18 +46,37 @@ int main(int argc, char** argv) {
     OK::EditorPanel editorPanel;
     window.m_activePanel = &editorPanel;
     OK::Generator::Init();
-    if (argc > 1) {
-        if (editorPanel.openFromFile(argv[1])) {
-            printf("Loaded song %s\n", argv[1]);
-            editorPanel.play();
-        } else {
-            return 1;
-        }
+    
+    if (editorPanel.openFromFile(songFile)) {
+        printf("Loaded song %s\n", songFile.data());
+        editorPanel.play();
     }
-
     while(window.isOpen()) {
         window.update();
         window.draw();
 	}
-    
+}
+
+int main(int argc, char** argv) {
+    if (argc == 1) {
+        std::printf("Error: expected arguments.\n");
+        printUsage();
+        return 1;
+    }
+    std::vector<std::string> args;
+    for (int i = 0; i < argc; i++)
+        args.push_back(argv[i]);
+
+    if (args.size() > 1 && std::find(args.begin(), args.end(), "-a") != args.end()) {
+        std::vector<std::string> mapsList;
+        for (int i = 2; i < args.size(); i++)
+            mapsList.push_back(args[i]);
+        analyseMaps(mapsList);
+    }
+    else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
+        generateFromAnnotation(args[3]);
+    }
+    else {
+        openEditorWindow(args[1]);
+    }
 }
