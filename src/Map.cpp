@@ -9,6 +9,7 @@ Map::Map() {}
 Map::Map(std::string fileName) {
     m_fileName = fileName;
     m_notes = std::vector<Note>();
+    load(fileName);
 }
 
 void Map::load(std::string fileName) {

@@ -3,7 +3,7 @@
 #include "../include/OK/Input.hpp"
 #include "../include/OK/factories/Factory.hpp"
 #include "../include/OK/validators/Validator.hpp"
-
+#include "../include/OK/MapAnalyzer.hpp"
 
 namespace OK {
 // Constants
@@ -25,9 +25,21 @@ void printUsage() {
     std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json\n");
 }
 
-void analyseMaps(std::vector<std::string> mapFiles) {
+void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     // Verify only .dat files.
-    printf("Analyse!\n");
+    OK::TransitionMatrix<bool> matrix;
+    if (append) {
+        // load matrix from file
+    }
+    for (std::string file : mapFiles) {
+        OK::Map map(file);
+        if (map.m_notes.size() == 0) {
+            printf("Failed to load map: %s\n", file.data());
+            continue;
+        }
+        matrix = OK::MapAnalyzer::AnalyzeMap(map); // TODO: += operator
+    }
+    matrix.saveToFile("binaryTransitionMatrix.data");
 }
 
 void generateFromAnnotation(std::string annontationFile) {
@@ -71,7 +83,7 @@ int main(int argc, char** argv) {
         std::vector<std::string> mapsList;
         for (int i = 2; i < args.size(); i++)
             mapsList.push_back(args[i]);
-        analyseMaps(mapsList);
+        analyseMaps(mapsList, true);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
         generateFromAnnotation(args[3]);
