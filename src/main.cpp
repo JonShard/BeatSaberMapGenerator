@@ -27,12 +27,15 @@ void printUsage() {
 }
 
 void analyseMaps(std::vector<std::string> mapFiles, bool append) {
-    // Verify only .dat files.
     OK::TransitionMatrix<bool> matrix;
     if (append) {
         matrix.loadFromFile(OK::c_binaryMatrixFile);
     }
     for (std::string file : mapFiles) {
+        if (!OK::Util::isFileExtention(file, ".dat")) {
+            printf("Error: Unexpected file extention: %s\nExpected .dat\n", file.data());
+            return;
+        }
         OK::Map map(file);
         if (map.m_notes.size() == 0) {
             printf("Failed to load map: %s\n", file.data());
@@ -44,11 +47,18 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
 }
 
 void generateFromAnnotation(std::string annontationFile) {
-    // Verify only .json file.
+    if (!OK::Util::isFileExtention(annontationFile, ".json")) {
+        printf("Error: Unexpected file extention: %s\nExpected .json\n", annontationFile.data());
+        return;
+    }
     printf("Generate!\n");
 }
 
 void openEditorWindow(std::string songFile) {
+    if (!OK::Util::isFileExtention(songFile, ".ogg")) {
+        printf("Error: Unexpected file extention: %s\nExpected .ogg\n", songFile.data());
+        return;
+    }
     OK::c_windowWidth;
     OK::c_windowHeight;
 
