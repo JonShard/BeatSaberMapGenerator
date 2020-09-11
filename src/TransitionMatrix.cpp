@@ -28,8 +28,13 @@ TransitionMatrix<T>::TransitionMatrix(std::string file) {
 }
 
 template<class T>
-void TransitionMatrix<T>::loadFromFile() {
+void TransitionMatrix<T>::loadFromFile(std::string file) {
 
+}
+
+template<class T>
+void TransitionMatrix<T>::saveToFile(std::string file) {
+    
 }
 
 template<class T>

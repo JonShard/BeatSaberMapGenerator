@@ -31,8 +31,8 @@ public:
 
             // TODO: move into function
             float time  = 0;
-            if (map.m_map.size() > 0) {
-                float lastNoteTime = map.m_map.back().time;
+            if (map.m_notes.size() > 0) {
+                float lastNoteTime = map.m_notes.back().time;
                 for (int j = 0; j < notations.size(); j++)
                 {
                     time = notations[j].time;

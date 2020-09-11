@@ -11,14 +11,14 @@ const int c_colors = 2;
 
 template <class T>
 class TransitionMatrix {
-private:
+public:
     //                                     LaneFrom  LaneTo
     T m_matrix[c_colors][c_types][c_floors][c_lanes][c_lanes];
-public:
     TransitionMatrix();
     TransitionMatrix(std::string file);
-
-    void loadFromFile();
+    
+    void loadFromFile(std::string file);
+    void saveToFile(std::string file);
     void print();
 };
 

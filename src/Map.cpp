@@ -8,7 +8,7 @@ Map::Map() {}
 
 Map::Map(std::string fileName) {
     m_fileName = fileName;
-    m_map = std::vector<Note>();
+    m_notes = std::vector<Note>();
 }
 
 void Map::load(std::string fileName) {
@@ -29,16 +29,16 @@ void Map::load(std::string fileName) {
             jn.at("_type").get_to(n.type),
             jn.at("_cutDirection").get_to(n.cutDirection)
         };
-        m_map.push_back(n);
+        m_notes.push_back(n);
     }
 }
 void Map::save() {
-    printf("Saving map with notes: %ld\n", m_map.size());
+    printf("Saving map with notes: %ld\n", m_notes.size());
 
     json jsNotes;
     json jsonMap;
     
-    for (Note n : m_map) {
+    for (Note n : m_notes) {
         printf("Adding note at time: %f\n", n.time);
         json jn;
         jn["_time"] = n.time;
@@ -58,7 +58,7 @@ void Map::save() {
 
 void Map::print() {
     std::string dir = "";
-    for (Note n : m_map) {
+    for (Note n : m_notes) {
         switch (n.cutDirection)
         {
         case CutDirection::UP: dir = "UP"; break;
@@ -76,13 +76,13 @@ void Map::print() {
 }
 
 Map Map::operator+=(Note n) {
-    m_map.push_back(n);
+    m_notes.push_back(n);
     return *this;
 }
 
 Map Map::operator+=(std::vector<Note> notes) {
     for (Note n : notes) {
-        m_map.push_back(n);
+        m_notes.push_back(n);
     }
     return *this;
 }

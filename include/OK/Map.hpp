@@ -34,7 +34,7 @@ private:
     std::string m_version;
 
 public:
-    std::vector<Note> m_map;
+    std::vector<Note> m_notes;
     
     Map();
     Map(std::string fileName);
