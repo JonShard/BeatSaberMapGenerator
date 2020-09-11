@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Factory.hpp" 
+#include "../Utilities.hpp"
 
 namespace OK {
 
@@ -23,7 +24,7 @@ public:
     virtual std::vector<Note> produce(std::vector<Notation> notations, Map map) {
         std::vector<Note> notes;
             for (int i = 0; i < notesToGenerate; i ++) {
-            int layer = random()%100;
+            int layer = Util::rng(0, 100);
             if      (layer > 50) layer = 0;
             else if (layer > 20) layer = 1;
             else if (layer >= 0) layer = 2;
@@ -42,10 +43,10 @@ public:
 
             Note note = Note{
                 note.time= time,
-                note.lineIndex = random()%4,
+                note.lineIndex = Util::rng(0, 4),
                 note.lineLayer = layer,
-                note.type = (random()%100 > 60),
-                note.cutDirection = random()%8,
+                note.type = (Util::rng(0, 100) > 60),
+                note.cutDirection = Util::rng(0, 8),
             };
             notes.push_back(note);
         }
