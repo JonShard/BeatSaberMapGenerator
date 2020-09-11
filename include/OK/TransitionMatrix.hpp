@@ -20,6 +20,7 @@ public:
     void loadFromFile(std::string file);
     void saveToFile(std::string file);
     void print();
+    TransitionMatrix<T> operator+= (TransitionMatrix m);
 };
 
 } // namespace OK

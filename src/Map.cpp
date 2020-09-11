@@ -6,13 +6,13 @@ using json = nlohmann::json;
 
 Map::Map() {}
 
-Map::Map(std::string fileName) {
+Map::Map(const std::string fileName) {
     m_fileName = fileName;
     m_notes = std::vector<Note>();
     load(fileName);
 }
 
-void Map::load(std::string fileName) {
+void Map::load(const std::string fileName) {
    // read a JSON file
     std::ifstream file(fileName);
     json jsonMap;
@@ -52,9 +52,9 @@ void Map::save() {
 
     jsonMap["_version"] = "2.0.0";
     jsonMap["_notes"] = jsNotes;
-    std::ofstream o(m_fileName);
-    o << jsonMap;
-    o.close();
+    std::ofstream out(m_fileName);
+    out << jsonMap;
+    out.close();
 }
 
 void Map::print() {

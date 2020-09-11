@@ -9,6 +9,7 @@ namespace OK {
 // Constants
 int c_windowWidth;
 int c_windowHeight;
+const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
 // Statics:
 float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
@@ -29,7 +30,7 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     // Verify only .dat files.
     OK::TransitionMatrix<bool> matrix;
     if (append) {
-        // load matrix from file
+        matrix.loadFromFile(OK::c_binaryMatrixFile);
     }
     for (std::string file : mapFiles) {
         OK::Map map(file);
@@ -37,9 +38,9 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
-        matrix = OK::MapAnalyzer::AnalyzeMap(map); // TODO: += operator
+        matrix += OK::MapAnalyzer::AnalyzeMap(map);
     }
-    matrix.saveToFile("binaryTransitionMatrix.data");
+    matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 
 void generateFromAnnotation(std::string annontationFile) {
@@ -81,9 +82,15 @@ int main(int argc, char** argv) {
 
     if (args.size() > 1 && std::find(args.begin(), args.end(), "-a") != args.end()) {
         std::vector<std::string> mapsList;
-        for (int i = 2; i < args.size(); i++)
+        bool append = true;
+        for (int i = 2; i < args.size(); i++) {
+            if (std::strcmp(args[i].data(), "--clean") == 0) {
+                append = false;
+                continue;
+            }
             mapsList.push_back(args[i]);
-        analyseMaps(mapsList, true);
+        }
+        analyseMaps(mapsList, append);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
         generateFromAnnotation(args[3]);
