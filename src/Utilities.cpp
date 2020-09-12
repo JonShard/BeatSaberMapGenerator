@@ -4,7 +4,7 @@
 namespace OK::Util {
 
 int rng(int min, int max) {
-    return (min + random());
+    return (min + random() % max);
 }
 
 bool isFileExtention(const std::string file, const std::string ext) {
