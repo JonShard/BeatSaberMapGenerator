@@ -30,7 +30,10 @@ public:
             else if (layer >= 0) layer = 2;
 
             // TODO: move into function
-            float time  = 0;
+            float time = 0;
+            if (notations.size() > 0) {
+                time = notations[0].time;
+            }
             if (map.m_notes.size() > 0) {
                 float lastNoteTime = map.m_notes.back().time;
                 for (int j = 0; j < notations.size(); j++)
@@ -48,6 +51,7 @@ public:
                 note.type = (Util::rng(0, 100) > 60),
                 note.cutDirection = Util::rng(0, 8),
             };
+
             notes.push_back(note);
         }
         return notes;
