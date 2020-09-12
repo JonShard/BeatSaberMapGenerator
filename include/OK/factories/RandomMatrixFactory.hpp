@@ -44,14 +44,28 @@ public:
                 }
             }
             
-            Note note = Note{
-                note.time= time,
-                note.lineIndex = Util::rng(0, 4),
-                note.lineLayer = layer,
-                note.type = (Util::rng(0, 100) > 60),
-                note.cutDirection = Util::rng(0, 8),
-            };
-
+            Note note;
+            note.time= time;
+            note.lineLayer = layer;
+            note.type = (Util::rng(0, 100) < 60); // Type 0 = red, 1 = blue
+            note.cutDirection = Util::rng(0, 8);
+            
+            int number = Util::rng(0, 100);
+            if (number < 30) {
+                note.lineIndex = 3;
+            } 
+            else if (number < 66){
+                note.lineIndex = 2;
+            }
+            else if (number < 85){
+                note.lineIndex = 1;
+            }
+            else {
+                note.lineIndex = 0;
+            }
+            if (note.type == 0) { // If red, invert location.
+                note.lineIndex = 3 - note.lineIndex;
+            }
             notes.push_back(note);
         }
         return notes;

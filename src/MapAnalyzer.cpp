@@ -9,7 +9,7 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
         //TODO: for all notes on same frame. Util func
         Note n = map.m_notes[i];
         Note nn = map.m_notes[i+1];
-        matrix.m_matrix[n.type][n.cutDirection][n.lineLayer][nn.lineIndex][n.lineIndex] = true;
+        matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] = true;
     }
 
     return matrix;
