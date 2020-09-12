@@ -52,16 +52,12 @@ void EditorPanel::update(float dt) {
     }
 
     int concurrent = 0;
-    bool special = false;
     for (auto k : Input::s_downKeys) {
         if (k.code > 0 && k.code < 36)     // A-Z + 0-9
             concurrent++;
-        if (k.code > 25 && k.code < 36)    // 0-9
-            special = true; 
     }
-    if (special == true) {
-        createNotation(NotationType::SPECIAL, concurrent);
-    } else if (concurrent == 1) {
+    
+    if (concurrent == 1) {
         createNotation(NotationType::SINGLE, concurrent);
     } else if (concurrent > 1) {
         createNotation(NotationType::DOUBLE, concurrent);
@@ -99,7 +95,7 @@ void EditorPanel::createNotation(NotationType type, int concurrent) {
 
     sf::CircleShape shape(((n.type == NotationType::DOUBLE) ? c_notationRadius * 1.5f : c_notationRadius) * m_UIScale);
     shape.setPosition(getCurrentPosition()); // -1 cuz top of screen is 0.
-    shape.setFillColor((n.type == NotationType::SPECIAL) ? c_notatonSpecialColor: c_notatonStandardColor);
+    shape.setFillColor(c_notatonStandardColor);
     m_notationShapes.push_back(shape);
 
     Editor::createNotation(n);

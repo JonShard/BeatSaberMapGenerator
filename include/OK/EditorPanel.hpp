@@ -10,7 +10,6 @@
 namespace OK {
 
 const sf::Color c_notatonStandardColor = sf::Color::Yellow;
-const sf::Color c_notatonSpecialColor = sf::Color::Cyan;
 const float c_notationRadius = 9;      // Radius of each node.
 const float c_spaceModifier = 200;      // Spaceing between each node.
 const float c_textSize = 20;

@@ -43,7 +43,7 @@ public:
                         break;
                 }
             }
-
+            
             Note note = Note{
                 note.time= time,
                 note.lineIndex = Util::rng(0, 4),

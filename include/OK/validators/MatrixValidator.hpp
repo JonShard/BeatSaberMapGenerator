@@ -7,23 +7,28 @@
 
 namespace OK {
 
-// template <class T>
-// class TransitionMatrix;
-
 class MatrixValidator : public Validator {
 private:
     TransitionMatrix<bool> m_matrix;
 public:
     MatrixValidator() {
+        loadConfig();
     }
 
     virtual void loadConfig() {
-        
+        m_matrix.loadFromFile("binaryTransitionMatrix.data");
     }
 
     virtual bool validate(Map map) {
-
-        return false;
+        for (int i = 0; i < map.m_notes.size()-1; i++) {
+            //TODO: for all notes on same frame. Util func
+            Note n = map.m_notes[i];
+            Note nn = map.m_notes[i+1];
+            if (m_matrix.m_matrix[n.type][n.cutDirection][n.lineLayer][nn.lineIndex][n.lineIndex] == false) {
+                return false;
+            }
+        }
+        return true;
     }
 };
 

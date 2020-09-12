@@ -9,7 +9,6 @@ Map::Map() {}
 Map::Map(const std::string fileName) {
     m_fileName = fileName;
     m_notes = std::vector<Note>();
-    load(fileName);
 }
 
 void Map::load(const std::string fileName) {
@@ -40,9 +39,10 @@ void Map::save() {
     json jsonMap;
     
     for (Note n : m_notes) {
-        printf("Adding note at time: %f\n", n.time);
+        printf("Adding note at time (Adjusted for BPM): %f\n", n.time * (110.0f / 60.0f));
         json jn;
-        jn["_time"] = n.time;
+        jn["_time"] = n.time * (110.0f / 60.0f);
+;
         jn["_lineIndex"] = n.lineIndex;
         jn["_lineLayer"] = n.lineLayer;
         jn["_type"] = n.type;

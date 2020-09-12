@@ -10,7 +10,7 @@ namespace OK {
 
 enum Type { BLUE, RED };
 enum CutDirection { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT };
-enum NotationType { SINGLE, DOUBLE, SPECIAL };
+enum NotationType { SINGLE, DOUBLE };
 
 struct Notation {
     int id;

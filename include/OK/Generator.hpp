@@ -16,7 +16,7 @@ protected:
     static std::vector<Validator*> s_validators;
 
     static void SaveMap(Map map);
-
+    static bool IsValid(Map map);
 public:
     Generator();
     static void Init();

@@ -68,7 +68,6 @@ void Input::update(float dt, sf::RenderWindow & w) {
             s_scrollDelta = event.mouseWheelScroll.delta;
         }
 
-
         if (event.type == sf::Event::Closed) {								//If the event happening is closed: {															//then close the window as well.
             w.close();
         }  

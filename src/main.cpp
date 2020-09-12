@@ -36,7 +36,8 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
             printf("Error: Unexpected file extention: %s\nExpected .dat\n", file.data());
             return;
         }
-        OK::Map map(file);
+        OK::Map map;
+        map.load(file);
         if (map.m_notes.size() == 0) {
             printf("Failed to load map: %s\n", file.data());
             continue;
