@@ -59,8 +59,6 @@ void openEditorWindow(std::string songFile) {
         printf("Error: Unexpected file extention: %s\nExpected .ogg\n", songFile.data());
         return;
     }
-    OK::c_windowWidth;
-    OK::c_windowHeight;
 
     OK::c_windowWidth = 1600;
     OK::c_windowHeight = 900;

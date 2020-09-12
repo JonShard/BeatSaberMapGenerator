@@ -43,7 +43,6 @@ void Window::update() {
         m_window.close();
     }
     
-
     m_dt = m_deltaTime.restart().asSeconds();						//Counts delta-time for consistant movement independent of framerate.
 
     m_view.zoom(m_zoom);

@@ -47,10 +47,6 @@ void Input::update(float dt, sf::RenderWindow & w) {
     for (auto & k : s_downKeys) {  
         printf("DownKey: %d \n", k.code);
     }
-    // for (auto & k : s_keys) {  
-    //     printf("Key: %d \ttime: %f \n", k.second.code, k.first);
-    // }
-
 
     while (w.pollEvent(event)) {
         if (event.type == sf::Event::EventType::KeyPressed) {
@@ -61,10 +57,9 @@ void Input::update(float dt, sf::RenderWindow & w) {
             } else if (s_keys.at(index).first < 0) {
                 s_keys.at(index).first = 0;        
                 printf("Key: %d pressed\n", event.key.code);
-
             }
         }
-        if (event.type == sf::Event::EventType::KeyReleased) {
+        if (s_keys.size() > 0 && event.type == sf::Event::EventType::KeyReleased) {
             s_keys.at(indexOfKey(event.key.code)).first = -1;
             printf("Key: %d released\n", event.key.code);
         }
