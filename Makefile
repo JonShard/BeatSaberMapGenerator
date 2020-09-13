@@ -3,7 +3,7 @@ all:
 	mkdir -p songs
 	mkdir -p imports
 	mkdir -p exports
-	g++ -g -c src/main.cpp -o .build/main.o
+	g++ -g -c src/Main.cpp -o .build/Main.o
 	g++ -g -c src/Map.cpp -o .build/Map.o
 	g++ -g -c src/Notation.cpp -o .build/Notation.o
 	g++ -g -c src/Generator.cpp -o .build/Generator.o
@@ -15,7 +15,7 @@ all:
 	g++ -g -c src/Window.cpp -o .build/Window.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	g++ -g -c src/Input.cpp -o .build/Input.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 
-	g++ .build/main.o -o generator.out \
+	g++ .build/Main.o -o generator.out \
 		.build/EditorPanel.o  \
 		.build/Map.o \
 		.build/Notation.o \
