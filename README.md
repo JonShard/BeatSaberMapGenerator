@@ -44,3 +44,18 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 `./generator.out songs/createOW/create.ogg`  
 `./generator.out -a songs/createOW/ExpertPlusStandard.dat --clean`  
 `./generator.out -g keyframes.json`  
+
+### Editor Keybindings
+Create a keyframe by pressing one or several keys in the range A-Z + 0-9. Pressing several at a time will register the keyframe with several concurrent presses with a **max of 4**, indicating the intensity of that keyframe.  
+| Key         | Action        |
+|-------------|---------------|
+| Space       | Play / pause  |
+| F5          | Save notation |
+| F10         | Generate map  |
+| Scroll      | Generate map  |
+| Backspace   | Go to start   |
+| Numpad+     | Zoom in       |
+| Numpad-     | Zoom out      |
+| Page up     | Speed up      |
+| Page down   | Speed down    |
+
