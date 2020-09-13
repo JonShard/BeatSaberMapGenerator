@@ -23,7 +23,7 @@ std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 
 
 void printUsage() {
-    std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg annotation.json\n");
+    std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg keyframe.json\n");
 }
 
 void analyseMaps(std::vector<std::string> mapFiles, bool append) {
@@ -47,7 +47,7 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 
-void generateFromAnnotation(std::string annontationFile) {
+void generateFromKeyframe(std::string annontationFile) {
     if (!OK::Util::isFileExtention(annontationFile, ".json")) {
         printf("Error: Unexpected file extention: %s\nExpected .json\n", annontationFile.data());
         return;
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
         analyseMaps(mapsList, append);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
-        generateFromAnnotation(args[3]);
+        generateFromKeyframe(args[3]);
     }
     else {
         openEditorWindow(args[1]);

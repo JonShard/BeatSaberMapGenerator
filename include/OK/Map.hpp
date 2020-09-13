@@ -1,3 +1,4 @@
+// Map is a representaion of a single difficulty of a Beat Saber map.
 #pragma once
 #include <fstream>
 #include <iostream>
@@ -10,14 +11,6 @@ namespace OK {
 
 enum Type { BLUE, RED };
 enum CutDirection { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT };
-enum NotationType { SINGLE, DOUBLE };
-
-struct Notation {
-    int id;
-    float time;
-    int concurrent;
-    NotationType type;
-};
 
 struct Note {
     float time;

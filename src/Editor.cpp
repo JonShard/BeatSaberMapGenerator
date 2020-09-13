@@ -3,14 +3,14 @@
 namespace OK {
 
 Editor::Editor() : sf::Music(){
-    m_notations = std::vector<Notation>();
+    m_keyframes = std::vector<Keyframe>();
 }
 
-void Editor::createNotation(Notation notation) {
-    m_notations.push_back(notation);
+void Editor::createKeyframe(Keyframe keyframe) {
+    m_keyframes.push_back(keyframe);
 }
 
-void Editor::saveAnnotation() {
+void Editor::saveKeyframe() {
     
     printf("Saving annontation to file.\n");
 }

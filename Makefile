@@ -5,6 +5,7 @@ all:
 	mkdir -p exports
 	g++ -g -c src/main.cpp -o .build/main.o
 	g++ -g -c src/Map.cpp -o .build/Map.o
+	g++ -g -c src/Notation.cpp -o .build/Notation.o
 	g++ -g -c src/Generator.cpp -o .build/Generator.o
 	g++ -g -c src/TransitionMatrix.cpp -o .build/TransitionMatrix.o
 	g++ -g -c src/Utilities.cpp -o .build/Utilities.o
@@ -18,6 +19,7 @@ all:
 	g++ .build/main.o -o generator.out \
 		.build/EditorPanel.o  \
 		.build/Map.o \
+		.build/Notation.o \
 		.build/Window.o \
 		.build/Editor.o \
 		.build/Input.o \

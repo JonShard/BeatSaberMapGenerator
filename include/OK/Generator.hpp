@@ -2,8 +2,6 @@
 // It controls the order factories are called in to build the map.
 #pragma once
 
-#include "Map.hpp"
-
 #include "factories/Factory.hpp"
 #include "factories/RandomMatrixFactory.hpp"
 
@@ -23,7 +21,7 @@ public:
     Generator();
     static void Init();
 
-    static void GenerateMap(std::vector<Notation> notations, std::string songName);
+    static void GenerateMap(std::vector<Keyframe> keyframes, std::string songName);
 };
 
 } // namespace OK

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "../Map.hpp"
+#include "../Notation.hpp"
 
 namespace OK {
 
@@ -12,7 +13,7 @@ protected:
     int attempts;
     virtual void loadConfig() = 0;
 public:
-    virtual std::vector<Note> produce(std::vector<Notation> notations, Map map) = 0;
+    virtual std::vector<Note> produce(std::vector<Keyframe> keyframes, Map map) = 0;
 };
 
 } // namespace OK

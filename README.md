@@ -38,9 +38,9 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 
 ### Parameters
 - `-a [MAP FILE...] [OPTIONAL --clean]` Analyse a map and build transition matrix. Stored in `binaryTransitionMatrix.data`. Optional falg `--clean` to discard existing matrix.
-- `-g [JSON NOTATIONS]` Generate map from existing notations file.
+- `-g [JSON NOTATIONS]` Generate map from existing keyframes file.
 
 ### Examples
 `./generator.out songs/createOW/create.ogg`  
 `./generator.out -a songs/createOW/ExpertPlusStandard.dat --clean`  
-`./generator.out -g notations.json`  
+`./generator.out -g keyframes.json`  
