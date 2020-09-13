@@ -12,7 +12,7 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 ## Factories
 - Weighted Transition matrix. Build a markov chain with note transition pick random based on the weights going out of that node.
 - Template. Has a collection of predefined patterns and puts them where they match the best.
-- Weighted random. Pick the next note random based on some simple weights. More at the bottom, colors on theirs side mostly.
+- Random. Pick the next note random based on some simple weights. More at the bottom, colors on theirs side mostly.
 - Symmetrical random. Generate two notes at same timestamp the are symmetrical to a center plane or a center point.
 
 ## Validators
@@ -34,13 +34,13 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 1. `./generator.out song.ogg`
 
 ## Usage
-`generator.out [AUDIO FILE] [JSON ANNOTATION]`  
+`generator.out [AUDIO FILE] [JSON NOTATIONS]`  
 
 ### Parameters
 - `-a [MAP FILE...] [OPTIONAL --clean]` Analyse a map and build transition matrix. Stored in `binaryTransitionMatrix.data`. Optional falg `--clean` to discard existing matrix.
-- `-g [JSON ANNOTATION]` Generate map from existing annotation file.
+- `-g [JSON NOTATIONS]` Generate map from existing notations file.
 
 ### Examples
 `./generator.out songs/createOW/create.ogg`  
 `./generator.out -a songs/createOW/ExpertPlusStandard.dat --clean`  
-`./generator.out -g annotation.json`  
+`./generator.out -g notations.json`  

@@ -5,7 +5,7 @@
 namespace OK {
 
     void Generator::Init() {
-        s_factories.push_back(new RandomMatrixFactory);
+        s_factories.push_back(new RandomFactory);
         s_validators.push_back(new MatrixValidator);
     }
 
