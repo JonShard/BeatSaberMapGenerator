@@ -10,8 +10,7 @@ const int c_types = 9;
 const int c_colors = 2;
 
 template <class T>
-class TransitionMatrix {
-public:
+struct TransitionMatrix {
     //         To       From      To       From     To        From      To       From
     T m_matrix[c_colors][c_colors][c_types][c_types][c_floors][c_floors][c_lanes][c_lanes];
     TransitionMatrix();
