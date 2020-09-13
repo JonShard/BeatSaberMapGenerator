@@ -1,3 +1,4 @@
+// RandomMatrixFactory produces a random note based on some weights to get more notes far down and colors their side more often.
 #pragma once
 
 #include "Factory.hpp" 
@@ -11,7 +12,6 @@ class RandomMatrixFactory : public Factory {
     // matrix of weights
     virtual void loadConfig() {
         // load notes to generate
-        // load matrix
     }
 
 public:
@@ -29,7 +29,7 @@ public:
             else if (layer > 20) layer = 1;
             else if (layer >= 0) layer = 2;
 
-            // TODO: move into function
+            // TODO: move into function in new annotation class
             float time = 0;
             if (notations.size() > 0) {
                 time = notations[0].time;

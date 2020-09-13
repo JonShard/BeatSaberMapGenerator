@@ -1,3 +1,4 @@
+// Base class for all factories. A factory is a class that procduces one or several notes.
 #pragma once
 
 #include "../Map.hpp"

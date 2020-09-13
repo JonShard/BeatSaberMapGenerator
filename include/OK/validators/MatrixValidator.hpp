@@ -1,4 +1,4 @@
-// Matrix Validator checks that the transition from each note to the next 
+// Matrix Validator ensures that the transition from each note to the next 
 // of the same color is legal. 
 #pragma once
 
@@ -25,9 +25,11 @@ public:
             Note n = map.m_notes[i];
             Note nn = map.m_notes[i+1];
             if (m_matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] == false) {
+                Validator::s_fails++;
                 return false;
             }
         }
+        Validator::s_passes++;
         return true;
     }
 };

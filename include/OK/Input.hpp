@@ -1,3 +1,5 @@
+// Input is an extention of SFML's input system.
+// It's main function is to keep track of which keys are pressed at the same time, as SFML didn't support this.
 #pragma once
 
 #include <SFML/Graphics.hpp>

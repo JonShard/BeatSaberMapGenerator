@@ -30,7 +30,7 @@ public:
     void draw(sf::RenderWindow & window);
     void setUIScale(float scale);
     void createNotation(NotationType type, int concurrent);
-    bool openFromFile(const std::string fileName);
+    bool openFromFile(const std::string fileName);      // Open song. SFML funciton
 };
 
 } // namespace OK

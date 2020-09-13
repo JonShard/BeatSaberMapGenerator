@@ -1,3 +1,5 @@
+// Generator is the manager of all the factories and validators.
+// It controls the order factories are called in to build the map.
 #pragma once
 
 #include "Map.hpp"
@@ -12,7 +14,7 @@ namespace OK {
 
 class Generator {
 protected:
-    static std::vector<Factory*> s_factories; // Weigts
+    static std::vector<Factory*> s_factories; // Weights
     static std::vector<Validator*> s_validators;
 
     static void SaveMap(Map map);

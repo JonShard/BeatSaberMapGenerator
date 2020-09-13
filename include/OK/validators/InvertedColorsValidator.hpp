@@ -1,0 +1,1 @@
+// InvertedColorsValidator ensures notes aren't on their opposite side for too long at a time.

@@ -1,0 +1,1 @@
+// DistanceValidator ensures the distance a saber has to travel from one note to it's next is bigger than a set tolerance.

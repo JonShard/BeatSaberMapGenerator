@@ -19,7 +19,6 @@ public:
     void loadAnnotation(std::string annotationFile);
     void createNotation(Notation notation);
     void saveAnnotation();
-
 };
 
 
