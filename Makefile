@@ -25,7 +25,7 @@ all:
 		.build/TransitionMatrix.o \
 		.build/Utilities.o \
 		.build/MapAnalyzer.o \
-		include/OK/factories/RandomMatrixFactory.hpp \
+		include/OK/factories/RandomFactory.hpp \
 		include/OK/validators/MatrixValidator.hpp \
 		-lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	rm -r .build

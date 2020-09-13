@@ -2,11 +2,8 @@
 // It controls the order factories are called in to build the map.
 #pragma once
 
-#include "factories/Factory.hpp"
-#include "factories/RandomMatrixFactory.hpp"
-
-#include "validators/Validator.hpp"
-
+#include "factories/RandomFactory.hpp"
+#include "validators/MatrixValidator.hpp"
 
 namespace OK {
 
