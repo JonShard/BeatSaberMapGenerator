@@ -54,6 +54,14 @@ void Notation::print() {
 
 std::string Notation::getName() { return m_name; }
 
+Keyframe Notation::getNextKeyframe(float time) {
+    for (Keyframe k : m_keyframes)
+    {
+        if (k.time > time) 
+            return k;
+    }
+    return Keyframe();   
+}
 
 Notation Notation::operator+=(Keyframe k) {
     m_keyframes.push_back(k);

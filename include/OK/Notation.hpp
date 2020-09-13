@@ -30,6 +30,7 @@ public:
     void print();
 
     std::string getName();
+    Keyframe getNextKeyframe(float time);
 
     Notation operator+=(Keyframe k);
     Notation operator+=(std::vector<Keyframe> keyframes);

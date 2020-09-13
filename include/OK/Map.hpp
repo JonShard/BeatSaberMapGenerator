@@ -37,6 +37,7 @@ public:
     void print();
 
     std::string getName();
+    float getLatestTime();
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);

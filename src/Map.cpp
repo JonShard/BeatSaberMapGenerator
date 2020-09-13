@@ -78,6 +78,13 @@ void Map::print() {
 
 std::string Map::getName() { return m_name; }
 
+float Map::getLatestTime() {
+    if (m_notes.size() == 0)
+        return 0;
+    else 
+        return m_notes.back().time;
+}
+
 Map Map::operator+=(Note n) {
     m_notes.push_back(n);
     return *this;

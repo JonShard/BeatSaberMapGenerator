@@ -21,13 +21,13 @@ namespace OK {
         printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
             int produceAttempts = 0;
-            printf("Processing keyframe %d at time: %f \tMap length: %ld \tProduce attempts: %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), produceAttempts);
             Map mapNext;
             do {
                 mapNext = map;
-                mapNext += s_factories[0]->produce(notation.m_keyframes, map);
+                mapNext += s_factories[0]->produce(notation, map);
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < 100000);
+            printf("Processed keyframe %d at time: %f \tMap length: %ld \tProduce attempts: %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), produceAttempts);
             map = mapNext;
         }
         map.save();

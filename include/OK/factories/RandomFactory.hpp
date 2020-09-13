@@ -10,26 +10,13 @@ class RandomFactory : public Factory {
     virtual void loadConfig() {}
 
 public:
-    virtual std::vector<Note> produce(std::vector<Keyframe> keyframes, Map map) {
+    virtual std::vector<Note> produce(Notation notation, Map map) {
         Factory::s_totalProduceAttempts++;
 
-        // TODO: move into function in new keyframe class
-        float time = 0;
-        if (keyframes.size() > 0) {
-            time = keyframes[0].time;
-        }
-        if (map.m_notes.size() > 0) {
-            float lastNoteTime = map.m_notes.back().time;
-            for (int j = 0; j < keyframes.size(); j++)
-            {
-                time = keyframes[j].time;
-                if (time > lastNoteTime) 
-                    break;
-            }
-        }
+        Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
 
         Note note;
-        note.time= time;
+        note.time= nextKeyframe.time;
         note.type = (Util::rng(0, 100) < 60); // Type 0 = red, 1 = blue
         note.cutDirection = Util::rng(0, 8);
         
