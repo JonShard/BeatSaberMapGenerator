@@ -16,6 +16,7 @@ EditorPanel::EditorPanel() : Panel() {
     m_cursorShape.setOrigin(sf::Vector2f(c_windowWidth/2, 2));
     m_cursorShape.setFillColor(sf::Color(60,60,60));
     m_notation = Notation();
+    m_autoSaveCountdown = c_autoSavePeriod;
 }
 
 bool EditorPanel::loadMusic(const std::string fileName) {
@@ -33,6 +34,11 @@ void EditorPanel::loadNotation(const std::string fileName) {
 
 
 void EditorPanel::update(float dt) {
+    m_autoSaveCountdown -= dt;
+    if (m_autoSaveCountdown < 0) {
+        m_autoSaveCountdown = c_autoSavePeriod;
+        m_notation.save();
+    }
 
     m_cursorShape.setPosition(getPositionAtTime(m_music.getPlayingOffset().asSeconds()));
     if (Input::isKeyDown(sf::Keyboard::Space)) {

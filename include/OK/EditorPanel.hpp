@@ -14,9 +14,9 @@ namespace OK {
 
 const sf::Color c_notatonStandardColor = sf::Color::Yellow;
 const float c_keyframeRadius = 9;      // Radius of each node.
-const float c_spaceModifier = 200;      // Spaceing between each node.
+const float c_spaceModifier = 200;     // Spaceing between each node.
 const float c_textSize = 20;
-
+const float c_autoSavePeriod = 60;     // Seconds
 
 class EditorPanel : public Panel {
 private:
@@ -26,6 +26,7 @@ private:
     sf::RectangleShape m_timelineShape;
     sf::RectangleShape m_cursorShape;
     Notation m_notation;
+    float m_autoSaveCountdown;
 
     void createKeyframe(int concurrent);
     void createKeyframeShape(Keyframe k);
