@@ -7,7 +7,7 @@ namespace OK {
 extern int c_windowWidth;
 extern int c_windowHeight;
 
-EditorPanel::EditorPanel() : Panel(), Editor() {
+EditorPanel::EditorPanel() : Panel() {
     m_timelineShape = sf::RectangleShape(sf::Vector2f(5, -MAXFLOAT-1));
     m_timelineShape.setPosition(sf::Vector2f(c_windowWidth/3, c_windowHeight));
     m_timelineShape.setFillColor(sf::Color::White);
@@ -15,40 +15,51 @@ EditorPanel::EditorPanel() : Panel(), Editor() {
     m_cursorShape = sf::RectangleShape(sf::Vector2f(c_windowWidth, 4));
     m_cursorShape.setOrigin(sf::Vector2f(c_windowWidth/2, 2));
     m_cursorShape.setFillColor(sf::Color(60,60,60));
+    m_notation = Notation();
 }
 
-sf::Vector2f EditorPanel::getCurrentPosition() {
-    return sf::Vector2f(c_windowWidth / 2, c_windowHeight / 2 + Editor::getPlayingOffset().asSeconds() * c_spaceModifier * m_UIScale * -1);
+bool EditorPanel::loadMusic(const std::string fileName) {
+    m_notation = Notation(fileName + "_notation.json");
+    return m_music.openFromFile(fileName);
 }
+
+void EditorPanel::loadNotation(const std::string fileName) {
+    m_notation = Notation(fileName);
+    m_notation.load(fileName);
+    for (Keyframe k : m_notation.m_keyframes) {
+        createKeyframeShape(k);
+    }
+}
+
 
 void EditorPanel::update(float dt) {
 
-    m_cursorShape.setPosition(getCurrentPosition());
+    m_cursorShape.setPosition(getPositionAtTime(m_music.getPlayingOffset().asSeconds()));
     if (Input::isKeyDown(sf::Keyboard::Space)) {
-        if (Editor::getStatus() == Editor::Playing) {
-            Editor::pause();
+        if (m_music.getStatus() == m_music.Playing) {
+            m_music.pause();
         }
         else {
-            Editor::play();
+            m_music.play();
         }
     }
     if (Input::isKeyDown(sf::Keyboard::BackSpace)) {
-        Editor::setPlayingOffset(sf::seconds(0));
+        m_music.setPlayingOffset(sf::seconds(0));
     }
     if (Input::s_scrollDelta) { // 1 or -1 if moved.
-        Editor::setPlayingOffset(std::max(sf::seconds(0), Editor::getPlayingOffset() + sf::seconds(1 * Input::s_scrollDelta)));
+        m_music.setPlayingOffset(std::max(sf::seconds(0), m_music.getPlayingOffset() + sf::seconds(1 * Input::s_scrollDelta)));
     }
     if (Input::isKeyDown(sf::Keyboard::PageUp)) {
-        Editor::setPitch(Editor::getPitch() + 0.1f);
+        m_music.setPitch(m_music.getPitch() + 0.1f);
     }
     if (Input::isKeyDown(sf::Keyboard::PageDown)) {
-        Editor::setPitch(Editor::getPitch() - 0.1f);
+        m_music.setPitch(m_music.getPitch() - 0.1f);
     }
     if (Input::isKeyDown(sf::Keyboard::F5)) {
-        Editor::saveKeyframe();
+        m_notation.save();
     }
     if (Input::isKeyDown(sf::Keyboard::F10)) {  // TODO: Make new panel for generating map.
-        Generator::GenerateMap(Editor::m_keyframes, m_songName);
+        Generator::GenerateMap(m_notation);
     }
 
     int concurrent = 0;
@@ -56,17 +67,14 @@ void EditorPanel::update(float dt) {
         if (k.code > 0 && k.code < 36)     // A-Z + 0-9
             concurrent++;
     }
-    
-    if (concurrent == 1) {
-        createKeyframe(KeyframeType::SINGLE, concurrent);
-    } else if (concurrent > 1) {
-        createKeyframe(KeyframeType::DOUBLE, concurrent);
+    if (concurrent > 0) {
+        createKeyframe(concurrent);
     }
 }
 
 void EditorPanel::draw(sf::RenderWindow & w) { 
     sf::View view = w.getView();
-    view.setCenter(getCurrentPosition());
+    view.setCenter(getPositionAtTime(m_music.getPlayingOffset().asSeconds()));
     w.setView(view);
 
     w.draw(m_cursorShape);
@@ -80,30 +88,32 @@ void EditorPanel::setUIScale(float scale) {
 
 }
 
-void EditorPanel::createKeyframe(KeyframeType type, int concurrent) {
-
-    Keyframe n;
-    n.time = Editor::getPlayingOffset().asSeconds();
-    n.concurrent = concurrent;
-    n.type = type;
-    if (m_keyframes.size() > 0) 
-        n.id = m_keyframes.back().id + 1; //TODO: duplicates possible!!
+void EditorPanel::createKeyframe(int concurrent) {
+    Keyframe k;
+    k.time = m_music.getPlayingOffset().asSeconds(); //TODO: Fix BPM not considered.
+    k.concurrent = concurrent;
+    if (m_notation.m_keyframes.size() > 0) 
+        k.id = m_notation.m_keyframes.back().id + 1; //TODO: duplicates possible!!
     else
-        n.id = 0;
+        k.id = 0;
 
-    printf("Creating keyframe, id %ld \ttime: %f \tconcurrent: %d\n", m_keyframes.size(), n.time, n.concurrent);
+    createKeyframeShape(k);
+    m_notation.m_keyframes.push_back(k);
+}
 
-    sf::CircleShape shape(((n.type == KeyframeType::DOUBLE) ? c_keyframeRadius * 1.5f : c_keyframeRadius) * m_UIScale);
-    shape.setPosition(getCurrentPosition()); // -1 cuz top of screen is 0.
+void EditorPanel::createKeyframeShape(Keyframe k) {
+    printf("Creating keyframe, id %ld \ttime: %f \tconcurrent: %d\n", m_notation.m_keyframes.size(), k.time, k.concurrent);
+    sf::CircleShape shape(((k.concurrent > 1) ? c_keyframeRadius * 1.5f : c_keyframeRadius) * m_UIScale);
+    shape.setPosition(getPositionAtTime(k.time)); // -1 cuz top of screen is 0.
     shape.setFillColor(c_notatonStandardColor);
     m_keyframeShapes.push_back(shape);
 
-    Editor::createKeyframe(n);
 }
 
-bool EditorPanel::openFromFile(const std::string fileName) {
-    Editor::m_songName = fileName;
-    return Music::openFromFile(fileName);
+sf::Vector2f EditorPanel::getPositionAtTime(float time) {
+    return sf::Vector2f(c_windowWidth / 2, c_windowHeight / 2 + time * c_spaceModifier * m_UIScale * -1);
 }
+
+
 
 } // namespace OK

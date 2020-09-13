@@ -2,23 +2,26 @@
 
 namespace OK {
 
-Map::Map() {}
+Map::Map() {
+    m_name = "";
+    m_notes = std::vector<Note>();
+}
 
 Map::Map(const std::string fileName) {
-    m_fileName = fileName;
+    m_name = fileName;
     m_notes = std::vector<Note>();
 }
 
 void Map::load(const std::string fileName) {
     std::ifstream file(fileName);
-    nlohmann::json jsonMap;
-    file >> jsonMap;
+    nlohmann::json jsMap;
+    file >> jsMap;
     
-    jsonMap.at("_version").get_to(m_version);
+    jsMap.at("_version").get_to(m_version);
     
-    nlohmann::json jsonNotes = jsonMap["_notes"];
+    nlohmann::json jsNotes = jsMap["_notes"];
 
-    for (nlohmann::json jn : jsonNotes) {
+    for (nlohmann::json jn : jsNotes) {
         Note n {
             jn.at("_time").get_to(n.time),
             jn.at("_lineIndex").get_to(n.lineIndex),
@@ -33,7 +36,7 @@ void Map::save() {
     printf("Saving map with notes: %ld\n", m_notes.size());
 
     nlohmann::json jsNotes;
-    nlohmann::json jsonMap;
+    nlohmann::json jsMap;
     
     for (Note n : m_notes) {
         printf("Adding note at time (Adjusted for BPM): %f\n", n.time * (110.0f / 60.0f)); // TODO: dynamically get BPS (110)
@@ -46,14 +49,15 @@ void Map::save() {
         jsNotes.push_back(jn);
     }
 
-    jsonMap["_version"] = "2.0.0";
-    jsonMap["_notes"] = jsNotes;
-    std::ofstream out(m_fileName);
-    out << jsonMap;
+    jsMap["_version"] = "2.0.0";
+    jsMap["_notes"] = jsNotes;
+    std::ofstream out(m_name);
+    out << jsMap;
     out.close();
 }
 
 void Map::print() {
+    printf("Map: %s\n", m_name.data());
     std::string dir = "";
     for (Note n : m_notes) {
         switch (n.cutDirection)
@@ -68,9 +72,11 @@ void Map::print() {
             case CutDirection::DOWN_RIGHT: dir = "DOWN RIGHT"; break;
             default: dir = "UNKNOW"; break;
         }
-        printf("Note: %f\t%s\t%s\t\n", n.time, (n.type == Type::BLUE)?"BLUE":"RED", dir.data());
+        printf("Note: time: %f\ttype: %s\tcut direction: %s\t\n", n.time, (n.type == Type::BLUE)?"BLUE":"RED", dir.data());
     }
 }
+
+std::string Map::getName() { return m_name; }
 
 Map Map::operator+=(Note n) {
     m_notes.push_back(n);

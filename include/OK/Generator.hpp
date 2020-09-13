@@ -21,7 +21,7 @@ public:
     Generator();
     static void Init();
 
-    static void GenerateMap(std::vector<Keyframe> keyframes, std::string songName);
+    static void GenerateMap(Notation notation);
 };
 
 } // namespace OK

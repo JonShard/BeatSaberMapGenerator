@@ -9,15 +9,30 @@
 
 namespace OK {
 
-enum KeyframeType { SINGLE, DOUBLE };
-
 struct Keyframe {
-    int id;
+    unsigned long id;
     float time;
     int concurrent;
-    KeyframeType type;
 };
 
+class Notation {
+private:
+    std::string m_name;
 
+public:
+    std::vector<Keyframe> m_keyframes;
+
+    Notation();
+    Notation(std::string fileName);
+
+    void load(std::string fileName);
+    void save();
+    void print();
+
+    std::string getName();
+
+    Notation operator+=(Keyframe k);
+    Notation operator+=(std::vector<Keyframe> keyframes);
+};
 
 } // Namespace OK

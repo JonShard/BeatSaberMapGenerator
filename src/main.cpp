@@ -55,7 +55,7 @@ void generateFromKeyframe(std::string annontationFile) {
     printf("Generate!\n");
 }
 
-void openEditorWindow(std::string songFile) {
+void openEditorWindow(std::string songFile, std::string notationFile = "") {
     if (!OK::Util::isFileExtention(songFile, ".ogg")) {
         printf("Error: Unexpected file extention: %s\nExpected .ogg\n", songFile.data());
         return;
@@ -69,9 +69,12 @@ void openEditorWindow(std::string songFile) {
     window.m_activePanel = &editorPanel;
     OK::Generator::Init();
     
-    if (editorPanel.openFromFile(songFile)) {
+    if (editorPanel.loadMusic(songFile)) {
         printf("Loaded song %s\n", songFile.data());
-        editorPanel.play();
+    }
+    if (notationFile.length() > 0) {
+        editorPanel.loadNotation(notationFile);
+        printf("Loaded notation %s\n", notationFile.data());
     }
     while(window.isOpen()) {
         window.update();
@@ -103,6 +106,9 @@ int main(int argc, char** argv) {
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
         generateFromKeyframe(args[3]);
+    }
+    else if (args.size() > 2){
+        openEditorWindow(args[1], args[2]);
     }
     else {
         openEditorWindow(args[1]);

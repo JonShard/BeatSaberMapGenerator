@@ -23,21 +23,23 @@ struct Note {
 
 class Map {
 private:
-    std::string m_fileName;
+    std::string m_name;
     std::string m_version;
 
 public:
     std::vector<Note> m_notes;
     
     Map();
-    Map(std::string fileName);
+    Map(const std::string fileName);
 
-    void load(std::string fileName);
+    void load(const std::string fileName);
     void save();
     void print();
+
+    std::string getName();
+
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);
-
 };
 
 } // Namespace OK

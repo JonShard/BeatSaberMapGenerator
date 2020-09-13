@@ -1,15 +1,7 @@
 # Visual Code project
 .vs/
 
-# Typical input files:
-*.json
-*.dat
-*.egg
-*.ogg
-*.info
-*.jpg
-
-# Binary files
+# Build 
 .build/
 .o
 *.out
@@ -19,4 +11,13 @@ songs/
 imports/
 exports/
 .temp
+
+# Input / output
+*.json
+*.dat
+*.egg
+*.ogg
+*.info
+*.jpg
 *.data
+*_notation.json

@@ -11,7 +11,6 @@ all:
 	g++ -g -c src/Utilities.cpp -o .build/Utilities.o
 	g++ -g -c src/MapAnalyzer.cpp -o .build/MapAnalyzer.o
 
-	g++ -g -c src/Editor.cpp -o .build/Editor.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	g++ -g -c src/EditorPanel.cpp -o .build/EditorPanel.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	g++ -g -c src/Window.cpp -o .build/Window.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 	g++ -g -c src/Input.cpp -o .build/Input.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
@@ -21,7 +20,6 @@ all:
 		.build/Map.o \
 		.build/Notation.o \
 		.build/Window.o \
-		.build/Editor.o \
 		.build/Input.o \
 		.build/Generator.o \
 		.build/TransitionMatrix.o \
