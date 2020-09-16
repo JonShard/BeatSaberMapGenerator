@@ -24,6 +24,10 @@ public:
             //TODO: for all notes on same frame. Util func
             Note n = map.m_notes[i];
             Note nn = map.m_notes[i+1];
+            if (nn.time - n.time > s_validateTimeAfterNote) {
+                Validator::s_passes++;
+                return true;
+            }
             if (m_matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] == false) {
                 Validator::s_fails++;
                 return false;

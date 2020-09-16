@@ -9,10 +9,13 @@ namespace OK {
 class Factory {
 protected:
     static int s_totalProduceAttempts;
-    int maxAttempts;
-    int attempts;
-    virtual void loadConfig() = 0;
+    
+    int static  cfg_maxAttempts;
 public:
+    static void LoadConfig() {
+        cfg_maxAttempts = 10000;
+    };
+    virtual void loadConfig() = 0;
     virtual std::vector<Note> produce(Notation notation, Map map) = 0;
 };
 

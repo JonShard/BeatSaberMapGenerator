@@ -9,8 +9,14 @@ class Validator {
 protected:
     static int s_passes;
     static int s_fails;
-    virtual void loadConfig() = 0;
+    
+    static float s_validateTimeAfterNote;    // Time after a note in which the validator will care if an illegal note is placed (sec).
+
 public:
+    static void LoadConfig() {
+        s_validateTimeAfterNote = 3;
+    };
+    virtual void loadConfig() = 0;
     virtual bool validate(Map map) = 0;
 };
 
