@@ -23,7 +23,7 @@ void Map::load(const std::string fileName) {
 
     for (nlohmann::json jn : jsNotes) {
         Note n {
-            jn.at("_time").get_to(n.time),
+            jn.at("_time").get_to(n.time) / (110.0f / 60.0f),
             jn.at("_lineIndex").get_to(n.lineIndex),
             jn.at("_lineLayer").get_to(n.lineLayer),
             jn.at("_type").get_to(n.type),
