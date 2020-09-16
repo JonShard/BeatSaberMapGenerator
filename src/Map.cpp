@@ -85,6 +85,20 @@ float Map::getLatestTime() {
         return m_notes.back().time;
 }
 
+std::vector<Note> Map::getKeyframesInCluster(int noteNr) {
+    std::vector<Note> cluster;
+    for (int i = noteNr; i < m_notes.size(); i++) {
+        if (m_notes[i].time - m_notes[noteNr].time < 0.05f) { // TODO: Config
+            cluster.push_back(m_notes[i]);
+        }
+        else {
+            break;
+        }
+    }
+    return cluster;
+}
+
+
 Map Map::operator+=(Note n) {
     m_notes.push_back(n);
     return *this;

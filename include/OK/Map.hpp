@@ -38,6 +38,7 @@ public:
 
     std::string getName();
     float getLatestTime();
+    std::vector<Note> getKeyframesInCluster(int noteNr); // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame")
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);
