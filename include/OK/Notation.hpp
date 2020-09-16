@@ -25,7 +25,7 @@ public:
     Notation();
     Notation(std::string fileName);
 
-    void load(std::string fileName);
+    bool load(std::string fileName);
     void save();
     void print();
 

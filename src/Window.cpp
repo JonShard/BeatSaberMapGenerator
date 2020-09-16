@@ -17,7 +17,7 @@ Window::Window(int width, int height) {
 
 	if(m_font.loadFromFile("FONT.ttf"))					//Loads font from file. Gives error in console if
 	{
-		std::printf("\nLoaded FONT.ttf\n");
+		std::printf("Loaded FONT.ttf\n");
 	}
 
     m_zoom = 1;

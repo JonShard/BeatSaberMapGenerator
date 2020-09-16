@@ -33,8 +33,11 @@ loadFromFile(file);
 }
 
 template<class T>
-void TransitionMatrix<T>::loadFromFile(const std::string file) {
- std::ifstream in(file);
+bool TransitionMatrix<T>::loadFromFile(const std::string file) {
+    std::ifstream in(file);
+    if (in.fail()) {
+        return false;
+    }
     for (int colorTo = 0; colorTo < c_colors; colorTo++) {
         for (int colorFrom = 0; colorFrom < c_colors; colorFrom++) {
             for (int typeTo = 0; typeTo < c_types; typeTo++) {
@@ -52,6 +55,7 @@ void TransitionMatrix<T>::loadFromFile(const std::string file) {
             }
         }
     }
+    return true;
 }
 
 template<class T>

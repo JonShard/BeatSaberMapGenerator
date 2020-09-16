@@ -4,6 +4,7 @@
 
 #include "Validator.hpp"
 #include "../TransitionMatrix.hpp"
+#include "../Config.hpp"
 
 namespace OK {
 
@@ -12,10 +13,6 @@ private:
     TransitionMatrix<bool> m_matrix;
 public:
     MatrixValidator() {
-        loadConfig();
-    }
-
-    virtual void loadConfig() {
         m_matrix.loadFromFile("binaryTransitionMatrix.data");
     }
 
@@ -24,7 +21,7 @@ public:
             //TODO: for all notes on same frame. Util func
             Note n = map.m_notes[i];
             Note nn = map.m_notes[i+1];
-            if (nn.time - n.time > s_validateTimeAfterNote) {
+            if (nn.time - n.time > Config::generator.validator.validateTimeAfterNote) {
                 Validator::s_passes++;
                 return true;
             }

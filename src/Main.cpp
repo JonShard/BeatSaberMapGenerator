@@ -4,6 +4,7 @@
 #include "../include/OK/factories/Factory.hpp"
 #include "../include/OK/validators/Validator.hpp"
 #include "../include/OK/MapAnalyzer.hpp"
+#include "../include/OK/Config.hpp"
 
 namespace OK {
 // Constants
@@ -15,12 +16,12 @@ float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
 std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyEvent>();
 int Factory::s_totalProduceAttempts = 0;
-int Factory::cfg_maxAttempts = 0;
-float Validator::s_validateTimeAfterNote = 0;
 int Validator::s_passes = 0;
 int Validator::s_fails = 0;
 std::vector<Factory*> Generator::s_factories = std::vector<Factory*>();
 std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
+GeneratorConfig Config::generator = {};
+EditorConfig Config::editor = {};
 }
 
 
@@ -90,6 +91,11 @@ int main(int argc, char** argv) {
         printUsage();
         return 1;
     }
+    if (!OK::Config::Load()) {
+        printf("Error: configuration file config.json not found\n");
+        return 2;
+    }
+    
     std::vector<std::string> args;
     for (int i = 0; i < argc; i++)
         args.push_back(argv[i]);

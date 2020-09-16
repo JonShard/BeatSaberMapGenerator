@@ -4,8 +4,6 @@
 namespace OK {
 
     void Generator::Init() {
-        Validator::LoadConfig();
-        Factory::LoadConfig();
         s_factories.push_back(new RandomFactory);
         s_validators.push_back(new MatrixValidator);
     }

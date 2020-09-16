@@ -12,8 +12,11 @@ Map::Map(const std::string fileName) {
     m_notes = std::vector<Note>();
 }
 
-void Map::load(const std::string fileName) {
+bool Map::load(const std::string fileName) {
     std::ifstream file(fileName);
+    if (file.fail()) {
+        return false;
+    }
     nlohmann::json jsMap;
     file >> jsMap;
     
@@ -31,6 +34,7 @@ void Map::load(const std::string fileName) {
         };
         m_notes.push_back(n);
     }
+    return true;
 }
 void Map::save() {
     printf("Saving map with notes: %ld\n", m_notes.size());

@@ -7,8 +7,6 @@
 namespace OK {
 
 class RandomFactory : public Factory {
-    virtual void loadConfig() {}
-
 public:
     virtual std::vector<Note> produce(Notation notation, Map map) {
         Factory::s_totalProduceAttempts++;

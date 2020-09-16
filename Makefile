@@ -4,6 +4,7 @@ all:
 	mkdir -p imports
 	mkdir -p exports
 	g++ -g -c src/Main.cpp -o .build/Main.o
+	g++ -g -c src/Config.cpp -o .build/Config.o
 	g++ -g -c src/Map.cpp -o .build/Map.o
 	g++ -g -c src/Notation.cpp -o .build/Notation.o
 	g++ -g -c src/Generator.cpp -o .build/Generator.o
@@ -16,6 +17,7 @@ all:
 	g++ -g -c src/Input.cpp -o .build/Input.o -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-system
 
 	g++ .build/Main.o -o generator.out \
+		.build/Config.o  \
 		.build/EditorPanel.o  \
 		.build/Map.o \
 		.build/Notation.o \

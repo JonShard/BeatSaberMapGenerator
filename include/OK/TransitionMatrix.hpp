@@ -16,7 +16,7 @@ struct TransitionMatrix {
     TransitionMatrix();
     TransitionMatrix(std::string file);
     
-    void loadFromFile(std::string file);
+    bool loadFromFile(std::string file);
     void saveToFile(std::string file);
     void print();
     TransitionMatrix<T> operator+= (TransitionMatrix m);

@@ -32,7 +32,7 @@ public:
     Map();
     Map(const std::string fileName);
 
-    void load(const std::string fileName);
+    bool load(const std::string fileName);
     void save();
     void print();
 

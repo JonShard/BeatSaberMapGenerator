@@ -12,8 +12,11 @@ Notation::Notation(const std::string name) {
     std::vector<Keyframe> m_keyframes;
 }
 
-void Notation::load(const std::string fileName) {
+bool Notation::load(const std::string fileName) {
     std::ifstream file(fileName);
+    if (file.fail()) {
+        return false;
+    }
     nlohmann::json jsNotation;
     file >> jsNotation;
 
@@ -25,6 +28,7 @@ void Notation::load(const std::string fileName) {
         };
         m_keyframes.push_back(k);
     }
+    return true;
 }
 
 void Notation::save() {
