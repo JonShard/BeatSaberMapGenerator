@@ -1,0 +1,15 @@
+{
+    "generator": {
+        "noteClusterTime": 0.05,
+        "factories": {
+            "maxAttempts": 10000
+        },
+        "validators": {
+            "validateTimeAfterNote": 2
+        }
+    },
+    "editor": {
+        "windowWidth": 1600,
+        "windowHeight": 900
+    }
+}

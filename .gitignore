@@ -1,5 +1,6 @@
 # Visual Code project
 .vs/
+.vscode/
 
 # Build 
 .build/
@@ -13,7 +14,6 @@ exports/
 .temp
 
 # Input / output
-*.json
 *.dat
 *.egg
 *.ogg

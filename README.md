@@ -45,6 +45,27 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 `./generator.out -a songs/createOW/ExpertPlusStandard.dat --clean`  
 `./generator.out -g keyframes.json`  
 
+### Config File
+Config file `config.json` is loaded from the same location as the program.  
+Example:
+```json
+{
+    "generator": {
+        "noteClusterTime": 0.05,
+        "factories": {
+            "maxAttempts": 10000
+        },
+        "validators": {
+            "validateTimeAfterNote": 2
+        }
+    },
+    "editor": {
+        "windowWidth": 1600,
+        "windowHeight": 900
+    }
+}
+```
+
 ### Editor Keybindings
 Create a keyframe by pressing one or several keys in the range A-Z + 0-9. Pressing several at a time will register the keyframe with several concurrent presses with a **max of 4**, indicating the intensity of that keyframe.  
 | Key         | Action        |
