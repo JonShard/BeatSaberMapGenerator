@@ -89,7 +89,7 @@ float Map::getLatestTime() {
         return m_notes.back().time;
 }
 
-std::vector<Note> Map::getKeyframesInCluster(int noteNr) {
+std::vector<Note> Map::getNotesInCluster(int noteNr) {
     std::vector<Note> cluster;
     // Search forwards from note.
     for (int i = noteNr; i < m_notes.size(); i++) {
