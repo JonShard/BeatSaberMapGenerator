@@ -91,8 +91,18 @@ float Map::getLatestTime() {
 
 std::vector<Note> Map::getKeyframesInCluster(int noteNr) {
     std::vector<Note> cluster;
+    // Search forwards from note.
     for (int i = noteNr; i < m_notes.size(); i++) {
-        if (m_notes[i].time - m_notes[noteNr].time < 0.05f) { // TODO: Config
+        if (m_notes[i].time - m_notes[noteNr].time < Config::generator.noteClusterTime) {
+            cluster.push_back(m_notes[i]);
+        }
+        else {
+            break;
+        }
+    }
+    // Search bachwards from note.
+    for (int i = noteNr; i > 0; i--) {
+        if (m_notes[noteNr].time - m_notes[i].time < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }
         else {
@@ -101,7 +111,6 @@ std::vector<Note> Map::getKeyframesInCluster(int noteNr) {
     }
     return cluster;
 }
-
 
 Map Map::operator+=(Note n) {
     m_notes.push_back(n);

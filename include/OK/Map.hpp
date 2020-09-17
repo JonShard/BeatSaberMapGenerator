@@ -7,6 +7,8 @@
 
 #include "../nlohmann/json.hpp"
 
+#include "Config.hpp"
+
 namespace OK {
 
 enum Type { BLUE, RED };
