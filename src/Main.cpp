@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
         analyseMaps(mapsList, append);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
-        generateFromKeyframe(args[3]);
+        generateFromKeyframe(args[2]);
     }
     else if (args.size() > 2){
         openEditorWindow(args[1], args[2]);
