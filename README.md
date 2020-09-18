@@ -34,7 +34,8 @@ The plan is to have many kinds of factories to bring variety, along with many kn
 1. `./generator.out song.ogg`
 
 ## Usage
-`generator.out [AUDIO FILE] [JSON NOTATIONS]`  
+Note that right now the generator requires a BPM of 120 in the info file as the program has no way to get this right now.  
+`generator.out [AUDIO FILE] [JSON NOTATIONS]` 
 
 ### Parameters
 - `-a [MAP FILE...] [OPTIONAL --clean]` Analyse a map and build transition matrix. Stored in `binaryTransitionMatrix.data`. Optional falg `--clean` to discard existing matrix.

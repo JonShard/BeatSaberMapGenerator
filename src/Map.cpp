@@ -48,7 +48,7 @@ bool Map::load(const std::string fileName) {
 
     for (nlohmann::json jn : jsNotes) {
         Note n {
-            jn.at("_time").get_to(n.time) / (110.0f / 60.0f),
+            jn.at("_time").get_to(n.time) / (120.0f / 60.0f),
             jn.at("_lineIndex").get_to(n.lineIndex),
             jn.at("_lineLayer").get_to(n.lineLayer),
             jn.at("_type").get_to(n.type),
@@ -65,9 +65,9 @@ void Map::save() {
     nlohmann::json jsMap;
     
     for (Note n : m_notes) {
-        printf("Adding note at time (Adjusted for BPM): %f\n", n.time * (110.0f / 60.0f)); // TODO: dynamically get BPS (110)
+        printf("Adding note at time (Adjusted for BPM): %f\n", n.time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
         nlohmann::json jn;
-        jn["_time"] = n.time * (110.0f / 60.0f);
+        jn["_time"] = n.time * (120.0f / 60.0f);
         jn["_lineIndex"] = n.lineIndex;
         jn["_lineLayer"] = n.lineLayer;
         jn["_type"] = n.type;
