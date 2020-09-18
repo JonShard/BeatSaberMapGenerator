@@ -17,7 +17,7 @@ EditorPanel::EditorPanel() : Panel() {
 }
 
 bool EditorPanel::loadMusic(const std::string fileName) {
-    m_notation = Notation(fileName + "_notation.json");
+    m_notation = Notation(Util::removeFileExtention(fileName, ".ogg") + "_notation.json");
     return m_music.openFromFile(fileName);
 }
 
@@ -62,7 +62,8 @@ void EditorPanel::update(float dt) {
         m_notation.save();
     }
     if (Input::isKeyDown(sf::Keyboard::F10)) {  // TODO: Make new panel for generating map.
-        Generator::GenerateMap(m_notation);
+        Map map = Generator::GenerateMap(m_notation);
+        map.save();
     }
 
     int concurrent = 0;

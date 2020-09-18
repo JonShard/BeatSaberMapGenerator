@@ -77,6 +77,7 @@ void Map::save() {
 
     jsMap["_version"] = "2.0.0";
     jsMap["_notes"] = jsNotes;
+    printf("Saving map file to: %s\n", m_name.data());
     std::ofstream out(m_name);
     out << jsMap;
     out.close();

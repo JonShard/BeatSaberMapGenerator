@@ -52,9 +52,10 @@ void generateFromNotation(std::string notationFile) {
         printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
         return;
     }
-    OK::Notation notation;
+    OK::Notation notation(notationFile);
     notation.load(notationFile);
-    OK::Generator::GenerateMap(notation);
+    OK::Map map = OK::Generator::GenerateMap(notation);
+    map.save();
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {
@@ -71,9 +72,14 @@ void openEditorWindow(std::string songFile, std::string notationFile = "") {
         printf("Loaded song %s\n", songFile.data());
     }
     if (notationFile.length() > 0) {
+        if (!OK::Util::isFileExtention(notationFile, ".json")) {
+            printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
+            return;
+        }
         editorPanel.loadNotation(notationFile);
         printf("Loaded notation %s\n", notationFile.data());
     }
+
     while(window.isOpen()) {
         window.update();
         window.draw();

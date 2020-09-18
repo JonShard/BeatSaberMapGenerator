@@ -12,13 +12,12 @@ protected:
     static std::vector<Factory*> s_factories; // Weights
     static std::vector<Validator*> s_validators;
 
-    static void SaveMap(Map map);
     static bool IsValid(Map map);
 public:
     Generator();
     static void Init();
 
-    static void GenerateMap(Notation notation);
+    static Map GenerateMap(Notation notation);
 };
 
 } // namespace OK

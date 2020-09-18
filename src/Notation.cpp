@@ -44,6 +44,7 @@ void Notation::save() {
         jn["concurrent"] = k.concurrent;
         jsKeyframes.push_back(jn);
     }
+    printf("Saving notation file to: %s\n", m_name.data());
     std::ofstream out(m_name);
     out << jsKeyframes;
     out.close();
