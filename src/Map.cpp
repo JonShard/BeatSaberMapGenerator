@@ -2,6 +2,28 @@
 
 namespace OK {
 
+// Static funcitons:
+bool Map::IsClusterMultiColor(std::vector<Note> cluster) {
+    bool red = false;
+    bool blue = false;
+    for (Note n : cluster) {
+        if (n.type = BLUE) blue = true;
+        if (n.type = RED) red = true;
+    }
+    return red && blue;
+}
+
+std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type color) {
+    std::vector<Note> notes;
+    for (Note n : cluster) {
+        if (n.type == color)
+            notes.push_back(n);
+    }
+    return notes;
+}
+
+
+
 Map::Map() {
     m_name = "";
     m_notes = std::vector<Note>();
@@ -101,7 +123,7 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
         }
     }
     // Search bachwards from note.
-    for (int i = noteNr; i > 0; i--) {
+    for (int i = noteNr -1; i > 0; i--) {
         if (m_notes[noteNr].time - m_notes[i].time < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }

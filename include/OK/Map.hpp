@@ -29,6 +29,9 @@ private:
     std::string m_version;
 
 public:
+    static bool IsClusterMultiColor(std::vector<Note> cluster);    // Returns true if the cluster contains both colors.
+    static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type color);
+
     std::vector<Note> m_notes;
     
     Map();
@@ -40,7 +43,7 @@ public:
 
     std::string getName();
     float getLatestTime();
-    std::vector<Note> getNotesInCluster(int noteNr); // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame")
+    std::vector<Note> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);
