@@ -4,17 +4,14 @@
 
 namespace OK {
 
-extern int c_windowWidth;
-extern int c_windowHeight;
-
 EditorPanel::EditorPanel() : Panel() {
-    m_timelineShape = sf::RectangleShape(sf::Vector2f(5, -MAXFLOAT-1));
-    m_timelineShape.setPosition(sf::Vector2f(c_windowWidth/3, c_windowHeight));
+    m_timelineShape = sf::RectangleShape(sf::Vector2f(5, -MAXFLOAT - 1));
+    m_timelineShape.setPosition(sf::Vector2f(Config::editor.windowWidth / 3, Config::editor.windowHeight));
     m_timelineShape.setFillColor(sf::Color::White);
 
-    m_cursorShape = sf::RectangleShape(sf::Vector2f(c_windowWidth, 4));
-    m_cursorShape.setOrigin(sf::Vector2f(c_windowWidth/2, 2));
-    m_cursorShape.setFillColor(sf::Color(60,60,60));
+    m_cursorShape = sf::RectangleShape(sf::Vector2f(Config::editor.windowWidth, 4));
+    m_cursorShape.setOrigin(sf::Vector2f(Config::editor.windowWidth / 2, 2));
+    m_cursorShape.setFillColor(sf::Color(60, 60, 60));
     m_notation = Notation();
     m_autoSaveCountdown = c_autoSavePeriod;
 }
@@ -117,7 +114,7 @@ void EditorPanel::createKeyframeShape(Keyframe k) {
 }
 
 sf::Vector2f EditorPanel::getPositionAtTime(float time) {
-    return sf::Vector2f(c_windowWidth / 2, c_windowHeight / 2 + time * c_spaceModifier * m_UIScale * -1);
+    return sf::Vector2f(Config::editor.windowWidth / 2, Config::editor.windowHeight / 2 + time * c_spaceModifier * m_UIScale * -1);
 }
 
 
