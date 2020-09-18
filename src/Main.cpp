@@ -7,9 +7,6 @@
 #include "../include/OK/Config.hpp"
 
 namespace OK {
-// Constants
-int c_windowWidth;
-int c_windowHeight;
 const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
 // Statics:
 float Input::s_scrollDelta = 0;
@@ -50,12 +47,14 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 
-void generateFromKeyframe(std::string annontationFile) {
-    if (!OK::Util::isFileExtention(annontationFile, ".json")) {
-        printf("Error: Unexpected file extention: %s\nExpected .json\n", annontationFile.data());
+void generateFromNotation(std::string notationFile) {
+    if (!OK::Util::isFileExtention(notationFile, ".json")) {
+        printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
         return;
     }
-    printf("Generate!\n");
+    OK::Notation notation;
+    notation.load(notationFile);
+    OK::Generator::GenerateMap(notation);
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {
@@ -64,13 +63,9 @@ void openEditorWindow(std::string songFile, std::string notationFile = "") {
         return;
     }
 
-    OK::c_windowWidth = 1600;
-    OK::c_windowHeight = 900;
-
-    OK::Window window(OK::c_windowWidth, OK::c_windowHeight);
+    OK::Window window(OK::Config::editor.windowWidth, OK::Config::editor.windowHeight);
     OK::EditorPanel editorPanel;
     window.m_activePanel = &editorPanel;
-    OK::Generator::Init();
     
     if (editorPanel.loadMusic(songFile)) {
         printf("Loaded song %s\n", songFile.data());
@@ -95,7 +90,8 @@ int main(int argc, char** argv) {
         printf("Error: configuration file config.json not found\n");
         return 2;
     }
-    
+    OK::Generator::Init();
+
     std::vector<std::string> args;
     for (int i = 0; i < argc; i++)
         args.push_back(argv[i]);
@@ -113,7 +109,7 @@ int main(int argc, char** argv) {
         analyseMaps(mapsList, append);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
-        generateFromKeyframe(args[2]);
+        generateFromNotation(args[2]);
     }
     else if (args.size() > 2){
         openEditorWindow(args[1], args[2]);
