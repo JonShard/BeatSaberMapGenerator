@@ -22,8 +22,7 @@ public:
             Note n = map.m_notes[i];
             Note nn = map.m_notes[i+1];
             if (nn.time - n.time > Config::generator.validator.validateTimeAfterNote) {
-                Validator::s_passes++;
-                return true;
+                continue;
             }
             if (m_matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] == false) {
                 Validator::s_fails++;
