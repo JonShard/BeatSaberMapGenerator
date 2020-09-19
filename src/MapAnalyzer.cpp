@@ -6,39 +6,37 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
     TransitionMatrix<bool> matrix;
 
     for (int i = 0; i < map.m_notes.size() - 1; i++) {
-        Note n = map.m_notes[i];
-        Note nn = map.m_notes[i+1];
         std::vector<Note> cluster = map.getNotesInCluster(i);
-        std::vector<Note> nextCluster = map.getNotesInCluster(i + cluster.size());
+        std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
         // If two notes are far enough apart, it's not a transition because the player gets time to "reset" their pose.
-        if (nn.time - n.time > Config::generator.validator.validateTimeAfterNote) {
+        if (cluster[0].time - clusterNext[0].time > Config::generator.validator.validateTimeAfterNote) {
             continue;
         }
 
         // If transitioning from cluster to another cluster. 
-        if (cluster.size() > 1 && nextCluster.size() > 1) {
-            printf("Many(%ld) to Many(%ld): \n", cluster.size(), nextCluster.size());
+        if (cluster.size() > 1 && clusterNext.size() > 1) {
+            printf("Many(%ld) to Many(%ld): \n", cluster.size(), clusterNext.size());
             // If both clusters have both colors, seperate transitions by color, blue -> blue and red -> red.
-            if (Map::IsClusterMultiColor(cluster) && Map::IsClusterMultiColor(nextCluster)) {
+            if (Map::IsClusterMultiColor(cluster) && Map::IsClusterMultiColor(clusterNext)) {
                 std::vector<Note> clusterBlue = Map::GetNotesOfColorInCluster(cluster, BLUE);
                 std::vector<Note> clusterRed = Map::GetNotesOfColorInCluster(cluster, RED);
-                std::vector<Note> nextClusterBlue = Map::GetNotesOfColorInCluster(nextCluster, BLUE);
-                std::vector<Note> nextClusterRed = Map::GetNotesOfColorInCluster(nextCluster, RED);
+                std::vector<Note> nextClusterBlue = Map::GetNotesOfColorInCluster(clusterNext, BLUE);
+                std::vector<Note> nextClusterRed = Map::GetNotesOfColorInCluster(clusterNext, RED);
                 for (Note cn : clusterBlue) {
                     for (Note cnn : nextClusterBlue) {
-                        matrix.m_matrix[cnn.type][cn.type][cnn.cutDirection][cn.cutDirection][cnn.lineLayer][cn.lineLayer][cnn.lineIndex][cn.lineIndex] = true;
+                        matrix.setNoteTransition(cn, cnn, true);
                     }
                 }
                 for (Note cn : clusterRed) {
                     for (Note cnn : nextClusterRed) {
-                        matrix.m_matrix[cnn.type][cn.type][cnn.cutDirection][cn.cutDirection][cnn.lineLayer][cn.lineLayer][cnn.lineIndex][cn.lineIndex] = true;
+                        matrix.setNoteTransition(cn, cnn, true);
                     }
                 }
             }
             else {
                 for (Note cn : cluster) {
-                    for (Note cnn : nextCluster) {
-                        matrix.m_matrix[cnn.type][cn.type][cnn.cutDirection][cn.cutDirection][cnn.lineLayer][cn.lineLayer][cnn.lineIndex][cn.lineIndex] = true;
+                    for (Note cnn : clusterNext) {
+                        matrix.setNoteTransition(cn, cnn, true);
                     }
                 }
             }
@@ -47,11 +45,11 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
         }
 
         // If transitioning from a single note to a cluster.
-        if (nextCluster.size() > 1) {
-            printf("One to many(%ld): %d -> ", nextCluster.size(), i);
-            for (int p = i+1; p < i + nextCluster.size()+1; p++) printf ("%d, ", p);
-            for (Note cn : nextCluster) {
-                matrix.m_matrix[cn.type][n.type][cn.cutDirection][n.cutDirection][cn.lineLayer][n.lineLayer][cn.lineIndex][n.lineIndex] = true;
+        if (clusterNext.size() > 1) {
+            printf("One to many(%ld): %d -> ", clusterNext.size(), i);
+            for (int p = i+1; p < i + clusterNext.size()+1; p++) printf ("%d, ", p);
+            for (Note cn : clusterNext) {
+                matrix.setNoteTransition(cluster[0], cn, true);
             }
             printf("\n");
             continue;
@@ -64,15 +62,16 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
                 printf ("%d, ", j);
                 Note cn = map.m_notes[j];
                 Note cnn = map.m_notes[firstAfterCluster];
-                matrix.m_matrix[cnn.type][cn.type][cnn.cutDirection][cn.cutDirection][cnn.lineLayer][cn.lineLayer][cnn.lineIndex][cn.lineIndex] = true;
+                matrix.setNoteTransition(cn, cnn, true);
             }
             i = firstAfterCluster - 1;
             printf(" -> %d\n", i);
             continue;
         }
 
+        // If transitioning from one to one:
         printf("One to one: %d -> %d\n", i, i + 1);
-        matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] = true;
+        matrix.setNoteTransition(cluster[0], clusterNext[0], true);
     }
 
     return matrix;

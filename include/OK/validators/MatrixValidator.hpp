@@ -19,12 +19,12 @@ public:
     virtual bool validate(Map map) {
         for (int i = 0; i < map.m_notes.size()-1; i++) {
             //TODO: for all notes on same frame. Util func
-            Note n = map.m_notes[i];
-            Note nn = map.m_notes[i+1];
-            if (nn.time - n.time > Config::generator.validator.validateTimeAfterNote) {
+            std::vector<Note> cluster = map.getNotesInCluster(i);
+            std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
+            if (clusterNext[0].time - cluster[0].time > Config::generator.validator.validateTimeAfterNote) {
                 continue;
             }
-            if (m_matrix.m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] == false) {
+            if (m_matrix.getNoteTransition(cluster[0], clusterNext[0]) == false) {
                 Validator::s_fails++;
                 return false;
             }

@@ -16,6 +16,9 @@ struct TransitionMatrix {
     TransitionMatrix();
     TransitionMatrix(std::string file);
     
+    void setNoteTransition(Note n, Note nn, T value);
+    T getNoteTransition(Note n, Note nn);
+
     bool loadFromFile(std::string file);
     void saveToFile(std::string file);
     void print();

@@ -28,6 +28,17 @@ TransitionMatrix<T>::TransitionMatrix() {
 }
 
 template<class T>
+void TransitionMatrix<T>::setNoteTransition(Note n, Note nn, T value) {
+    m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] = value;
+}
+
+template<class T>
+T TransitionMatrix<T>::getNoteTransition(Note n, Note nn) {
+    return m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex];
+}
+
+
+template<class T>
 TransitionMatrix<T>::TransitionMatrix(const std::string file) {
 loadFromFile(file);
 }
