@@ -39,7 +39,7 @@ Note that right now the generator requires a BPM of 120 in the info file as the 
 
 ### Parameters
 - `-a [MAP FILE...] [OPTIONAL --clean]` Analyse a map and build transition matrix. Stored in `binaryTransitionMatrix.data`. Optional falg `--clean` to discard existing matrix.
-- `-g [JSON NOTATIONS]` Generate map from existing keyframes file.
+- `-g [JSON NOTATIONS]` Generate map from existing keyframes file. Optional parameter `--seed 42`.
 
 ### Examples
 `./generator.out songs/createOW/create.ogg /songs/createOW/keyframes.json`  

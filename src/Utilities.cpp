@@ -22,4 +22,13 @@ std::string removeFileExtention(const std::string file, const std::string ext) {
     return file.substr(0, pos - ext.size() + 1);
 }
 
+unsigned int integerSumString(std::string str) {
+    unsigned int sum = 0;
+    for (char c : str) {
+        sum += int(c);
+    }
+    return sum;
+}
+
+
 } // namespace OK::Util

@@ -119,6 +119,17 @@ int main(int argc, char** argv) {
         analyseMaps(mapsList, append);
     }
     else if (args.size() > 1 && std::find(args.begin(), args.end(), "-g") != args.end()) {
+        
+        if (args.size() > 3 && std::find(args.begin(), args.end(), "--seed") != args.end()) {
+            if (args.size() > 4) {
+                srandom(OK::Util::integerSumString(args[4]));
+            }
+            else {
+                printf("Error: expected value for parameter --seed\n");
+                return ExitCode::MISSING_ARGUMENTS;
+            }
+
+        }
         generateFromNotation(args[2]);
     }
     else if (args.size() > 2){
