@@ -20,6 +20,11 @@ public:
         for (int i = 0; i < map.m_notes.size()-1; i++) {
             //TODO: for all notes on same frame. Util func
             std::vector<Note> cluster = map.getNotesInCluster(i);
+            // If the last two or more notes are in a cluster, return because the next note(s) doesn't exist.
+            if (i + cluster.size() > map.m_notes.size() -1) {
+                return true;
+            }
+
             std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
             if (clusterNext[0].time - cluster[0].time > Config::generator.validator.validateTimeAfterNote) {
                 continue;

@@ -6,6 +6,7 @@ namespace OK {
     void Generator::Init() {
         s_factories.push_back(new RandomFactory);
         s_validators.push_back(new MatrixValidator);
+        // s_validators.push_back(new DoubleDownValidator);
     }
 
     bool Generator::IsValid(Map map) {
@@ -20,6 +21,7 @@ namespace OK {
         Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
         printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
+            
             int produceAttempts = 0;
             Map mapNext;
             do {
@@ -30,8 +32,11 @@ namespace OK {
             
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
+                Note badNote = map.m_notes.back();
                 map.m_notes.pop_back();
                 i--;
+                printf("Ran out of max attempts: %d. Escaping absorbing state:\n", produceAttempts);
+                badNote.print();
                 continue;
             }
 

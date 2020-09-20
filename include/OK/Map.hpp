@@ -11,8 +11,9 @@
 
 namespace OK {
 
-enum Type { BLUE, RED };
-enum CutDirection { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT };
+enum Type { RED, BLUE};
+enum CutDirection       { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, ANY};
+const int CutAngle[] =  { 90, 270,  180,  0,     135,     45,       225,       315,        -1 };
 
 struct Note {
     float time;
@@ -20,6 +21,8 @@ struct Note {
     int lineLayer;
     int type;
     int cutDirection;
+
+    void print();
 };
 
 
@@ -44,6 +47,7 @@ public:
     std::string getName();
     float getLatestTime();
     std::vector<Note> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
+    Note getPreviousNoteOfColor(int noteNr, Type color);
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);

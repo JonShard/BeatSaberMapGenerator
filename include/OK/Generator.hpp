@@ -4,6 +4,7 @@
 
 #include "factories/RandomFactory.hpp"
 #include "validators/MatrixValidator.hpp"
+#include "validators/DoubleDownValidator.hpp"
 
 namespace OK {
 

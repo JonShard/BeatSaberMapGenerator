@@ -24,6 +24,13 @@ std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type 
 
 
 
+
+void Note::print() {
+    printf ("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d\n", 
+            time, lineIndex, lineLayer, type, cutDirection);
+}
+
+
 Map::Map() {
     m_name = "";
     m_notes = std::vector<Note>();
@@ -134,6 +141,19 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
     }
     return cluster;
 }
+
+Note Map::getPreviousNoteOfColor(int noteNr, Type color) {
+    if (m_notes.size() == 0 || noteNr < 0)
+        return Note();
+
+    for (int i = noteNr; i >= 0; i--) {
+        if (m_notes[i].type = color) {
+            return m_notes[i];
+        }
+    }
+    return Note();
+}
+
 
 Map Map::operator+=(Note n) {
     m_notes.push_back(n);
