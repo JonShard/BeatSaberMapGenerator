@@ -7,6 +7,10 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
 
     for (int i = 0; i < map.m_notes.size() - 1; i++) {
         std::vector<Note> cluster = map.getNotesInCluster(i);
+        // If the last two or more notes are in a cluster, exit loop and return because the next note(s) doesn't exist.
+        if (i + cluster.size() > map.m_notes.size() -1) {
+            break;
+        }
         std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
         // If two notes are far enough apart, it's not a transition because the player gets time to "reset" their pose.
         if (cluster[0].time - clusterNext[0].time > Config::generator.validator.validateTimeAfterNote) {
@@ -47,13 +51,14 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
         // If transitioning from a single note to a cluster.
         if (clusterNext.size() > 1) {
             printf("One to many(%ld): %d -> ", clusterNext.size(), i);
-            for (int p = i+1; p < i + clusterNext.size()+1; p++) printf ("%d, ", p);
             for (Note cn : clusterNext) {
                 matrix.setNoteTransition(cluster[0], cn, true);
             }
+            for (int p = i+1; p <= i + clusterNext.size(); p++) printf ("%d, ", p);
             printf("\n");
             continue;
         }
+
         // If transitioning from inside a cluster, consider each node in cluster as a transition to the next note:
         if (cluster.size() > 1) {
             int firstAfterCluster = i + cluster.size(); 

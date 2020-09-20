@@ -21,7 +21,6 @@ namespace OK {
         Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
         printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
-            
             int produceAttempts = 0;
             Map mapNext;
             do {

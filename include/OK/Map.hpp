@@ -11,8 +11,8 @@
 
 namespace OK {
 
-enum Type { RED, BLUE};
-enum CutDirection       { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, ANY};
+enum Type { RED, BLUE, RED_DUP, BOMB}; // For some reason red appears twice in the types of note.
+enum CutDirection       { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, DOT};
 const int CutAngle[] =  { 90, 270,  180,  0,     135,     45,       225,       315,        -1 };
 
 struct Note {

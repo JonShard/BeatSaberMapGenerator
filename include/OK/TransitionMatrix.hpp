@@ -7,7 +7,7 @@ namespace OK {
 const int c_lanes = 4;
 const int c_floors = 3;
 const int c_types = 9; 
-const int c_colors = 2;
+const int c_colors = 4; // RED, BLUE, RED_DUPLICATE, BOMB
 
 template <class T>
 struct TransitionMatrix {
