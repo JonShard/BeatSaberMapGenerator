@@ -26,6 +26,9 @@ public:
                     Validator::s_fails++;
                     return false;                    
                 }
+                else {  // Last note wasn't double down, time to stop looking so we don't compare with notes that aren't the previous one.
+                    break;
+                }
 
                 if (map.m_notes[i].time - map.m_notes[j].time > Config::generator.validator.validateTimeAfterNote) {
                     break;
