@@ -13,7 +13,10 @@ private:
     TransitionMatrix<bool> m_matrix;
 public:
     MatrixValidator() {
-        m_matrix.loadFromFile("binaryTransitionMatrix.data");
+        if (!m_matrix.loadFromFile(Config::generator.validator.matrix.binaryMatrixFilePath)) {
+            printf("\nWarning: unable to load binary matrix file at configured path: %s\n\n", 
+                 Config::generator.validator.matrix.binaryMatrixFilePath.data());
+        }
     }
 
     virtual bool validate(Map map) {

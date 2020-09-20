@@ -6,6 +6,8 @@
 #include "../include/OK/MapAnalyzer.hpp"
 #include "../include/OK/Config.hpp"
 
+enum ExitCode { DONE, MISSING_ARGUMENTS, BAD_CONFIG };
+
 namespace OK {
 const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
 // Statics:
@@ -90,13 +92,15 @@ int main(int argc, char** argv) {
     if (argc == 1) {
         std::printf("Error: expected arguments.\n");
         printUsage();
-        return 1;
+        return ExitCode::MISSING_ARGUMENTS;
     }
     if (!OK::Config::Load()) {
         printf("Error: configuration file config.json not found\n");
-        return 2;
+        return ExitCode::BAD_CONFIG;
     }
-    OK::Generator::Init();
+    if (!OK::Generator::Init()) {
+        return ExitCode::BAD_CONFIG;
+    }
 
     std::vector<std::string> args;
     for (int i = 0; i < argc; i++)
@@ -123,4 +127,6 @@ int main(int argc, char** argv) {
     else {
         openEditorWindow(args[1]);
     }
+
+    return ExitCode::DONE;
 }

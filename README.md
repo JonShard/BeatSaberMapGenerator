@@ -55,10 +55,18 @@ Format:
         "noteClusterTime": float - Time that defines how close notes have to be to be considered in the same cluser or "frame" (seconds).
         "factories": {
             "maxAttempts": int - The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
+            "randomFactory": {
+                "enabled": bool - is the random factory enabled.
+            }
         },
         "validators": {
             "validateTimeAfterNote": float - Time after a note in which the validator will care if an illegal note is placed (seconds).
+            "matrixValidator": {
+                "enabled": bool - is the matrix validator enabled.
+                "binaryMatrixFilePath": string - Path to ascii file containing binary transition matrix containing only 1, 0 and whitespace.  
+            },
             "doubleDownValidator": {
+                "enabled": bool - is the double down validator enabled.
                 "angleToBeDoubleDown": The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
             }
         }
@@ -75,11 +83,19 @@ Example:
     "generator": {
         "noteClusterTime": 0.05,
         "factories": {
-            "maxAttempts": 10000
+            "maxAttempts": 10000,
+            "randomFactory": {
+                "enabled": true
+            }
         },
         "validators": {
             "validateTimeAfterNote": 2,
+            "matrixValidator": {
+                "enabled": true,
+                "binaryMatrixFilePath": "binaryTransitionMatrix.data"
+            },
             "doubleDownValidator": {
+                "enabled": true,
                 "angleToBeDoubleDown": 90
             }
         }

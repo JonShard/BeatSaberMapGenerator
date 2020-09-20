@@ -16,7 +16,7 @@ protected:
     static bool IsValid(Map map);
 public:
     Generator();
-    static void Init();
+    static bool Init();
 
     static Map GenerateMap(Notation notation);
 };

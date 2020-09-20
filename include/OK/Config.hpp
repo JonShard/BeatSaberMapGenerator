@@ -7,16 +7,28 @@
 
 namespace OK {
 
+struct RandomFactoryConfig {
+    bool enabled;
+};
+
 struct FactoryConfig {
     int maxAttempts; // The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
+    RandomFactoryConfig random;
 };
 
 struct DoubleDownValidatorConfig {
-    int angleToBeDoubleDown = 90; // The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
+    bool enabled;
+    int angleToBeDoubleDown; // The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
+};
+
+struct MatrixValidatorConfig {
+    bool enabled;
+    std::string binaryMatrixFilePath; // Path to ascii file containing binary transition matrix containing only 1, 0 and whitespace. 
 };
 
 struct ValidatorConfig {
     float validateTimeAfterNote; // Time after a note in which the validator will care if an illegal note is placed (sec).
+    MatrixValidatorConfig matrix;
     DoubleDownValidatorConfig doubleDown;
 };
 

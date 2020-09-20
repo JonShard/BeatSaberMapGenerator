@@ -3,10 +3,17 @@
 
 namespace OK {
 
-    void Generator::Init() {
-        s_factories.push_back(new RandomFactory);
-        s_validators.push_back(new MatrixValidator);
-        s_validators.push_back(new DoubleDownValidator);
+    bool Generator::Init() {
+        if (Config::generator.factory.random.enabled) s_factories.push_back(new RandomFactory);
+        if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
+        if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
+        
+        if (s_factories.size() == 0) {
+            printf("Error: there must be atleast one enabled factory\n");
+            return false;
+        }
+
+        return true;
     }
 
     bool Generator::IsValid(Map map) {

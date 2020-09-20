@@ -12,12 +12,25 @@ bool Config::Load() {
     
     nlohmann::json jsGenerator = jsConfig["generator"];
             jsGenerator.at("noteClusterTime").get_to(generator.noteClusterTime);
+        
         nlohmann::json jsFactories = jsGenerator["factories"];
             jsFactories.at("maxAttempts").get_to(generator.factory.maxAttempts);
+        
+            nlohmann::json jsRandomFactory = jsFactories["randomFactory"];
+                jsRandomFactory.at("enabled").get_to(generator.factory.random.enabled);
+
         nlohmann::json jsValidators = jsGenerator["validators"];
             jsValidators.at("validateTimeAfterNote").get_to(generator.validator.validateTimeAfterNote);
+            
+            nlohmann::json jsMatrixValidator = jsValidators["matrixValidator"];
+                jsMatrixValidator.at("enabled").get_to(generator.validator.matrix.enabled);
+                jsMatrixValidator.at("binaryMatrixFilePath").get_to(generator.validator.matrix.binaryMatrixFilePath);
+
             nlohmann::json jsDoubleDownValidator = jsValidators["doubleDownValidator"];
+                jsDoubleDownValidator.at("enabled").get_to(generator.validator.doubleDown.enabled);
                 jsDoubleDownValidator.at("angleToBeDoubleDown").get_to(generator.validator.doubleDown.angleToBeDoubleDown);
+
+
     nlohmann::json jsEditor = jsConfig["editor"];
         jsEditor.at("windowWidth").get_to(editor.windowWidth);
         jsEditor.at("windowHeight").get_to(editor.windowHeight);
