@@ -42,12 +42,33 @@ Note that right now the generator requires a BPM of 120 in the info file as the 
 - `-g [JSON NOTATIONS]` Generate map from existing keyframes file.
 
 ### Examples
-`./generator.out songs/createOW/create.ogg`  
+`./generator.out songs/createOW/create.ogg /songs/createOW/keyframes.json`  
 `./generator.out -a songs/createOW/ExpertPlusStandard.dat --clean`  
 `./generator.out -g keyframes.json`  
 
 ### Config File
 Config file `config.json` is loaded from the same location as the program.  
+Format:
+```
+{
+    "generator": {
+        "noteClusterTime": float - Time that defines how close notes have to be to be considered in the same cluser or "frame" (seconds).
+        "factories": {
+            "maxAttempts": int - The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
+        },
+        "validators": {
+            "validateTimeAfterNote": float - Time after a note in which the validator will care if an illegal note is placed (seconds).
+            "doubleDownValidator": {
+                "angleToBeDoubleDown": The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
+            }
+        }
+    },
+    "editor": {
+        "windowWidth": int - Amount of pixles of the editor window in X direction.
+        "windowHeight": int - Amount of pixles of the editor window in Y direction.
+    }
+}
+```
 Example:
 ```json
 {
@@ -57,7 +78,10 @@ Example:
             "maxAttempts": 10000
         },
         "validators": {
-            "validateTimeAfterNote": 2
+            "validateTimeAfterNote": 2,
+            "doubleDownValidator": {
+                "angleToBeDoubleDown": 90
+            }
         }
     },
     "editor": {

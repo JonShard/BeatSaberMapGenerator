@@ -8,7 +8,6 @@ namespace OK {
 
 class DoubleDownValidator : public Validator {
 private:
-    int angleToBeDoubleDown = 90; //0, 45, 90, 135
 
 public:
     DoubleDownValidator() {}
@@ -22,7 +21,8 @@ public:
                 if (map.m_notes[i].type != map.m_notes[j].type) // Has to be same color to be double down.
                     continue;
 
-                if (std::abs(CutAngle[map.m_notes[i].cutDirection] - CutAngle[map.m_notes[j].cutDirection]) <= angleToBeDoubleDown) {
+                int angleDelta = std::abs(CutAngle[map.m_notes[i].cutDirection] - CutAngle[map.m_notes[j].cutDirection]);
+                if (angleDelta <= Config::generator.validator.doubleDown.angleToBeDoubleDown) {
                     Validator::s_fails++;
                     return false;                    
                 }

@@ -5,7 +5,10 @@
             "maxAttempts": 10000
         },
         "validators": {
-            "validateTimeAfterNote": 2
+            "validateTimeAfterNote": 2,
+            "doubleDownValidator": {
+                "angleToBeDoubleDown": 90
+            }
         }
     },
     "editor": {
