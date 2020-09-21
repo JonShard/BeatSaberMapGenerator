@@ -1,4 +1,3 @@
-// DoubleDownValidator ensures the frequency consecutive notes in the same direction of a color is wihin a set tolerance.
 #pragma once
 
 #include "Validator.hpp"
@@ -6,6 +5,7 @@
 
 namespace OK {
 
+// DoubleDownValidator ensures the frequency consecutive notes in the same direction of a color is wihin a set tolerance.
 class DoubleDownValidator : public Validator {
 private:
 

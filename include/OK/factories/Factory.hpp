@@ -1,4 +1,3 @@
-// Base class for all factories. A factory is a class that procduces one or several notes.
 #pragma once
 
 #include "../Map.hpp"
@@ -6,6 +5,7 @@
 
 namespace OK {
 
+// Base class for all factories. A factory is a class that procduces one or several notes.
 class Factory {
 protected:
     static int s_totalProduceAttempts;

@@ -1,4 +1,3 @@
-// Map is a representaion of a single difficulty of a Beat Saber map.
 #pragma once
 #include <fstream>
 #include <iostream>
@@ -26,6 +25,7 @@ struct Note {
 };
 
 
+// Map is a representaion of a single difficulty of a Beat Saber map.
 class Map {
 private:
     std::string m_name;

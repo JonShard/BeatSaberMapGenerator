@@ -1,4 +1,5 @@
-// Keyframe is a
+// Notation is the representation of a user input on the keyboard. 
+// Each of these will be generated into one or several notes, except if they are way too dense and some have to be removed.
 #pragma once
 #include <fstream>
 #include <iostream>

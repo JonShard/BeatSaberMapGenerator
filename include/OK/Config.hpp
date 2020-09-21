@@ -7,6 +7,12 @@
 
 namespace OK {
 
+
+struct SymmeticalFactoryConfig {
+    bool enabled;
+    bool onlyOnBorder; // Disallow notes to be generatred in the two ceneter positions.  
+};
+
 struct RandomFactoryConfig {
     bool enabled;
 };
@@ -14,6 +20,7 @@ struct RandomFactoryConfig {
 struct FactoryConfig {
     int maxAttempts; // The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
     RandomFactoryConfig random;
+    SymmeticalFactoryConfig symmetrical;
 };
 
 struct DoubleDownValidatorConfig {

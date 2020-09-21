@@ -9,6 +9,8 @@ const int c_floors = 3;
 const int c_types = 9; 
 const int c_colors = 4; // RED, BLUE, RED_DUPLICATE, BOMB
 
+// TransitionMatrix describes all allowed trasitions from one note to the next. 
+// It is parsed from existing maps and stored on a file. It is used to validate the map.
 template <class T>
 struct TransitionMatrix {
     //         To       From      To       From     To        From      To       From

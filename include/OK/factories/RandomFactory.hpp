@@ -1,4 +1,3 @@
-// RandomFactory produces a random note based on some weights to get more notes far down and colors their side more often.
 #pragma once
 
 #include "Factory.hpp" 
@@ -6,6 +5,7 @@
 
 namespace OK {
 
+// RandomFactory produces a random note based on some weights to get more notes far down and colors their side more often.
 class RandomFactory : public Factory {
 public:
     virtual std::vector<Note> produce(Notation notation, Map map) {
@@ -15,8 +15,8 @@ public:
 
         Note note;
         note.time= nextKeyframe.time;
-        note.type = (Util::rng(0, 100) < 60); // Type 0 = red, 1 = blue
-        note.cutDirection = Util::rng(0, 8);
+        note.type = (Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
+        note.cutDirection = Util::rng(0, 8);    // Dot note is 9 none of those for now.
         
         int layer = Util::rng(0, 100);
         if      (layer > 50) note.lineLayer = 0;

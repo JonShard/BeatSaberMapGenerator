@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <SFML/Audio.hpp>
@@ -18,6 +17,7 @@ const float c_spaceModifier = 200;     // Spaceing between each node.
 const float c_textSize = 20;
 const float c_autoSavePeriod = 60;     // Seconds
 
+// EditorPanel is the user interface to create Keyframes which are used by the Generator to make a Map.
 class EditorPanel : public Panel {
 private:
     std::vector<sf::CircleShape> m_keyframeShapes;

@@ -1,5 +1,3 @@
-// Matrix Validator ensures that the transition from each note to the next 
-// of the same color is legal. 
 #pragma once
 
 #include "Validator.hpp"
@@ -8,6 +6,8 @@
 
 namespace OK {
 
+// Matrix Validator ensures that the transition from each note to the next 
+// of the same color is legal. 
 class MatrixValidator : public Validator {
 private:
     TransitionMatrix<bool> m_matrix;
