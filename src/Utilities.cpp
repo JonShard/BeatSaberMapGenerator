@@ -3,6 +3,7 @@
 
 namespace OK::Util {
 
+// Returns random numer in the range min()inclusive to max(exclusive). 
 int rng(int min, int max) {
     return (min + random() % max);
 }
