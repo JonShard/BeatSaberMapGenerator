@@ -9,7 +9,7 @@ namespace OK {
 
 
 struct SymmeticalFactoryConfig {
-    bool enabled = true;
+    bool enabled;
     bool onlyOnBorder; // Disallow notes to be generatred in the two ceneter positions.  
 };
 

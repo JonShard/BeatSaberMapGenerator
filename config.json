@@ -5,6 +5,10 @@
             "maxAttempts": 10000,
             "randomFactory": {
                 "enabled": true
+            },
+            "symmetricalFactory": {
+                "enabled": true,
+                "onlyOnBorder" : true
             }
         },
         "validators": {

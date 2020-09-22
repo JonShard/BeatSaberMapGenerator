@@ -56,17 +56,21 @@ Format:
         "factories": {
             "maxAttempts": int - The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
             "randomFactory": {
-                "enabled": bool - is the random factory enabled.
+                "enabled": bool - Is the random factory enabled.
+            }
+            "symmetricalFactory": {
+                "enabled": bool - Is the symmetrical factory enabled.
+                "onlyOnBorder": bool - Disallow notes to be generatred in the two ceneter positions.  
             }
         },
         "validators": {
             "validateTimeAfterNote": float - Time after a note in which the validator will care if an illegal note is placed (seconds).
             "matrixValidator": {
-                "enabled": bool - is the matrix validator enabled.
+                "enabled": bool - Is the matrix validator enabled.
                 "binaryMatrixFilePath": string - Path to ascii file containing binary transition matrix containing only 1, 0 and whitespace.  
             },
             "doubleDownValidator": {
-                "enabled": bool - is the double down validator enabled.
+                "enabled": bool - Is the double down validator enabled.
                 "angleToBeDoubleDown": The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
             }
         }
@@ -86,12 +90,16 @@ Example:
             "maxAttempts": 10000,
             "randomFactory": {
                 "enabled": true
+            },
+            "symmetricalFactory": {
+                "enabled": true,
+                "onlyOnBorder" : true
             }
         },
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": true,
+                "enabled": false,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {

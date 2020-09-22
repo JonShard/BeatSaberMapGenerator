@@ -18,6 +18,10 @@ bool Config::Load() {
         
             nlohmann::json jsRandomFactory = jsFactories["randomFactory"];
                 jsRandomFactory.at("enabled").get_to(generator.factory.random.enabled);
+            
+            nlohmann::json jsSymmetricalFactory = jsFactories["symmetricalFactory"];
+                jsSymmetricalFactory.at("enabled").get_to(generator.factory.symmetrical.enabled);
+                jsSymmetricalFactory.at("onlyOnBorder").get_to(generator.factory.symmetrical.onlyOnBorder);
 
         nlohmann::json jsValidators = jsGenerator["validators"];
             jsValidators.at("validateTimeAfterNote").get_to(generator.validator.validateTimeAfterNote);
