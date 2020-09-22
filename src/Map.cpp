@@ -26,9 +26,32 @@ std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type 
 
 
 void Note::print() {
-    printf ("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d\n", 
+    printf ("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
             time, lineIndex, lineLayer, type, cutDirection);
 }
+void Note::invertNote() {
+    if      (type == BLUE) type = RED;
+    else if (type == RED)  type = BLUE; // If bomb, keep as bomb.
+    
+    switch (cutDirection)
+    {
+    case UP: cutDirection = DOWN; break;
+    case DOWN: cutDirection = UP; break;
+    case LEFT: cutDirection = RIGHT; break;
+    case RIGHT: cutDirection = LEFT; break;
+    case UP_LEFT: cutDirection = DOWN_RIGHT; break;
+    case UP_RIGHT: cutDirection = DOWN_LEFT; break;
+    case DOWN_LEFT: cutDirection = UP_RIGHT; break;
+    case DOWN_RIGHT: cutDirection = UP_LEFT; break;
+    default: cutDirection = DOT; break;
+    }
+}
+
+void Note::invertPosition() {
+    lineLayer = 2 - lineLayer;
+    lineIndex = 3 - lineIndex;
+}
+
 
 
 Map::Map() {

@@ -22,6 +22,13 @@ mv testAudio.ogg testAudio.egg
 zip ../../exports/testAudio.zip *
 cd - > /dev/null 2>&1
 
+cp -r ../songs/DiscoDescentCryptOfTheNecrodancer .
+cd DiscoDescentCryptOfTheNecrodancer
+mv song.dat ExpertPlusStandard.dat
+mv song.ogg song.egg
+zip ../../exports/discoDescent.zip *
+cd - > /dev/null 2>&1
+
 # \loop
 cd ..
 rm -r .temp

@@ -10,7 +10,7 @@
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": true,
+                "enabled": false,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {

@@ -5,9 +5,9 @@ namespace OK {
 
     bool Generator::Init() {
         if (Config::generator.factory.random.enabled) s_factories.push_back(new RandomFactory);
+        if (Config::generator.factory.symmetrical.enabled) s_factories.push_back(new SymmetricalFactory);
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
-        
         if (s_factories.size() == 0) {
             printf("Error: there must be atleast one enabled factory\n");
             return false;
@@ -25,32 +25,46 @@ namespace OK {
     }
  
     Map Generator::GenerateMap(Notation notation) {
-        Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
         printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
+        Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
+        int notesAddedLast = 0;
+
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
+            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent);
             int produceAttempts = 0;
             Map mapNext;
             do {
                 mapNext = map;
-                mapNext += s_factories[0]->produce(notation, map);
+                if (notation.m_keyframes[i].concurrent == 2) {
+                    mapNext += s_factories[1]->produce(notation, map);
+                }
+                else {
+                    mapNext += s_factories[0]->produce(notation, map);
+                }
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
             
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
-                printf("Ran out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
-                printf("Absorbing note being removed: ");
-                map.m_notes.back().print();
-                printf("Last attempted transition:    ");
-                mapNext.m_notes.back().print();
-                map.m_notes.pop_back();
-                printf("Map length after removing absorbing note: %ld\n\n", map.m_notes.size());
+                printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
+                for (int j = 0; j < notesAddedLast; j++) {
+                    printf("\tAbsorbing note being removed: \t");
+                    map.m_notes.back().print();
+                    map.m_notes.pop_back();
+                    printf("\n");
+                }
+                for (int k = 0; k < mapNext.m_notes.size() - map.m_notes.size(); k++) {
+                    printf("\tLast attempted transition:    \t");
+                    mapNext.m_notes.back().print();
+                    mapNext.m_notes.pop_back();
+                    printf("\n");
+                }
                 i--;
                 continue;
             }
-
+            notesAddedLast = mapNext.m_notes.size() - map.m_notes.size();
             map = mapNext;
-            printf("Processed keyframe %d at time: %f \tMap length: %ld \tProduce attempts: %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), produceAttempts);
+             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\n\n", i, produceAttempts, map.m_notes.size());
         }
         return map;
     }

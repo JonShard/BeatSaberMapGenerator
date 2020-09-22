@@ -1,6 +1,7 @@
 #pragma once
 
 #include "factories/RandomFactory.hpp"
+#include "factories/SymmetricalFactory.hpp"
 #include "validators/MatrixValidator.hpp"
 #include "validators/DoubleDownValidator.hpp"
 
