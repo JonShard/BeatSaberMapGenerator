@@ -21,9 +21,10 @@ struct Note {
     int type;
     int cutDirection;
 
-    std::string toString();
     void invertNote(); // Invertes the color and cutdirection of the note. Blue down becomes red up. Position and time remain unchanged.
     void invertPosition(); // Invertes position of the note. Top left becomes bottom right. Everything else remains unchanged.
+    bool isInCenter();
+    std::string toString();
 };
 
 

@@ -21,10 +21,27 @@ public:
         
         // Blue is more likely to be on the right.
         int number = Util::rng(0, 100);
-        if      (number < 30) noteBlue.lineIndex = 3; 
-        else if (number < 66) noteBlue.lineIndex = 2;
-        else if (number < 85) noteBlue.lineIndex = 1;
+        if      (number < 40) noteBlue.lineIndex = 3; 
+        else if (number < 80) noteBlue.lineIndex = 2;
+        else if (number < 90) noteBlue.lineIndex = 1;
         else noteBlue.lineIndex = 0;
+
+        if (noteBlue.isInCenter()) {
+            if (Config::generator.factory.symmetrical.onlyOnBorder ) {
+                if (noteBlue.lineIndex == 1) {
+                    noteBlue.lineIndex--;
+                }
+                else if (noteBlue.lineIndex == 2){
+                    noteBlue.lineIndex++;
+                }
+            }
+            else if ((noteBlue.lineIndex == 1 || noteBlue.lineIndex == 2) 
+                    && (noteBlue.cutDirection == RIGHT || noteBlue.cutDirection == LEFT)) { // Clap not allowed.
+                while (noteBlue.cutDirection == RIGHT || noteBlue.cutDirection == LEFT) {
+                    noteBlue.cutDirection = Util::rng(0, 8);
+                }
+            }
+        }
 
         Note noteRed = noteBlue;
         noteRed.invertNote();

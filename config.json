@@ -8,7 +8,7 @@
             },
             "symmetricalFactory": {
                 "enabled": true,
-                "onlyOnBorder" : true
+                "onlyOnBorder" : false
             }
         },
         "validators": {

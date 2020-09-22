@@ -25,12 +25,6 @@ std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type 
 
 
 
-std::string Note::toString() {
-    std::string s; 
-    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
-            time, lineIndex, lineLayer, type, cutDirection);
-    return s;
-}
 void Note::invertNote() {
     if      (type == BLUE) type = RED;
     else if (type == RED)  type = BLUE; // If bomb, keep as bomb.
@@ -54,6 +48,16 @@ void Note::invertPosition() {
     lineIndex = 3 - lineIndex;
 }
 
+bool Note::isInCenter() {
+    return (lineLayer == 1 && (lineIndex == 1 || lineIndex == 2));
+}
+
+std::string Note::toString() {
+    std::string s; 
+    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
+            time, lineIndex, lineLayer, type, cutDirection);
+    return s;
+}
 
 
 Map::Map() {
