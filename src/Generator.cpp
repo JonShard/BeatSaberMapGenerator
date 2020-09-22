@@ -48,16 +48,12 @@ namespace OK {
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
                 for (int j = 0; j < notesAddedLast; j++) {
-                    printf("\tAbsorbing note being removed: \t");
-                    map.m_notes.back().print();
+                    printf("\tAbsorbing note being removed: \t%s" ,map.m_notes.back().toString().data());
                     map.m_notes.pop_back();
-                    printf("\n");
                 }
                 for (int k = 0; k < mapNext.m_notes.size() - map.m_notes.size(); k++) {
-                    printf("\tLast attempted transition:    \t");
-                    mapNext.m_notes.back().print();
+                    printf("\tLast attempted transition:    \t%s\n", mapNext.m_notes.back().toString().data());
                     mapNext.m_notes.pop_back();
-                    printf("\n");
                 }
                 i--;
                 continue;

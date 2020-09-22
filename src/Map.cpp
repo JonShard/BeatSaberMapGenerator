@@ -25,9 +25,11 @@ std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type 
 
 
 
-void Note::print() {
-    printf ("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
+std::string Note::toString() {
+    std::string s; 
+    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
             time, lineIndex, lineLayer, type, cutDirection);
+    return s;
 }
 void Note::invertNote() {
     if      (type == BLUE) type = RED;
