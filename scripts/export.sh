@@ -2,37 +2,23 @@
 if [ "${PWD##*/}" == "scripts" ]; then
     cd ..
 fi
+mkdir -p .temp 
+cd .temp
 
-mkdir -p .temp && cd .temp
-# loop
-cp -r ../songs/createOW .
-cd createOW
-mv create.dat EasyStandard.dat
-mv create.ogg create.egg
-zip ../../exports/createOW.zip *
-cd - > /dev/null 2>&1
+for src in ../songs/* ; do
 
-cp -r ../songs/blueSky .
-cd blueSky
-mv song.dat Normal.dat
-mv song.ogg song.egg
-zip ../../exports/blueSky.zip *
-cd - > /dev/null 2>&1
+    dest="${src##*/}"
+    echo "$dest"
+    mkdir -p "$dest"
+    cp -r "$src" .
+    for m in "$dest"/*.ogg; do
+        mv -- "$m" "${m%.ogg}.egg"
+    done
 
-cp -r ../songs/testAudio .
-cd testAudio
-mv testAudio.dat Normal.dat
-mv testAudio.ogg testAudio.egg
-zip ../../exports/testAudio.zip *
-cd - > /dev/null 2>&1
+    cd "$dest"
+    zip ../../exports/"$dest.zip" *
+    cd ..
+done
 
-cp -r ../songs/DiscoDescentCryptOfTheNecrodancer .
-cd DiscoDescentCryptOfTheNecrodancer
-mv song.dat ExpertPlusStandard.dat
-mv song.ogg song.egg
-zip ../../exports/discoDescent.zip *
-cd - > /dev/null 2>&1
-
-# \loop
 cd ..
 rm -r .temp
