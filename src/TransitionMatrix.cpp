@@ -36,6 +36,30 @@ template<class T>
 T TransitionMatrix<T>::getNoteTransition(Note n, Note nn) {
     return m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex];
 }
+template<class T>
+int TransitionMatrix<T>::getNonZeroCount() {
+    int count = 0;
+    for (int colorTo = 0; colorTo < c_colors; colorTo++) {
+        for (int colorFrom = 0; colorFrom < c_colors; colorFrom++) {
+            for (int typeTo = 0; typeTo < c_types; typeTo++) {
+                for (int typeFrom = 0; typeFrom < c_types; typeFrom++) {
+                    for (int floorTo = 0; floorTo < c_floors; floorTo++) {
+                        for (int floorFrom = 0; floorFrom < c_floors; floorFrom++) {
+                            for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
+                                for (int laneFrom = 0; laneFrom < c_lanes; laneFrom++) {
+                                    if (m_matrix[colorTo][colorFrom][typeTo][typeFrom][floorTo][floorFrom][laneTo][laneFrom] != T()) {
+                                        count++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return count;
+}
 
 
 template<class T>
