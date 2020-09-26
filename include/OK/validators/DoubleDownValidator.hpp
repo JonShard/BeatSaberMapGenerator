@@ -13,7 +13,6 @@ public:
     DoubleDownValidator() {}
 
     virtual bool validate(Map map) {
-        for (int i = 1; i < map.m_notes.size(); i++) {
             for (int j = i - 1; j >= 0; j--) {
                 if (map.m_notes[i].time - map.m_notes[j].time < Config::generator.noteClusterTime)
                     continue;
@@ -21,8 +20,15 @@ public:
                 if (map.m_notes[i].type != map.m_notes[j].type) // Has to be same color to be double down.
                     continue;
 
-                int angleDelta = std::abs(CutAngle[map.m_notes[i].cutDirection] - CutAngle[map.m_notes[j].cutDirection]);
-                if (angleDelta <= Config::generator.validator.doubleDown.angleToBeDoubleDown) {
+                int minRequired = Config::generator.validator.doubleDown.angleToBeDoubleDown;
+                int biggest = std::max(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
+                int smallest = std::min(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
+                if (biggest + minRequired >= 360) {
+                    biggest = (biggest + minRequired) % 360;
+                }
+                int angleDelta = std::abs(biggest - smallest);
+
+                if (angleDelta <= minRequired) {
                     Validator::s_fails++;
                     return false;                    
                 }
