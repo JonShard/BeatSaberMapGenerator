@@ -13,7 +13,7 @@ for f in imports/*.zip; do
     echo $name
 
     mkdir -p "$name"
-    unzip -n "$f" -d "$name"
+    unzip -n "$f" -d "$name" &>/dev/null
     for m in "$name"/*.egg; do
         mv -- "$m" "${m%.egg}.ogg"
     done

@@ -12,11 +12,16 @@ for src in ../songs/* ; do
     mkdir -p "$dest"
     cp -r "$src" .
     for m in "$dest"/*.ogg; do
-        mv -- "$m" "${m%.ogg}.egg"
+        mv -- "$m" "${m%.ogg}.egg" &>/dev/null
     done
-
+    for d in "$dest"/*.dat; do
+        if [ "$d" = "info.dat" ] || [ "$d" = "Info.dat" ] || [ "$d" = "song.dat" ]; then
+            continue
+        fi
+        mv "$dest"/song.dat "$d" &>/dev/null
+    done
     cd "$dest"
-    zip ../../exports/"$dest.zip" *
+    zip ../../exports/"$dest.zip" * &>/dev/null
     cd ..
 done
 
