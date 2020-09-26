@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ "${PWD##*/}" == "scripts" ]; then
+    cd ..
+fi
+
 mkdir -p .temp && cd .temp
 # loop
 cp -r ../songs/createOW .

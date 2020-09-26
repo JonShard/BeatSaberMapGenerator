@@ -1,5 +1,8 @@
+#!/bin/bash
+if [ "${PWD##*/}" == "scripts" ]; then
+    cd ..
+fi
 mkdir -p extractedMaps
-
 i=0
 for f in imports/*.zip; do 
     unzip "$f" -d extractedMaps
