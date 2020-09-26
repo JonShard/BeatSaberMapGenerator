@@ -13,6 +13,7 @@ public:
     DoubleDownValidator() {}
 
     virtual bool validate(Map map) {
+        for (int i = 1; i < map.m_notes.size(); i++) {
             for (int j = i - 1; j >= 0; j--) {
                 if (map.m_notes[i].time - map.m_notes[j].time < Config::generator.noteClusterTime)
                     continue;
