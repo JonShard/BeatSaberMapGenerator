@@ -11,6 +11,7 @@
 songs/
 imports/
 exports/
+extractedMaps/
 .temp
 
 # Input / output

@@ -1,8 +1,8 @@
 {
     "generator": {
-        "noteClusterTime": 0.05,
+        "noteClusterTime": 0.08,
         "factories": {
-            "maxAttempts": 10000,
+            "maxAttempts": 1000,
             "randomFactory": {
                 "enabled": true
             },
@@ -14,7 +14,7 @@
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": false,
+                "enabled": true,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {

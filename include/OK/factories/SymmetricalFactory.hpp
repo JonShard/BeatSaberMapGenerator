@@ -27,7 +27,7 @@ public:
         else noteBlue.lineIndex = 0;
 
         if (noteBlue.isInCenter()) {
-            if (Config::generator.factory.symmetrical.onlyOnBorder ) {
+            if (Config::generator.factory.symmetrical.onlyOnBorder) {
                 if (noteBlue.lineIndex == 1) {
                     noteBlue.lineIndex--;
                 }

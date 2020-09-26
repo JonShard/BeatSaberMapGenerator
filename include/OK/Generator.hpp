@@ -11,6 +11,7 @@ namespace OK {
 // It controls the order factories are called in to build the map.
 class Generator {
 protected:
+    static unsigned long s_backtracks;
     static std::vector<Factory*> s_factories; // Weights
     static std::vector<Validator*> s_validators;
 

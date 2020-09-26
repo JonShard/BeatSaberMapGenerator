@@ -14,9 +14,10 @@ const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
 float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
 std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyEvent>();
-int Factory::s_totalProduceAttempts = 0;
-int Validator::s_passes = 0;
-int Validator::s_fails = 0;
+unsigned long Factory::s_totalProduceAttempts = 0;
+unsigned long Validator::s_passes = 0;
+unsigned long Validator::s_fails = 0;
+unsigned long Generator::s_backtracks = 0;
 std::vector<Factory*> Generator::s_factories = std::vector<Factory*>();
 std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 GeneratorConfig Config::generator = {};
@@ -33,11 +34,13 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     if (append) {
         matrix.loadFromFile(OK::c_binaryMatrixFile);
     }
+    int countStart = matrix.getNonZeroCount();
     for (std::string file : mapFiles) {
         if (!OK::Util::isFileExtention(file, ".dat")) {
             printf("Error: Unexpected file extention: %s\nExpected .dat\n", file.data());
             return;
         }
+        printf("\n\nLoading mapFile %s\n\n", file.data());
         OK::Map map;
         map.load(file);
         if (map.m_notes.size() == 0) {
@@ -45,7 +48,10 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
             continue;
         }
         matrix += OK::MapAnalyzer::AnalyzeMap(map);
+        printf("done\n");
     }
+    printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\n", 
+    countStart, matrix.getNonZeroCount(), matrix.getNonZeroCount() - countStart);
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 

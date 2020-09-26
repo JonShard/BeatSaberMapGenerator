@@ -46,21 +46,24 @@ namespace OK {
             
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
+                Generator::s_backtracks++;
                 printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
                 for (int j = 0; j < notesAddedLast; j++) {
-                    printf("\tAbsorbing note being removed: \t%s" ,map.m_notes.back().toString().data());
+                    printf("\tAbsorbing note being removed: \t%s\n" ,map.m_notes.back().toString().data());
                     map.m_notes.pop_back();
                 }
                 for (int k = 0; k < mapNext.m_notes.size() - map.m_notes.size(); k++) {
                     printf("\tLast attempted transition:    \t%s\n", mapNext.m_notes.back().toString().data());
                     mapNext.m_notes.pop_back();
                 }
-                i--;
+                printf("\n");
+                i-= 2;
                 continue;
             }
             notesAddedLast = mapNext.m_notes.size() - map.m_notes.size();
             map = mapNext;
-             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\n\n", i, produceAttempts, map.m_notes.size());
+             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
+             i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
         }
         return map;
     }
