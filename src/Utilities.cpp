@@ -31,5 +31,12 @@ unsigned int integerSumString(std::string str) {
     return sum;
 }
 
+int angleDelta(int a, int b) {
+    int m = std::abs(a - b);
+    int n = std::abs(a - b + 360);
+    int o = std::abs(a - b + 360);
+    return std::min(m, std::min(n, o));
+}
+
 
 } // namespace OK::Util
