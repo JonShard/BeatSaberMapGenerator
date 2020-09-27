@@ -103,6 +103,13 @@ public:
                 Validator::s_fails++;
                 return false;
             }
+
+            int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext[0]);
+            if (transitionsFromNext == 0) {
+                printf("MatrixValidator: No possible ways to transition from the next node. Will become absorbing.\n");
+                Validator::s_fails++;
+                return false;
+            }
         }
         Validator::s_passes++;
         return true;

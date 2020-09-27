@@ -30,7 +30,7 @@ namespace OK {
         int notesAddedLast = 0;
 
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
-            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent);
+            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent: %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent);
             int produceAttempts = 0;
             Map mapNext;
             do {
