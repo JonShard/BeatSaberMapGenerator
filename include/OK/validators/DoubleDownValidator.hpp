@@ -21,15 +21,9 @@ public:
                 if (map.m_notes[i].type != map.m_notes[j].type) // Has to be same color to be double down.
                     continue;
 
-                int minRequired = Config::generator.validator.doubleDown.angleToBeDoubleDown;
-                int biggest = std::max(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
-                int smallest = std::min(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
-                if (biggest + minRequired >= 360) {
-                    biggest = (biggest + minRequired) % 360;
-                }
-                int angleDelta = std::abs(biggest - smallest);
+                int angleDelta = Util::angleDelta(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
 
-                if (angleDelta <= minRequired) {
+                if (angleDelta <= Config::generator.validator.doubleDown.angleToBeDoubleDown) {
                     Validator::s_fails++;
                     return false;                    
                 }

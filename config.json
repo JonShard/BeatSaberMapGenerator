@@ -1,6 +1,6 @@
 {
     "generator": {
-        "noteClusterTime": 0.08,
+        "noteClusterTime": 0.01,
         "factories": {
             "maxAttempts": 1000,
             "randomFactory": {
@@ -8,7 +8,11 @@
             },
             "symmetricalFactory": {
                 "enabled": true,
-                "onlyOnBorder" : false
+                "centerPointMode": true,
+                "horizontalMode": true,
+                "verticalMode": true,
+                "allowOffsetPlane": true,
+                "allowNotesInCenter": false
             }
         },
         "validators": {

@@ -62,7 +62,7 @@ namespace OK {
             }
             notesAddedLast = mapNext.m_notes.size() - map.m_notes.size();
             map = mapNext;
-             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
+             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
              i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
         }
         return map;

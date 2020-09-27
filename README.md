@@ -60,7 +60,11 @@ Format:
             }
             "symmetricalFactory": {
                 "enabled": bool - Is the symmetrical factory enabled.
-                "onlyOnBorder": bool - Disallow notes to be generatred in the two ceneter positions.  
+                "centerPointMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the pair of notes are complete opposites, mirrored accross a center point. If one note is top left with direction up, the other will be bottom right with direction down.
+                "horizontalMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the generated notes are symmertrical along a vertical plane. Two notes on same layer with same direction, but different lanes.
+                "verticalMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the generated notes are symmetrical along a horizontal plane. Two notes on same lane, top and bottom. 
+                "allowOffsetPlane": bool - Allow the symmmetry plane be offset one note left or right (only applicable to vertical mode).
+                "allowNotesInCenter": bool - Allow notes to be generatred in the two ceneter positions.  
             }
         },
         "validators": {
@@ -85,21 +89,25 @@ Example:
 ```json
 {
     "generator": {
-        "noteClusterTime": 0.05,
+        "noteClusterTime": 0.01,
         "factories": {
-            "maxAttempts": 10000,
+            "maxAttempts": 1000,
             "randomFactory": {
                 "enabled": true
             },
             "symmetricalFactory": {
                 "enabled": true,
-                "onlyOnBorder" : true
+                "centerPointMode": true,
+                "horizontalMode": true,
+                "verticalMode": true,
+                "allowOffsetPlane": true,
+                "allowNotesInCenter": false
             }
         },
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": false,
+                "enabled": true,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {

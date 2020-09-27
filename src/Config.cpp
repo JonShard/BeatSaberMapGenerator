@@ -21,7 +21,11 @@ bool Config::Load() {
             
             nlohmann::json jsSymmetricalFactory = jsFactories["symmetricalFactory"];
                 jsSymmetricalFactory.at("enabled").get_to(generator.factory.symmetrical.enabled);
-                jsSymmetricalFactory.at("onlyOnBorder").get_to(generator.factory.symmetrical.onlyOnBorder);
+                jsSymmetricalFactory.at("centerPointMode").get_to(generator.factory.symmetrical.centerPointMode);
+                jsSymmetricalFactory.at("horizontalMode").get_to(generator.factory.symmetrical.horizontalMode);
+                jsSymmetricalFactory.at("verticalMode").get_to(generator.factory.symmetrical.verticalMode);
+                jsSymmetricalFactory.at("allowOffsetPlane").get_to(generator.factory.symmetrical.allowOffsetPlane);
+                jsSymmetricalFactory.at("allowNotesInCenter").get_to(generator.factory.symmetrical.allowNotesInCenter);
 
         nlohmann::json jsValidators = jsGenerator["validators"];
             jsValidators.at("validateTimeAfterNote").get_to(generator.validator.validateTimeAfterNote);
