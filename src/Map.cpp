@@ -43,14 +43,38 @@ void Note::invertNote() {
     }
 }
 
+void Note::invertColor() {
+    if      (type == BLUE) type = RED;
+    else if (type == RED)  type = BLUE; // If bomb, keep as bomb.
+}
+
 void Note::invertPosition() {
     lineLayer = 2 - lineLayer;
     lineIndex = 3 - lineIndex;
 }
 
+void Note::invertHorizontal() {
+    lineIndex = 3 - lineIndex;
+}
+
+void Note::invertVertical() {
+    lineLayer = 2 - lineLayer;
+}
+
+
 bool Note::isInCenter() {
     return (lineLayer == 1 && (lineIndex == 1 || lineIndex == 2));
 }
+
+bool Note::isHorizontal() {
+    return cutDirection == LEFT || cutDirection == RIGHT;
+}
+
+bool Note::isVertical() {
+    return cutDirection == UP || cutDirection == DOWN;
+}
+
+
 
 std::string Note::toString() {
     std::string s; 
