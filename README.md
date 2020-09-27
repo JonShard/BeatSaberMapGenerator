@@ -80,6 +80,7 @@ Format:
         }
     },
     "editor": {
+        "autosaveEnabled": bool
         "windowWidth": int - Amount of pixles of the editor window in X direction.
         "windowHeight": int - Amount of pixles of the editor window in Y direction.
     }

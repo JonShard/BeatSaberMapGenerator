@@ -31,10 +31,12 @@ void EditorPanel::loadNotation(const std::string fileName) {
 
 
 void EditorPanel::update(float dt) {
-    m_autoSaveCountdown -= dt;
-    if (m_autoSaveCountdown < 0) {
-        m_autoSaveCountdown = c_autoSavePeriod;
-        m_notation.save();
+    if (Config::editor.autosaveEnabled) {
+        m_autoSaveCountdown -= dt;
+        if (m_autoSaveCountdown < 0) {
+            m_autoSaveCountdown = c_autoSavePeriod;
+            m_notation.save();
+        }
     }
 
     m_cursorShape.setPosition(getPositionAtTime(m_music.getPlayingOffset().asSeconds()));

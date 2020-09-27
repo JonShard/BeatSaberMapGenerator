@@ -28,6 +28,7 @@
         }
     },
     "editor": {
+        "autosaveEnabled": false,
         "windowWidth": 1600,
         "windowHeight": 900
     }

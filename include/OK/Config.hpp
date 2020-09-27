@@ -50,6 +50,7 @@ struct GeneratorConfig {
 };
 
 struct EditorConfig {
+    bool autosaveEnabled;
     int windowWidth;    // Amount of pixles of the editor window in X direction.
     int windowHeight;   // Amount of pixles of the editor window in Y direction.
 };

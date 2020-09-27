@@ -40,6 +40,7 @@ bool Config::Load() {
 
 
     nlohmann::json jsEditor = jsConfig["editor"];
+        jsEditor.at("autosaveEnabled").get_to(editor.autosaveEnabled);
         jsEditor.at("windowWidth").get_to(editor.windowWidth);
         jsEditor.at("windowHeight").get_to(editor.windowHeight);
     
