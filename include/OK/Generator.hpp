@@ -4,6 +4,7 @@
 #include "factories/SymmetricalFactory.hpp"
 #include "validators/MatrixValidator.hpp"
 #include "validators/DoubleDownValidator.hpp"
+#include "validators/AdjacentValidator.hpp"
 
 namespace OK {
 
@@ -16,6 +17,7 @@ protected:
     static std::vector<Validator*> s_validators;
 
     static bool IsValid(Map map);
+    static void PrintReport();
 public:
     Generator();
     static bool Init();

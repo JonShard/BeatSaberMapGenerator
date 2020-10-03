@@ -13,12 +13,17 @@ private:
     TransitionMatrix<bool> m_matrix;
 public:
     MatrixValidator() {
+        m_passes = 0;
+        m_fails = 0;
         if (!m_matrix.loadFromFile(Config::generator.validator.matrix.binaryMatrixFilePath)) {
             printf("\nWarning: unable to load binary matrix file at configured path: %s\n\n", 
                  Config::generator.validator.matrix.binaryMatrixFilePath.data());
         }
         printf("Loaded binary transition matrix containing transitions: %d", m_matrix.getNonZeroCount());
     }
+
+    virtual std::string getName() { return "MatrixValidator"; }
+
 
     virtual bool validate(Map map) {
         for (int i = 0; i < map.m_notes.size()-1; i++) {
@@ -29,7 +34,7 @@ public:
             }
 
             std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
-            if (clusterNext[0].time - cluster[0].time > Config::generator.validator.validateTimeAfterNote) {
+            if (clusterNext[0].m_time - cluster[0].m_time > Config::generator.validator.validateTimeAfterNote) {
                 continue;
             }
 
@@ -44,7 +49,8 @@ public:
                     for (Note cn : clusterBlue) {
                         for (Note cnn : nextClusterBlue) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                Validator::s_fails++;
+                                m_fails++;
+                                Validator::s_totalFails++;
                                 return false;
                             }
                         }
@@ -52,7 +58,8 @@ public:
                     for (Note cn : clusterRed) {
                         for (Note cnn : nextClusterRed) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                Validator::s_fails++;
+                                m_fails++;
+                                Validator::s_totalFails++;
                                 return false;
                             }                        
                         }
@@ -62,7 +69,8 @@ public:
                     for (Note cn : cluster) {
                         for (Note cnn : clusterNext) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                Validator::s_fails++;
+                                m_fails++;
+                                Validator::s_totalFails++;
                                 return false;
                             }
                         }
@@ -76,7 +84,8 @@ public:
             if (clusterNext.size() > 1) {
                 for (Note cn : clusterNext) {
                     if (!m_matrix.getNoteTransition(cluster[0], cn)) {
-                        Validator::s_fails++;
+                        m_fails++;
+                        Validator::s_totalFails++;
                         return false;
                     }                
                 }
@@ -90,7 +99,8 @@ public:
                     Note cn = map.m_notes[j];
                     Note cnn = map.m_notes[firstAfterCluster];
                     if (!m_matrix.getNoteTransition(cn, cnn)) {
-                        Validator::s_fails++;
+                        m_fails++;
+                        Validator::s_totalFails++;
                         return false;
                     }                
                 }
@@ -100,18 +110,21 @@ public:
 
 
             if (m_matrix.getNoteTransition(cluster[0], clusterNext[0]) == false) {
-                Validator::s_fails++;
+                m_fails++;
+                Validator::s_totalFails++;
                 return false;
             }
 
             int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext[0]);
             if (transitionsFromNext == 0) {
                 printf("MatrixValidator: No possible ways to transition from the next node. Will become absorbing.\n");
-                Validator::s_fails++;
+                
+                Validator::s_totalFails++;
                 return false;
             }
         }
-        Validator::s_passes++;
+        m_passes++;
+        Validator::s_totalPasses++;
         return true;
     }
 };

@@ -8,6 +8,7 @@ namespace OK {
         if (Config::generator.factory.symmetrical.enabled) s_factories.push_back(new SymmetricalFactory);
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
+        if (Config::generator.validator.adjacent.enabled) s_validators.push_back(new AdjacentValidator);
         if (s_factories.size() == 0) {
             printf("Error: there must be atleast one enabled factory\n");
             return false;
@@ -24,6 +25,14 @@ namespace OK {
         return true;
     }
  
+    void Generator::PrintReport() {
+        for (Validator* v : s_validators) {
+            v->printReport();
+        }
+        printf("\n");
+    }
+
+
     Map Generator::GenerateMap(Notation notation) {
         printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
         Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
@@ -57,6 +66,7 @@ namespace OK {
                     mapNext.m_notes.pop_back();
                 }
                 printf("\n");
+                PrintReport();
                 i-= 2;
                 continue;
             }
