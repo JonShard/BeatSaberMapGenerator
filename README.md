@@ -77,6 +77,10 @@ Format:
                 "enabled": bool - Is the double down validator enabled.
                 "angleToBeDoubleDown": The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
             }
+            "adjacentValidator": {
+                "enabled": bool - Is the adjacent validator enabled.
+                "timeToBeAdjacent": float - The maximum a time difference between two notes in order for them to be considered adjacent.
+            }
         }
     },
     "editor": {
@@ -114,10 +118,15 @@ Example:
             "doubleDownValidator": {
                 "enabled": true,
                 "angleToBeDoubleDown": 90
+            },
+            "adjacentValidator": {
+                "enabled": true,
+                "timeToBeAdjacent": 2
             }
         }
     },
     "editor": {
+        "autosaveEnabled": false,
         "windowWidth": 1600,
         "windowHeight": 900
     }

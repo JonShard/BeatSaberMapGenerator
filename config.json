@@ -24,6 +24,10 @@
             "doubleDownValidator": {
                 "enabled": true,
                 "angleToBeDoubleDown": 90
+            },
+            "adjacentValidator": {
+                "enabled": true,
+                "timeToBeAdjacent": 2
             }
         }
     },

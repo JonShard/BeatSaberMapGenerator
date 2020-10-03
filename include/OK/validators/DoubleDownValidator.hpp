@@ -10,33 +10,41 @@ class DoubleDownValidator : public Validator {
 private:
 
 public:
-    DoubleDownValidator() {}
+    DoubleDownValidator() {
+        m_passes = 0;
+        m_fails = 0;
+    }
+
+    virtual std::string getName() { return "ADoubleDownValidator"; }
+
 
     virtual bool validate(Map map) {
         for (int i = 1; i < map.m_notes.size(); i++) {
             for (int j = i - 1; j >= 0; j--) {
-                if (map.m_notes[i].time - map.m_notes[j].time < Config::generator.noteClusterTime)
+                if (map.m_notes[i].m_time - map.m_notes[j].m_time < Config::generator.noteClusterTime) // Skip the ones in the same cluster.
                     continue;
 
-                if (map.m_notes[i].type != map.m_notes[j].type) // Has to be same color to be double down.
+                if (map.m_notes[i].m_type != map.m_notes[j].m_type) // Has to be same color to be double down.
                     continue;
 
-                int angleDelta = Util::angleDelta(CutAngle[map.m_notes[i].cutDirection], CutAngle[map.m_notes[j].cutDirection]);
+                int angleDelta = Util::angleDelta(CutAngle[map.m_notes[i].m_cutDirection], CutAngle[map.m_notes[j].m_cutDirection]);
 
                 if (angleDelta <= Config::generator.validator.doubleDown.angleToBeDoubleDown) {
-                    Validator::s_fails++;
+                    m_fails++;
+                    Validator::s_totalFails++;
                     return false;                    
                 }
                 else {  // Last note wasn't double down, time to stop looking so we don't compare with notes that aren't the previous one.
                     break;
                 }
 
-                if (map.m_notes[i].time - map.m_notes[j].time > Config::generator.validator.validateTimeAfterNote) {
+                if (map.m_notes[i].m_time - map.m_notes[j].m_time > Config::generator.validator.validateTimeAfterNote) {
                     break;
                 }
             }
         }
-        Validator::s_passes++;
+        m_passes++;
+        Validator::s_totalPasses++;
         return true;
     }
 };

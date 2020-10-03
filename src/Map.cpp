@@ -7,8 +7,8 @@ bool Map::IsClusterMultiColor(std::vector<Note> cluster) {
     bool red = false;
     bool blue = false;
     for (Note n : cluster) {
-        if (n.type = BLUE) blue = true;
-        if (n.type = RED) red = true;
+        if (n.m_type = BLUE) blue = true;
+        if (n.m_type = RED) red = true;
     }
     return red && blue;
 }
@@ -16,7 +16,7 @@ bool Map::IsClusterMultiColor(std::vector<Note> cluster) {
 std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type color) {
     std::vector<Note> notes;
     for (Note n : cluster) {
-        if (n.type == color)
+        if (n.m_type == color)
             notes.push_back(n);
     }
     return notes;
@@ -26,60 +26,68 @@ std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type 
 
 
 void Note::invertNote() {
-    if      (type == BLUE) type = RED;
-    else if (type == RED)  type = BLUE; // If bomb, keep as bomb.
+    if      (m_type == BLUE) m_type = RED;
+    else if (m_type == RED)  m_type = BLUE; // If bomb, keep as bomb.
     
-    switch (cutDirection)
+    switch (m_cutDirection)
     {
-    case UP: cutDirection = DOWN; break;
-    case DOWN: cutDirection = UP; break;
-    case LEFT: cutDirection = RIGHT; break;
-    case RIGHT: cutDirection = LEFT; break;
-    case UP_LEFT: cutDirection = DOWN_RIGHT; break;
-    case UP_RIGHT: cutDirection = DOWN_LEFT; break;
-    case DOWN_LEFT: cutDirection = UP_RIGHT; break;
-    case DOWN_RIGHT: cutDirection = UP_LEFT; break;
-    default: cutDirection = DOT; break;
+    case UP: m_cutDirection = DOWN; break;
+    case DOWN: m_cutDirection = UP; break;
+    case LEFT: m_cutDirection = RIGHT; break;
+    case RIGHT: m_cutDirection = LEFT; break;
+    case UP_LEFT: m_cutDirection = DOWN_RIGHT; break;
+    case UP_RIGHT: m_cutDirection = DOWN_LEFT; break;
+    case DOWN_LEFT: m_cutDirection = UP_RIGHT; break;
+    case DOWN_RIGHT: m_cutDirection = UP_LEFT; break;
+    default: m_cutDirection = DOT; break;
     }
 }
 
 void Note::invertColor() {
-    if      (type == BLUE) type = RED;
-    else if (type == RED)  type = BLUE; // If bomb, keep as bomb.
+    if      (m_type == BLUE) m_type = RED;
+    else if (m_type == RED)  m_type = BLUE; // If bomb, keep as bomb.
 }
 
 void Note::invertPosition() {
-    lineLayer = 2 - lineLayer;
-    lineIndex = 3 - lineIndex;
+    m_lineLayer = 2 - m_lineLayer;
+    m_lineIndex = 3 - m_lineIndex;
 }
 
 void Note::invertHorizontal() {
-    lineIndex = 3 - lineIndex;
+    m_lineIndex = 3 - m_lineIndex;
 }
 
 void Note::invertVertical() {
-    lineLayer = 2 - lineLayer;
+    m_lineLayer = 2 - m_lineLayer;
 }
 
 
 bool Note::isInCenter() {
-    return (lineLayer == 1 && (lineIndex == 1 || lineIndex == 2));
+    return (m_lineLayer == 1 && (m_lineIndex == 1 || m_lineIndex == 2));
 }
 
 bool Note::isHorizontal() {
-    return cutDirection == LEFT || cutDirection == RIGHT;
+    return m_cutDirection == LEFT || m_cutDirection == RIGHT;
 }
 
 bool Note::isVertical() {
-    return cutDirection == UP || cutDirection == DOWN;
+    return m_cutDirection == UP || m_cutDirection == DOWN;
 }
 
-
+bool Note::isOppositeCutDirection(Note other) {
+    if (other.m_cutDirection == DOT) {
+        if (m_cutDirection == DOT) {    // DOT is opposite of dot.
+            return true;
+        }
+        return false;
+    }
+    return std::abs(CutAngle[other.m_cutDirection] - CutAngle[m_cutDirection]) == 180;
+}
 
 std::string Note::toString() {
     std::string s; 
     sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
-            time, lineIndex, lineLayer, type, cutDirection);
+            m_time, m_lineIndex, m_lineLayer, m_type, m_cutDirection);
     return s;
 }
 
@@ -108,11 +116,11 @@ bool Map::load(const std::string fileName) {
 
     for (nlohmann::json jn : jsNotes) {
         Note n {
-            jn.at("_time").get_to(n.time) / (120.0f / 60.0f),
-            jn.at("_lineIndex").get_to(n.lineIndex),
-            jn.at("_lineLayer").get_to(n.lineLayer),
-            jn.at("_type").get_to(n.type),
-            jn.at("_cutDirection").get_to(n.cutDirection)
+            jn.at("_time").get_to(n.m_time) / (120.0f / 60.0f),
+            jn.at("_lineIndex").get_to(n.m_lineIndex),
+            jn.at("_lineLayer").get_to(n.m_lineLayer),
+            jn.at("_type").get_to(n.m_type),
+            jn.at("_cutDirection").get_to(n.m_cutDirection)
         };
         m_notes.push_back(n);
     }
@@ -125,13 +133,13 @@ void Map::save() {
     nlohmann::json jsMap;
     
     for (Note n : m_notes) {
-        printf("Adding note at time (Adjusted for BPM): %f\n", n.time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
+        printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
         nlohmann::json jn;
-        jn["_time"] = n.time * (120.0f / 60.0f);
-        jn["_lineIndex"] = n.lineIndex;
-        jn["_lineLayer"] = n.lineLayer;
-        jn["_type"] = n.type;
-        jn["_cutDirection"] = n.cutDirection;
+        jn["_time"] = n.m_time * (120.0f / 60.0f);
+        jn["_lineIndex"] = n.m_lineIndex;
+        jn["_lineLayer"] = n.m_lineLayer;
+        jn["_type"] = n.m_type;
+        jn["_cutDirection"] = n.m_cutDirection;
         jsNotes.push_back(jn);
     }
 
@@ -147,7 +155,7 @@ void Map::print() {
     printf("Map: %s\n", m_name.data());
     std::string dir = "";
     for (Note n : m_notes) {
-        switch (n.cutDirection)
+        switch (n.m_cutDirection)
         {
             case CutDirection::UP: dir = "UP"; break;
             case CutDirection::DOWN: dir = "DOWN"; break;
@@ -159,7 +167,7 @@ void Map::print() {
             case CutDirection::DOWN_RIGHT: dir = "DOWN RIGHT"; break;
             default: dir = "UNKNOW"; break;
         }
-        printf("Note: time: %f\ttype: %s\tcut direction: %s\t\n", n.time, (n.type == Type::BLUE)?"BLUE":"RED", dir.data());
+        printf("Note: time: %f\ttype: %s\tcut direction: %s\t\n", n.m_time, (n.m_type == Type::BLUE)?"BLUE":"RED", dir.data());
     }
 }
 
@@ -169,14 +177,14 @@ float Map::getLatestTime() {
     if (m_notes.size() == 0)
         return 0;
     else 
-        return m_notes.back().time;
+        return m_notes.back().m_time;
 }
 
 std::vector<Note> Map::getNotesInCluster(int noteNr) {
     std::vector<Note> cluster;
     // Search forwards from note.
     for (int i = noteNr; i < m_notes.size(); i++) {
-        if (m_notes[i].time - m_notes[noteNr].time < Config::generator.noteClusterTime) {
+        if (m_notes[i].m_time - m_notes[noteNr].m_time < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }
         else {
@@ -185,7 +193,7 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
     }
     // Search bachwards from note.
     for (int i = noteNr -1; i > 0; i--) {
-        if (m_notes[noteNr].time - m_notes[i].time < Config::generator.noteClusterTime) {
+        if (m_notes[noteNr].m_time - m_notes[i].m_time < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }
         else {
@@ -200,7 +208,7 @@ Note Map::getPreviousNoteOfColor(int noteNr, Type color) {
         return Note();
 
     for (int i = noteNr; i >= 0; i--) {
-        if (m_notes[i].type = color) {
+        if (m_notes[i].m_type = color) {
             return m_notes[i];
         }
     }

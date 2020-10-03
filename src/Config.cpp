@@ -37,6 +37,11 @@ bool Config::Load() {
             nlohmann::json jsDoubleDownValidator = jsValidators["doubleDownValidator"];
                 jsDoubleDownValidator.at("enabled").get_to(generator.validator.doubleDown.enabled);
                 jsDoubleDownValidator.at("angleToBeDoubleDown").get_to(generator.validator.doubleDown.angleToBeDoubleDown);
+            
+            nlohmann::json jsAdjacentValidator = jsValidators["adjacentValidator"];
+                jsAdjacentValidator.at("enabled").get_to(generator.validator.adjacent.enabled);
+                jsAdjacentValidator.at("timeToBeAdjacent").get_to(generator.validator.adjacent.timeToBeAdjacent);
+
 
 
     nlohmann::json jsEditor = jsConfig["editor"];

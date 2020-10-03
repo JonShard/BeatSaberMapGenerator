@@ -27,6 +27,12 @@ struct FactoryConfig {
     SymmeticalFactoryConfig symmetrical;
 };
 
+
+struct AdjacentValidatorConfig {
+    bool enabled;
+    float timeToBeAdjacent; // The maximum a time difference between two notes in order for them to be considered adjacent.
+};
+
 struct DoubleDownValidatorConfig {
     bool enabled;
     int angleToBeDoubleDown; // The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
@@ -41,6 +47,7 @@ struct ValidatorConfig {
     float validateTimeAfterNote; // Time after a note in which the validator will care if an illegal note is placed (sec).
     MatrixValidatorConfig matrix;
     DoubleDownValidatorConfig doubleDown;
+    AdjacentValidatorConfig adjacent;
 };
 
 struct GeneratorConfig {

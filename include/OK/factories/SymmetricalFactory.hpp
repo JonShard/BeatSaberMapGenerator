@@ -25,36 +25,36 @@ public:
         std::vector<Note> notes;
 
         Note noteBlue;
-        noteBlue.time = nextKeyframe.time;
-        noteBlue.type = BLUE;
-        noteBlue.cutDirection = Util::rng(0, 8);
-        noteBlue.lineLayer = Util::rng(0, 2);
+        noteBlue.m_time = nextKeyframe.time;
+        noteBlue.m_type = BLUE;
+        noteBlue.m_cutDirection = Util::rng(0, 8);
+        noteBlue.m_lineLayer = Util::rng(0, 2);
         
         // Blue is more likely to be on the right.
         int number = Util::rng(0, 100);
-        if      (number < 40) noteBlue.lineIndex = 3; 
-        else if (number < 80) noteBlue.lineIndex = 2;
-        else if (number < 90) noteBlue.lineIndex = 1;
-        else noteBlue.lineIndex = 0;
+        if      (number < 40) noteBlue.m_lineIndex = 3; 
+        else if (number < 80) noteBlue.m_lineIndex = 2;
+        else if (number < 90) noteBlue.m_lineIndex = 1;
+        else noteBlue.m_lineIndex = 0;
 
         if (noteBlue.isInCenter()) {
             if (!Config::generator.factory.symmetrical.allowNotesInCenter) {
-                if (noteBlue.lineIndex == 1) {
-                    noteBlue.lineIndex--;
+                if (noteBlue.m_lineIndex == 1) {
+                    noteBlue.m_lineIndex--;
                 }
-                else if (noteBlue.lineIndex == 2){
-                    noteBlue.lineIndex++;
+                else if (noteBlue.m_lineIndex == 2){
+                    noteBlue.m_lineIndex++;
                 }
             }
-            else if ((noteBlue.lineIndex == 1 || noteBlue.lineIndex == 2) 
-                    && (noteBlue.cutDirection == RIGHT || noteBlue.cutDirection == LEFT)) { // Clap not allowed.
-                while (noteBlue.cutDirection == RIGHT || noteBlue.cutDirection == LEFT) {
-                    noteBlue.cutDirection = Util::rng(0, 8);
+            else if ((noteBlue.m_lineIndex == 1 || noteBlue.m_lineIndex == 2) 
+                    && (noteBlue.m_cutDirection == RIGHT || noteBlue.m_cutDirection == LEFT)) { // Clap not allowed.
+                while (noteBlue.m_cutDirection == RIGHT || noteBlue.m_cutDirection == LEFT) {
+                    noteBlue.m_cutDirection = Util::rng(0, 8);
                 }
             }
         }
 
-        if (noteBlue.time > 24 && noteBlue.cutDirection == UP && noteBlue.lineLayer == 1 && noteBlue.lineIndex == 2) {
+        if (noteBlue.m_time > 24 && noteBlue.m_cutDirection == UP && noteBlue.m_lineLayer == 1 && noteBlue.m_lineIndex == 2) {
             printf("This one\n");
         }
 
@@ -75,10 +75,10 @@ public:
             } 
             else if (mode == HORIZONTAL && Config::generator.factory.symmetrical.horizontalMode) {
                 while (noteBlue.isVertical()) { // Ensure horizontal.
-                    noteBlue.cutDirection = Util::rng(0, 8);
+                    noteBlue.m_cutDirection = Util::rng(0, 8);
                 }
-                if (noteBlue.lineLayer == 1) {      // If in center, move one up or down.
-                    noteBlue.lineLayer += 1 - Util::rng(0, 3);
+                if (noteBlue.m_lineLayer == 1) {      // If in center, move one up or down.
+                    noteBlue.m_lineLayer += 1 - Util::rng(0, 3);
                 }
                 noteRed = noteBlue;
                 noteRed.invertColor();
@@ -87,11 +87,11 @@ public:
             } 
             else if (mode == VERTICAL && Config::generator.factory.symmetrical.verticalMode) {
                 if (!Config::generator.factory.symmetrical.allowOffsetPlane) { // If offset not allowed, blue note is one one of the horizontal edges.
-                    noteBlue.lineIndex = (Util::rng(0, 2) == 0) ? 0 : 3;
+                    noteBlue.m_lineIndex = (Util::rng(0, 2) == 0) ? 0 : 3;
                 }
-                if (std::abs(noteBlue.lineIndex - noteRed.lineIndex) < 2) {
+                if (std::abs(noteBlue.m_lineIndex - noteRed.m_lineIndex) < 2) {
                     while (noteBlue.isHorizontal()) { // Ensure vertical.
-                        noteBlue.cutDirection = Util::rng(0, 8);
+                        noteBlue.m_cutDirection = Util::rng(0, 8);
                     }
                 }
                 noteRed = noteBlue;

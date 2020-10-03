@@ -15,11 +15,11 @@ enum CutDirection       { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, D
 const int CutAngle[] =  { 90, 270,  180,  0,     135,     45,       225,       315,        -1 };
 
 struct Note {
-    float time;
-    int lineIndex;
-    int lineLayer;
-    int type;
-    int cutDirection;
+    float m_time;
+    int m_lineIndex;
+    int m_lineLayer;
+    int m_type;
+    int m_cutDirection;
 
     void invertNote(); // Invertes the color and cutdirection of the note. Blue down becomes red up. Position and time remain unchanged.
     void invertColor();
@@ -29,6 +29,7 @@ struct Note {
     bool isInCenter();
     bool isHorizontal();
     bool isVertical();
+    bool isOppositeCutDirection(Note other);
     std::string toString();
 };
 

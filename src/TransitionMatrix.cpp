@@ -29,12 +29,12 @@ TransitionMatrix<T>::TransitionMatrix() {
 
 template<class T>
 void TransitionMatrix<T>::setNoteTransition(Note n, Note nn, T value) {
-    m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex] = value;
+    m_matrix[nn.m_type][n.m_type][nn.m_cutDirection][n.m_cutDirection][nn.m_lineLayer][n.m_lineLayer][nn.m_lineIndex][n.m_lineIndex] = value;
 }
 
 template<class T>
 T TransitionMatrix<T>::getNoteTransition(Note n, Note nn) {
-    return m_matrix[nn.type][n.type][nn.cutDirection][n.cutDirection][nn.lineLayer][n.lineLayer][nn.lineIndex][n.lineIndex];
+    return m_matrix[nn.m_type][n.m_type][nn.m_cutDirection][n.m_cutDirection][nn.m_lineLayer][n.m_lineLayer][nn.m_lineIndex][n.m_lineIndex];
 }
 
 template<class T>
@@ -44,7 +44,7 @@ int TransitionMatrix<T>::getTransitionCountFromNote(Note n) {
         for (int typeTo = 0; typeTo < c_types; typeTo++) {
             for (int floorTo = 0; floorTo < c_floors; floorTo++) {
                 for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
-                    if (m_matrix[colorTo][n.type][typeTo][n.cutDirection][floorTo][n.lineLayer][laneTo][n.lineIndex] != T()) {
+                    if (m_matrix[colorTo][n.m_type][typeTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex] != T()) {
                         count++;
                     }
                 }
