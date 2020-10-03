@@ -27,7 +27,8 @@
             },
             "adjacentValidator": {
                 "enabled": true,
-                "timeToBeAdjacent": 2
+                "timeToBeAdjacent": 0.45,
+                "timeToEnforceSameTrack": 0.25
             }
         }
     },

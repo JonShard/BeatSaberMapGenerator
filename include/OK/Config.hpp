@@ -31,6 +31,7 @@ struct FactoryConfig {
 struct AdjacentValidatorConfig {
     bool enabled;
     float timeToBeAdjacent; // The maximum a time difference between two notes in order for them to be considered adjacent.
+    float timeToEnforceSameTrack; // The minimum time between to notes to allow them to be on seperate tracks. No "side-stepping" when the time is really short.
 };
 
 struct DoubleDownValidatorConfig {

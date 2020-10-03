@@ -41,7 +41,7 @@ bool Config::Load() {
             nlohmann::json jsAdjacentValidator = jsValidators["adjacentValidator"];
                 jsAdjacentValidator.at("enabled").get_to(generator.validator.adjacent.enabled);
                 jsAdjacentValidator.at("timeToBeAdjacent").get_to(generator.validator.adjacent.timeToBeAdjacent);
-
+                jsAdjacentValidator.at("timeToEnforceSameTrack").get_to(generator.validator.adjacent.timeToEnforceSameTrack);
 
 
     nlohmann::json jsEditor = jsConfig["editor"];

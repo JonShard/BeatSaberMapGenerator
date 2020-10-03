@@ -34,7 +34,7 @@ public:
             }
 
             std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
-            if (clusterNext[0].m_time - cluster[0].m_time > Config::generator.validator.validateTimeAfterNote) {
+            if (std::abs(clusterNext[0].m_time - cluster[0].m_time) > Config::generator.validator.validateTimeAfterNote) {
                 continue;
             }
 

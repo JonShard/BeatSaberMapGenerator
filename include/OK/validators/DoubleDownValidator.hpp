@@ -15,13 +15,13 @@ public:
         m_fails = 0;
     }
 
-    virtual std::string getName() { return "ADoubleDownValidator"; }
+    virtual std::string getName() { return "DoubleDownValidator"; }
 
 
     virtual bool validate(Map map) {
         for (int i = 1; i < map.m_notes.size(); i++) {
             for (int j = i - 1; j >= 0; j--) {
-                if (map.m_notes[i].m_time - map.m_notes[j].m_time < Config::generator.noteClusterTime) // Skip the ones in the same cluster.
+                if (std::abs(map.m_notes[i].m_time - map.m_notes[j].m_time) < Config::generator.noteClusterTime) // Skip the ones in the same cluster.
                     continue;
 
                 if (map.m_notes[i].m_type != map.m_notes[j].m_type) // Has to be same color to be double down.

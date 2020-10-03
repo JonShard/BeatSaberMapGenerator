@@ -81,7 +81,7 @@ bool Note::isOppositeCutDirection(Note other) {
         }
         return false;
     }
-    return std::abs(CutAngle[other.m_cutDirection] - CutAngle[m_cutDirection]) == 180;
+    return Util::angleDelta(CutAngle[other.m_cutDirection], CutAngle[m_cutDirection]) == 180;
 }
 
 std::string Note::toString() {
@@ -184,7 +184,7 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
     std::vector<Note> cluster;
     // Search forwards from note.
     for (int i = noteNr; i < m_notes.size(); i++) {
-        if (m_notes[i].m_time - m_notes[noteNr].m_time < Config::generator.noteClusterTime) {
+        if (std::abs(m_notes[i].m_time - m_notes[noteNr].m_time) < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }
         else {
@@ -193,7 +193,7 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
     }
     // Search bachwards from note.
     for (int i = noteNr -1; i > 0; i--) {
-        if (m_notes[noteNr].m_time - m_notes[i].m_time < Config::generator.noteClusterTime) {
+        if (std::abs(m_notes[noteNr].m_time - m_notes[i].m_time) < Config::generator.noteClusterTime) {
             cluster.push_back(m_notes[i]);
         }
         else {

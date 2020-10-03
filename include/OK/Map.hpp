@@ -6,6 +6,7 @@
 
 #include "../nlohmann/json.hpp"
 
+#include "Utilities.hpp"
 #include "Config.hpp"
 
 namespace OK {
