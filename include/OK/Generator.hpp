@@ -5,6 +5,7 @@
 #include "validators/MatrixValidator.hpp"
 #include "validators/DoubleDownValidator.hpp"
 #include "validators/AdjacentValidator.hpp"
+#include "validators/OverlapValidator.hpp"
 
 namespace OK {
 

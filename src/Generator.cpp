@@ -9,6 +9,7 @@ namespace OK {
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
         if (Config::generator.validator.adjacent.enabled) s_validators.push_back(new AdjacentValidator);
+        s_validators.push_back(new OverlapValidator);
         if (s_factories.size() == 0) {
             printf("Error: there must be atleast one enabled factory\n");
             return false;

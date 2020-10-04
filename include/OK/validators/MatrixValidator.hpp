@@ -24,7 +24,6 @@ public:
 
     virtual std::string getName() { return "MatrixValidator"; }
 
-
     virtual bool validate(Map map) {
         for (int i = 0; i < map.m_notes.size()-1; i++) {
             std::vector<Note> cluster = map.getNotesInCluster(i);
