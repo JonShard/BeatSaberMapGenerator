@@ -26,11 +26,17 @@ namespace OK {
         return true;
     }
  
-    void Generator::PrintReport() {
+    void Generator::PrintReport(Map map) {
         for (Validator* v : s_validators) {
             v->printReport();
         }
-        printf("\n");
+        int blueCount = 0;
+        int redCount = 0;
+        for (Note n : map.m_notes) {
+            if (n.m_type == BLUE) blueCount++;
+            else if (n.m_type == RED) redCount++;
+        }
+        printf("Blue to red ratio: %f\n", blueCount / (float)redCount);
     }
 
 
@@ -40,7 +46,7 @@ namespace OK {
         int notesAddedLast = 0;
 
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
-            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent: %d\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent);
+            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent: %d\tTime delta: %f\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent, (i) ? notation.m_keyframes[i].time - notation.m_keyframes[i-1].time: 0);
             int produceAttempts = 0;
             Map mapNext;
             do {
@@ -67,7 +73,7 @@ namespace OK {
                     mapNext.m_notes.pop_back();
                 }
                 printf("\n");
-                PrintReport();
+                PrintReport(map);
                 i-= 2;
                 continue;
             }
@@ -76,7 +82,7 @@ namespace OK {
              printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
              i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
         }
-        PrintReport();
+        PrintReport(map);
         return map;
     }
 
