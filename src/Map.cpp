@@ -133,7 +133,7 @@ void Map::save() {
     nlohmann::json jsMap;
     
     for (Note n : m_notes) {
-        printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
+        //printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
         nlohmann::json jn;
         jn["_time"] = n.m_time * (120.0f / 60.0f);
         jn["_lineIndex"] = n.m_lineIndex;
@@ -204,11 +204,11 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
 }
 
 Note Map::getPreviousNoteOfColor(int noteNr, Type color) {
-    if (m_notes.size() == 0 || noteNr < 0)
+    if (m_notes.size() == 0 || noteNr <= 0)
         return Note();
 
-    for (int i = noteNr; i >= 0; i--) {
-        if (m_notes[i].m_type = color) {
+    for (int i = noteNr - 1; i >= 0; i--) {
+        if (m_notes[i].m_type == color) {
             return m_notes[i];
         }
     }
