@@ -5,6 +5,9 @@
 
 namespace OK::Util {
 
+const float D2R = 0.01745329251;
+const float R2D = 57.2958;
+
 int rng(int min, int max);
 bool isFileExtention(const std::string file, const std::string ext);
 std::string removeFileExtention(const std::string file, const std::string ext);

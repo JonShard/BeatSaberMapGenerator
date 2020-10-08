@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cfenv> // round
 
 #include "../nlohmann/json.hpp"
 
@@ -31,6 +32,7 @@ struct Note {
     bool isHorizontal();
     bool isVertical();
     bool isOppositeCutDirection(Note other);
+    bool isOnSamePlane(Note other);
     std::string toString();
 };
 

@@ -84,6 +84,18 @@ bool Note::isOppositeCutDirection(Note other) {
     return Util::angleDelta(CutAngle[other.m_cutDirection], CutAngle[m_cutDirection]) == 180;
 }
 
+bool Note::isOnSamePlane(Note other) {
+    std::fesetround(FE_TONEAREST);
+    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
+    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
+
+    for (int i = - 4,l  = -4; i < 4; i++, l++)
+    if (other.m_lineIndex == m_lineIndex + index * i && other.m_lineLayer == m_lineLayer + layer * l) {
+        return true;
+    }
+    return false;
+}
+
 std::string Note::toString() {
     std::string s; 
     sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 

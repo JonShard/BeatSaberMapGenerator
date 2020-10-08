@@ -35,7 +35,7 @@ public:
                 continue;
 
             if (timeDelta < Config::generator.validator.adjacent.timeToEnforceSameTrack) { // If time is really short, enforce notes to be on same track.
-                if (current.m_lineIndex != previous.m_lineIndex) {
+                if (!current.isOnSamePlane(previous)) {
                     m_fails++;
                     Validator::s_totalFails++;
                     return false;
