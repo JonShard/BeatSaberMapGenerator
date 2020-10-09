@@ -27,7 +27,7 @@ public:
         Note noteBlue;
         noteBlue.m_time = nextKeyframe.time;
         noteBlue.m_type = BLUE;
-        noteBlue.m_cutDirection = Util::rng(0, 8);
+        noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
         noteBlue.m_lineLayer = Util::rng(0, 2);
         
         // Blue is more likely to be on the right.
@@ -49,7 +49,7 @@ public:
             else if ((noteBlue.m_lineIndex == 1 || noteBlue.m_lineIndex == 2) 
                     && (noteBlue.m_cutDirection == RIGHT || noteBlue.m_cutDirection == LEFT)) { // Clap not allowed.
                 while (noteBlue.m_cutDirection == RIGHT || noteBlue.m_cutDirection == LEFT) {
-                    noteBlue.m_cutDirection = Util::rng(0, 8);
+                    noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                 }
             }
         }
@@ -75,7 +75,7 @@ public:
             } 
             else if (mode == HORIZONTAL && Config::generator.factory.symmetrical.horizontalMode) {
                 while (noteBlue.isVertical()) { // Ensure horizontal.
-                    noteBlue.m_cutDirection = Util::rng(0, 8);
+                    noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                 }
                 if (noteBlue.m_lineLayer == 1) {      // If in center, move one up or down.
                     noteBlue.m_lineLayer += 1 - Util::rng(0, 3);
@@ -91,7 +91,7 @@ public:
                 }
                 if (std::abs(noteBlue.m_lineIndex - noteRed.m_lineIndex) < 2) {
                     while (noteBlue.isHorizontal()) { // Ensure vertical.
-                        noteBlue.m_cutDirection = Util::rng(0, 8);
+                        noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                     }
                 }
                 noteRed = noteBlue;
@@ -100,7 +100,6 @@ public:
                 break;
             }
         }
-        
 
         notes.push_back(noteBlue);
         notes.push_back(noteRed);

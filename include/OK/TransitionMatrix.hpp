@@ -6,15 +6,15 @@ namespace OK {
 
 const int c_lanes = 4;
 const int c_floors = 3;
-const int c_types = 9; 
-const int c_colors = 4; // RED, BLUE, RED_DUPLICATE, BOMB
+const int c_cutDirections = 9; 
+const int c_types = 4; // RED, BLUE, RED_DUPLICATE, BOMB
 
 // TransitionMatrix describes all allowed trasitions from one note to the next. 
 // It is parsed from existing maps and stored on a file. It is used to validate the map.
 template <class T>
 struct TransitionMatrix {
     //         To       From      To       From     To        From      To       From
-    T m_matrix[c_colors][c_colors][c_types][c_types][c_floors][c_floors][c_lanes][c_lanes];
+    T m_matrix[c_types][c_types][c_cutDirections][c_cutDirections][c_floors][c_floors][c_lanes][c_lanes];
     TransitionMatrix();
     TransitionMatrix(std::string file);
     

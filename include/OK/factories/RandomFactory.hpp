@@ -15,9 +15,8 @@ public:
 
         Note note;
         note.m_time= nextKeyframe.time;
-        // note.m_type = (Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
-        note.m_type = 1;
-        note.m_cutDirection = Util::rng(0, 8);    // Dot note is 9 none of those for now.
+        note.m_type = (Type)(Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
+        note.m_cutDirection = (CutDirection)Util::rng(0, 8);    // Dot note is 9 none of those for now.
         
         // Notes are more likely to be towards the bottom.
         int layer = Util::rng(0, 100);
