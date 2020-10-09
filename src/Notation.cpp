@@ -80,4 +80,13 @@ Notation Notation::operator+=(std::vector<Keyframe> keyframes) {
     return *this;
 }
 
+Notation Notation::operator=(Notation other) {
+    m_name = other.m_name.data();
+    for (Keyframe k : other.m_keyframes) {
+        m_keyframes.push_back(k);
+    }
+    return *this;
+}
+
+
 } // Namespace OK

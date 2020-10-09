@@ -3,6 +3,7 @@
 #include "../include/OK/Input.hpp"
 #include "../include/OK/factories/Factory.hpp"
 #include "../include/OK/validators/Validator.hpp"
+#include "../include/OK/Song.hpp"
 #include "../include/OK/MapAnalyzer.hpp"
 #include "../include/OK/Config.hpp"
 
@@ -42,12 +43,12 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
         }
         printf("\n\nLoading mapFile %s\n\n", file.data());
         OK::Map map;
-        map.load(file);
+        map.load(file, 120);
         if (map.m_notes.size() == 0) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
-        matrix += OK::MapAnalyzer::AnalyzeMap(map);
+        matrix += OK::MapAnalyzer::RegisterTransitionsInMap(map);
         printf("done\n");
     }
     printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\n", 
@@ -56,14 +57,26 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
 }
 
 void generateFromNotation(std::string notationFile) {
-    if (!OK::Util::isFileExtention(notationFile, ".json")) {
-        printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
-        return;
+    if (OK::Util::isFileExtention(notationFile, ".json")) {
+        printf("Generating map from notation file: %s\n", notationFile.data());
+        OK::Notation notation(notationFile);
+        notation.load(notationFile);
+        OK::Map map = OK::Generator::GenerateMap(notation);
+        map.save();
+    } 
+    else if (OK::Util::isFileExtention(notationFile, ".dat")) {
+        printf("Generating map from other map file: %s\n", notationFile.data());
+        
+        OK::Map inputMap(notationFile);
+        inputMap.load(notationFile, 120);
+        OK::Map outputMap = OK::Generator::GenerateMap(OK::Song::CreateNotationFromMap(inputMap));
+        outputMap.save();
     }
-    OK::Notation notation(notationFile);
-    notation.load(notationFile);
-    OK::Map map = OK::Generator::GenerateMap(notation);
-    map.save();
+    else {
+        printf("Error: Unexpected file extention: %s\nExpected .json (notation file) or .dat (map file)\n", notationFile.data());
+        return;        
+    }
+
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {

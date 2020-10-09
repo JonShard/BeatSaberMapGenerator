@@ -41,7 +41,7 @@ namespace OK {
 
 
     Map Generator::GenerateMap(Notation notation) {
-        printf("Generating map from nototions: %ld\n", notation.m_keyframes.size());
+        printf("Generating map from nototion with keyframes: %ld\n", notation.m_keyframes.size());
         Map map(Util::removeFileExtention(notation.getName(), "_notation.json") + ".dat");
         int notesAddedLast = 0;
 

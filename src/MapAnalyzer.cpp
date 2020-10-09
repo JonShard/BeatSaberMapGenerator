@@ -2,7 +2,7 @@
 
 namespace OK {
 
-TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
+TransitionMatrix<bool> MapAnalyzer::RegisterTransitionsInMap(Map map) {
     TransitionMatrix<bool> matrix;
 
     for (int i = 0; i < map.m_notes.size() - 1; i++) {

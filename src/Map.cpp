@@ -13,10 +13,10 @@ bool Map::IsClusterMultiColor(std::vector<Note> cluster) {
     return red && blue;
 }
 
-std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type color) {
+std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type type) {
     std::vector<Note> notes;
     for (Note n : cluster) {
-        if (n.m_type == color)
+        if (n.m_type == type)
             notes.push_back(n);
     }
     return notes;
@@ -105,16 +105,16 @@ std::string Note::toString() {
 
 
 Map::Map() {
-    m_name = "";
+    m_fileName = "";
     m_notes = std::vector<Note>();
 }
 
 Map::Map(const std::string fileName) {
-    m_name = fileName;
+    m_fileName = fileName;
     m_notes = std::vector<Note>();
 }
 
-bool Map::load(const std::string fileName) {
+bool Map::load(const std::string fileName, float bps) {
     std::ifstream file(fileName);
     if (file.fail()) {
         return false;
@@ -128,7 +128,7 @@ bool Map::load(const std::string fileName) {
 
     for (nlohmann::json jn : jsNotes) {
         Note n {
-            jn.at("_time").get_to(n.m_time) / (120.0f / 60.0f),
+            jn.at("_time").get_to(n.m_time) / (bps / 60.0f),
             jn.at("_lineIndex").get_to(n.m_lineIndex),
             jn.at("_lineLayer").get_to(n.m_lineLayer),
             jn.at("_type").get_to(n.m_type),
@@ -157,14 +157,14 @@ void Map::save() {
 
     jsMap["_version"] = "2.0.0";
     jsMap["_notes"] = jsNotes;
-    printf("Saving map file to: %s\n", m_name.data());
-    std::ofstream out(m_name);
+    printf("Saving map file to: %s\n", m_fileName.data());
+    std::ofstream out(m_fileName);
     out << jsMap;
     out.close();
 }
 
 void Map::print() {
-    printf("Map: %s\n", m_name.data());
+    printf("Map: %s\n", m_fileName.data());
     std::string dir = "";
     for (Note n : m_notes) {
         switch (n.m_cutDirection)
@@ -183,7 +183,6 @@ void Map::print() {
     }
 }
 
-std::string Map::getName() { return m_name; }
 
 float Map::getLatestTime() {
     if (m_notes.size() == 0)
@@ -215,12 +214,12 @@ std::vector<Note> Map::getNotesInCluster(int noteNr) {
     return cluster;
 }
 
-Note Map::getPreviousNoteOfColor(int noteNr, Type color) {
+Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
     if (m_notes.size() == 0 || noteNr <= 0)
         return Note();
 
     for (int i = noteNr - 1; i >= 0; i--) {
-        if (m_notes[i].m_type == color) {
+        if (m_notes[i].m_type == type) {
             return m_notes[i];
         }
     }

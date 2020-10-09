@@ -16,11 +16,8 @@ struct Keyframe {
     int concurrent;
 };
 
-class Notation {
-private:
+struct Notation {
     std::string m_name;
-
-public:
     std::vector<Keyframe> m_keyframes;
 
     Notation();
@@ -35,6 +32,7 @@ public:
 
     Notation operator+=(Keyframe k);
     Notation operator+=(std::vector<Keyframe> keyframes);
+    Notation operator=(Notation other);
 };
 
 } // Namespace OK

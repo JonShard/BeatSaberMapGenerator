@@ -19,7 +19,7 @@ public:
             printf("\nWarning: unable to load binary matrix file at configured path: %s\n\n", 
                  Config::generator.validator.matrix.binaryMatrixFilePath.data());
         }
-        printf("Loaded binary transition matrix containing transitions: %d", m_matrix.getNonZeroCount());
+        printf("Loaded binary transition matrix containing transitions: %d\n", m_matrix.getNonZeroCount());
     }
 
     virtual std::string getName() { return "MatrixValidator"; }
