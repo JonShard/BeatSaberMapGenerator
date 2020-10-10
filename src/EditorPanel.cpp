@@ -96,8 +96,8 @@ void EditorPanel::setUIScale(float scale) {
 
 void EditorPanel::createKeyframe(int concurrent) {
     Keyframe k;
-    k.time = m_music.getPlayingOffset().asSeconds(); //TODO: Fix BPM not considered.
-    k.concurrent = concurrent;
+    k.time = m_music.getPlayingOffset().asSeconds() - 0.1f; // 0.1 random offset I think the editor is causing. 
+    k.concurrent = concurrent;                              //TODO: Fix BPM not considered.
     if (m_notation.m_keyframes.size() > 0) 
         k.id = m_notation.m_keyframes.back().id + 1; //TODO: duplicates possible!!
     else
