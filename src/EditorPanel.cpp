@@ -35,7 +35,7 @@ void EditorPanel::update(float dt) {
         m_autoSaveCountdown -= dt;
         if (m_autoSaveCountdown < 0) {
             m_autoSaveCountdown = c_autoSavePeriod;
-            m_notation.save();
+            m_notation.save(m_notation.m_name);
         }
     }
 
@@ -61,11 +61,11 @@ void EditorPanel::update(float dt) {
         m_music.setPitch(m_music.getPitch() - 0.1f);
     }
     if (Input::isKeyDown(sf::Keyboard::F5)) {
-        m_notation.save();
+        m_notation.save(m_notation.m_name);
     }
     if (Input::isKeyDown(sf::Keyboard::F10)) {  // TODO: Make new panel for generating map.
         Map map = Generator::GenerateMap(m_notation);
-        map.save();
+        map.save(map.m_name, 120);
     }
 
     int concurrent = 0;

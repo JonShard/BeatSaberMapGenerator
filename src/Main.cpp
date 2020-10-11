@@ -56,27 +56,19 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 
-void generateFromNotation(std::string notationFile) {
-    if (OK::Util::isFileExtention(notationFile, ".json")) {
-        printf("Generating map from notation file: %s\n", notationFile.data());
-        OK::Notation notation(notationFile);
-        notation.load(notationFile);
-        OK::Map map = OK::Generator::GenerateMap(notation);
-        map.save();
-    } 
-    else if (OK::Util::isFileExtention(notationFile, ".dat")) {
-        printf("Generating map from other map file: %s\n", notationFile.data());
-        
-        OK::Map inputMap(notationFile);
-        inputMap.load(notationFile, 120);
-        OK::Map outputMap = OK::Generator::GenerateMap(OK::Song::CreateNotationFromMap(inputMap));
-        outputMap.save();
+void generateMapFromFile(std::string file) {
+    OK::Song song(file);
+    int notationIndex = song.loadNotation(file);
+    if (notationIndex == -1) {
+        notationIndex = song.createNotationFromMap(song.getMap(song.loadMap(file)));  
     }
-    else {
-        printf("Error: Unexpected file extention: %s\nExpected .json (notation file) or .dat (map file)\n", notationFile.data());
-        return;        
+    if (notationIndex == -1) {
+        printf("Error: Invalid file extention or invalid file content: %s\n", file.data());
+        return;
     }
 
+    int mapIndex = song.addMap(OK::Generator::GenerateMap(song.getNotation(notationIndex)));
+    song.saveMap(mapIndex);
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {
@@ -149,7 +141,7 @@ int main(int argc, char** argv) {
             }
 
         }
-        generateFromNotation(args[2]);
+        generateMapFromFile(args[2]);
     }
     else if (args.size() > 2){
         openEditorWindow(args[1], args[2]);

@@ -8,7 +8,8 @@
 namespace OK {
 
 const std::string c_infoFileName = "Info.dat";
-const std::string c_notationSuffix = "_notation.json";
+const std::string c_notationExtenton = "_notation.json";
+const std::string c_mapFileExtention = ".dat";
 
 struct Info {
   std::string version;
@@ -16,7 +17,7 @@ struct Info {
   std::string songSubName;
   std::string songAuthorName;
   std::string levelAuthorName;
-  float beatsPerMinute;
+  float beatsPerMinute = 120;
   float shuffle;
   float shufflePerio;
   float previewStartTime;
@@ -27,7 +28,7 @@ struct Info {
   float songTimeOffset;
 };
 
-// Song is a representaion of a the collection of maps  Beat Saber song.
+// Song is a representaion of a the collection of maps Beat Saber song.
 class Song {
 private:
     Info m_info;
@@ -36,28 +37,32 @@ private:
     std::vector<Notation> m_notations;
 
 public:
-    static Notation CreateNotationFromMap(Map map); // Constructs a Notation from a collection of keyframes extraced from a Map.
 
     Song();
     Song(std::string path);    
 
-    bool loadSongFromDirectory();   // Loads all resources from a path to a driectory.
+    bool loadSongFromDirectory(std::string path);   // Loads all resources from a path to a driectory.
     bool saveSongToDirectory();     // Saves all the resources of the song to the stored path.
 
     void loadInfo(const std::string fileName);
     void saveInfo();
 
+    Map getMap(int index);
     Map getMap(const std::string name);
-    void addMap(Map map);
-    bool loadMap(const std::string fileName);
+    int addMap(Map map);
+    int loadMap(const std::string fileName);
+    bool saveMap(int index);
     bool saveMap(const std::string name);
     void removeMap(const std::string name);
 
+    Notation getNotation(int index);
     Notation getNotation(const std::string name);
-    bool loadNotation(const std::string fileName);
+    int loadNotation(const std::string fileName);
+    int createNotationFromMap(Map map); // Constructs a Notation from a collection of keyframes extraced from a Map.
+    bool saveNotation(int index);
     bool saveNotation(const std::string name);
 
-    void addNotation(Notation notation);
+    int addNotation(Notation notation);
     void removeNotation(const std::string name);
     
 };
