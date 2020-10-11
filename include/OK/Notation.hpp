@@ -21,13 +21,12 @@ struct Notation {
     std::vector<Keyframe> m_keyframes;
 
     Notation();
-    Notation(std::string fileName);
+    Notation(const std::string fileName);
 
-    bool load(std::string fileName);
-    void save();
+    bool load(const std::string fileName);
+    void save(const std::string fileName);
     void print();
 
-    std::string getName();
     Keyframe getNextKeyframe(float time);
 
     Notation operator+=(Keyframe k);

@@ -41,7 +41,7 @@ enum DifficultyRank { EASY, NORMAL, HARD, EXPERT, EXPERTPLUS };
 // Map is a representaion of a single difficulty of a Beat Saber map.
 struct Map {
     std::string m_version;
-    std::string m_fileName;
+    std::string m_name;
     std::string m_difficultyText;
     DifficultyRank m_difficultyRank;
     float m_noteJumpMovementSpeed;
@@ -52,10 +52,10 @@ struct Map {
     static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type type);
 
     Map();
-    Map(const std::string fileName);
+    Map(const std::string name);
 
     bool load(const std::string fileName, float bps);
-    void save();
+    void save(const std::string fileName, float bps);
     void print();
 
     float getLatestTime();

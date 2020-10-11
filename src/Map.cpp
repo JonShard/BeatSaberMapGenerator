@@ -105,12 +105,12 @@ std::string Note::toString() {
 
 
 Map::Map() {
-    m_fileName = "";
+    m_name = "";
     m_notes = std::vector<Note>();
 }
 
-Map::Map(const std::string fileName) {
-    m_fileName = fileName;
+Map::Map(const std::string name) {
+    m_name = name;
     m_notes = std::vector<Note>();
 }
 
@@ -137,8 +137,9 @@ bool Map::load(const std::string fileName, float bps) {
         m_notes.push_back(n);
     }
     return true;
+    
 }
-void Map::save() {
+void Map::save(const std::string fileName, float bps) {
     printf("Saving map with notes: %ld\n", m_notes.size());
 
     nlohmann::json jsNotes;
@@ -147,7 +148,7 @@ void Map::save() {
     for (Note n : m_notes) {
         //printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
         nlohmann::json jn;
-        jn["_time"] = n.m_time * (120.0f / 60.0f);
+        jn["_time"] = n.m_time * (bps / 60.0f);
         jn["_lineIndex"] = n.m_lineIndex;
         jn["_lineLayer"] = n.m_lineLayer;
         jn["_type"] = n.m_type;
@@ -157,14 +158,14 @@ void Map::save() {
 
     jsMap["_version"] = "2.0.0";
     jsMap["_notes"] = jsNotes;
-    printf("Saving map file to: %s\n", m_fileName.data());
-    std::ofstream out(m_fileName);
+    printf("Saving map file to: %s\n", fileName.data());
+    std::ofstream out(fileName);
     out << jsMap;
     out.close();
 }
 
 void Map::print() {
-    printf("Map: %s\n", m_fileName.data());
+    printf("Map: %s\n", m_name.data());
     std::string dir = "";
     for (Note n : m_notes) {
         switch (n.m_cutDirection)
