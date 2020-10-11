@@ -10,6 +10,8 @@ const float R2D = 57.2958;
 
 int rng(int min, int max);
 bool isFileExtention(const std::string file, const std::string ext);
+std::string extractDirectoryFromPath(std::string path);
+std::string extractFileNameFromPath(std::string path);
 std::string removeFileExtention(const std::string file, const std::string ext);
 unsigned int integerSumString(std::string str);
 int angleDelta(int a, int b);

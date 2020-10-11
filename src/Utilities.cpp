@@ -16,6 +16,20 @@ bool isFileExtention(const std::string file, const std::string ext) {
     return splitExt == ext;
 }
 
+std::string extractDirectoryFromPath(std::string path) {
+    int pos = path.find_last_of("/");
+    if (pos < 0)
+        return "";
+    return path.substr(0, pos + 1); // + 1 to unclude the leading /
+}
+
+std::string extractFileNameFromPath(std::string path) {
+    int pos = path.find_last_of("/");
+    if (pos < 0)
+        return "";
+    return path.substr(pos + 1, path.size());
+}
+
 std::string removeFileExtention(const std::string file, const std::string ext) {
     int pos = file.find_last_of(ext);
     if (pos < 0) 
