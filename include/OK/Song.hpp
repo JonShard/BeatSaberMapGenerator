@@ -8,7 +8,7 @@
 namespace OK {
 
 const std::string c_infoFileName = "Info.dat";
-const std::string c_notationExtenton = "_notation.json";
+const std::string c_notationExtenton = ".json";
 const std::string c_mapFileExtention = ".dat";
 
 struct Info {

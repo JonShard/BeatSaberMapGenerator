@@ -17,7 +17,7 @@ EditorPanel::EditorPanel() : Panel() {
 }
 
 bool EditorPanel::loadMusic(const std::string fileName) {
-    m_notation = Notation(Util::removeFileExtention(fileName, ".ogg") + "_notation.json");
+    m_notation = Notation(Util::removeFileExtention(fileName, ".ogg") + ".json");
     return m_music.openFromFile(fileName);
 }
 
