@@ -9,14 +9,14 @@ Song::Song() {
     m_notations = std::vector<Notation>();
 }
 
-Song::Song(std::string path) {
+Song::Song(const std::string path) {
     m_path = Util::extractDirectoryFromPath(path);
     // TODO Info
     m_maps = std::vector<Map>();
     m_notations = std::vector<Notation>();
 }
 
-bool Song::loadSongFromDirectory(std::string path) {
+bool Song::loadSongFromDirectory(const std::string path) {
     return false;
 }
 
@@ -24,10 +24,12 @@ bool Song::saveSongToDirectory() {
     return false;
 }
 
+void Song::setSongFileName(const std::string fileName) {
+    m_info.songFilename = fileName;
+}
 
 
-
-void Song::loadInfo(std::string fileName) {
+void Song::loadInfo(const std::string fileName) {
 
 }
 
@@ -35,20 +37,8 @@ void Song::saveInfo() {
 
 }
 
-Map Song::getMap(int index) {
-    if (index < 0 || index > m_maps.size()) {
-        return Map();
-    }
-    return m_maps[index];
-}
-
-Map Song::getMap(const std::string name) {
-    auto it = std::find_if(m_maps.begin(), m_maps.end(), [name](const Map & map){ return map.m_name == name; });
-
-    if (it == m_maps.end()) {
-        return Map();
-    }
-    return *it.base();
+int Song::getMapCount() {
+    return m_maps.size();
 }
 
 int Song::addMap(Map map) {
@@ -62,6 +52,22 @@ int Song::addMap(Map map) {
     }
     m_maps.push_back(map);
     return m_maps.size() -1;
+}
+
+Map* Song::getMap(int index) {
+    if (index < 0 || index > m_maps.size()) {
+        return nullptr;
+    }
+    return &m_maps[index];
+}
+
+Map* Song::getMap(const std::string name) {
+    auto it = std::find_if(m_maps.begin(), m_maps.end(), [name](const Map & map){ return map.m_name == name; });
+
+    if (it == m_maps.end()) {
+        return nullptr;
+    }
+    return it.base();
 }
 
 int Song::loadMap(const std::string fileName) {
@@ -91,7 +97,7 @@ bool Song::saveMap(int index) {
 
 
 bool Song::saveMap(const std::string name) {
-    Map map = getMap(name);
+    Map map = *getMap(name);
     if (map.m_notes.size() <= 0) {
         printf("Warning: Can not save map without any notes\n");
         return false;
@@ -104,20 +110,33 @@ void Song::removeMap(const std::string name) {
 
 }
 
-Notation Song::getNotation(int index) {
-    if (index < 0 || index > m_notations.size()) {
-        return Notation();
-    }
-    return m_notations[index];
+int Song::getNotationCount() {
+    return m_notations.size();
 }
 
-Notation Song::getNotation(const std::string name) {
+int Song::addNotation(Notation notation) {
+    if (notation.m_name.size() == 0) {
+        printf("Warning: Can not add a notation to song without a name\n");
+        return -1;
+    }
+    m_notations.push_back(notation);
+    return m_notations.size() -1;
+}
+
+Notation* Song::getNotation(int index) {
+    if (index < 0 || index > m_notations.size()) {
+        return nullptr;
+    }
+    return &m_notations[index];
+}
+
+Notation* Song::getNotation(const std::string name) {
     auto it = std::find_if(m_notations.begin(), m_notations.end(), [name](const Notation & notation){ return notation.m_name == name; });
 
     if (it == m_notations.end()) {
-        return Notation();
+        return nullptr;
     }
-    return *it.base();
+    return it.base();
 }
 
 int Song::createNotationFromMap(Map map) {
@@ -173,7 +192,7 @@ bool Song::saveNotation(int index) {
 }
 
 bool Song::saveNotation(const std::string name) {
-    Notation notation = getNotation(name);
+    Notation notation = *getNotation(name);
     if (notation.m_keyframes.size() <= 0) {
         printf("Warning: Can not save notation without any keyframes\n");
         return false;
@@ -182,19 +201,6 @@ bool Song::saveNotation(const std::string name) {
     return true;
 }
 
-
-int Song::addNotation(Notation notation) {
-    if (notation.m_name.size() == 0) {
-        printf("Warning: Can not add a notation to song without a name\n");
-        return -1;
-    }
-    if (notation.m_keyframes.size() == 0) {
-        printf("Warning: Can not add a notation to song without any keyframes\n");
-        return -1;
-    }
-    m_notations.push_back(notation);
-    return m_notations.size() -1;
-}
 
 void Song::removeNotation(const std::string name) {
 

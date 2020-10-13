@@ -3,8 +3,7 @@
 #include <SFML/Audio.hpp>
 
 #include "Panel.hpp"
-#include "Map.hpp"
-#include "Notation.hpp"
+#include "Song.hpp"
 #include "Input.hpp"
 #include "Generator.hpp"
 
@@ -25,18 +24,21 @@ private:
     sf::Music m_music;
     sf::RectangleShape m_timelineShape;
     sf::RectangleShape m_cursorShape;
-    Notation m_notation;
+    Song m_song;
     float m_autoSaveCountdown;
 
     void createKeyframe(int concurrent);
     void createKeyframeShape(Keyframe k);
     sf::Vector2f getPositionAtTime(float time);
 
+    void initSFML();
+
 public:
     EditorPanel();
+    EditorPanel(const std::string songFile, const std::string notationFile);
 
     bool loadMusic(const std::string fileName);
-    void loadNotation(const std::string fileName);
+    void loadNotation(Notation notation);
     void update(float dt);
     void draw(sf::RenderWindow & window);
     void setUIScale(float scale);

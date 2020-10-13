@@ -43,26 +43,27 @@ public:
 
     bool loadSongFromDirectory(std::string path);   // Loads all resources from a path to a driectory.
     bool saveSongToDirectory();     // Saves all the resources of the song to the stored path.
-
+    void setSongFileName(const std::string fileName);
     void loadInfo(const std::string fileName);
     void saveInfo();
 
-    Map getMap(int index);
-    Map getMap(const std::string name);
+    Map* getMap(int index);
+    Map* getMap(const std::string name);
+    int getMapCount();
     int addMap(Map map);
     int loadMap(const std::string fileName);
     bool saveMap(int index);
     bool saveMap(const std::string name);
     void removeMap(const std::string name);
 
-    Notation getNotation(int index);
-    Notation getNotation(const std::string name);
+    Notation* getNotation(int index);
+    Notation* getNotation(const std::string name);
+    int getNotationCount();
+    int addNotation(Notation notation);
     int loadNotation(const std::string fileName);
     int createNotationFromMap(Map map); // Constructs a Notation from a collection of keyframes extraced from a Map.
     bool saveNotation(int index);
     bool saveNotation(const std::string name);
-
-    int addNotation(Notation notation);
     void removeNotation(const std::string name);
     
 };

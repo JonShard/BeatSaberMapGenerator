@@ -146,4 +146,6 @@ Create a keyframe by pressing one or several keys in the range A-Z + 0-9. Pressi
 | Numpad-     | Zoom out      |
 | Page up     | Speed up      |
 | Page down   | Speed down    |
+| End         | Reset speed   |
+
 

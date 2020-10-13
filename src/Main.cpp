@@ -60,39 +60,22 @@ void generateMapFromFile(std::string file) {
     OK::Song song(file);
     int notationIndex = song.loadNotation(file);
     if (notationIndex == -1) {
-        notationIndex = song.createNotationFromMap(song.getMap(song.loadMap(file)));  
+        notationIndex = song.createNotationFromMap(*song.getMap(song.loadMap(file)));  
     }
     if (notationIndex == -1) {
         printf("Error: Invalid file extention or invalid file content: %s\n", file.data());
         return;
     }
 
-    int mapIndex = song.addMap(OK::Generator::GenerateMap(song.getNotation(notationIndex)));
+    int mapIndex = song.addMap(OK::Generator::GenerateMap(*song.getNotation(notationIndex)));
     song.saveMap(mapIndex);
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {
-    if (!OK::Util::isFileExtention(songFile, ".ogg")) {
-        printf("Error: Unexpected file extention: %s\nExpected .ogg\n", songFile.data());
-        return;
-    }
-
     OK::Window window(OK::Config::editor.windowWidth, OK::Config::editor.windowHeight);
-    OK::EditorPanel editorPanel;
+    OK::EditorPanel editorPanel(songFile, notationFile);
     window.m_activePanel = &editorPanel;
     
-    if (editorPanel.loadMusic(songFile)) {
-        printf("Loaded song %s\n", songFile.data());
-    }
-    if (notationFile.length() > 0) {
-        if (!OK::Util::isFileExtention(notationFile, ".json")) {
-            printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
-            return;
-        }
-        editorPanel.loadNotation(notationFile);
-        printf("Loaded notation %s\n", notationFile.data());
-    }
-
     while(window.isOpen()) {
         window.update();
         window.draw();
