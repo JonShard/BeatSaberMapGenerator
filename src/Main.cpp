@@ -51,8 +51,10 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
         matrix += OK::MapAnalyzer::RegisterTransitionsInMap(map);
         printf("done\n");
     }
-    printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\n", 
-    countStart, matrix.getNonZeroCount(), matrix.getNonZeroCount() - countStart);
+    int nonZeroCount = matrix.getNonZeroCount();
+    float populatedRatio = nonZeroCount / (float)matrix.getTotalCount();
+    printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
+    countStart, nonZeroCount, matrix.getNonZeroCount() - countStart, matrix.getTotalCount(), populatedRatio);
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 

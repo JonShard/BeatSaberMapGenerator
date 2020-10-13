@@ -80,6 +80,11 @@ int TransitionMatrix<T>::getNonZeroCount() {
     return count;
 }
 
+template<class T>
+int TransitionMatrix<T>::getTotalCount() {
+    return c_types * c_types * c_cutDirections * c_cutDirections * c_floors * c_floors * c_lanes * c_lanes;
+}
+
 
 template<class T>
 TransitionMatrix<T>::TransitionMatrix(const std::string file) {
