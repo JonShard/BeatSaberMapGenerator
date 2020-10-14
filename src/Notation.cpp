@@ -31,7 +31,7 @@ bool Notation::load(const std::string fileName) {
     return true;
 }
 
-void Notation::save() {
+void Notation::save(const std::string fileName) {
     printf("Saving Notation with keyframes: %ld\n", m_keyframes.size());
 
     nlohmann::json jsKeyframes;
@@ -44,8 +44,8 @@ void Notation::save() {
         jn["concurrent"] = k.concurrent;
         jsKeyframes.push_back(jn);
     }
-    printf("Saving notation file to: %s\n", m_name.data());
-    std::ofstream out(m_name);
+    printf("Saving notation file to: %s\n", fileName.data());
+    std::ofstream out(fileName);
     out << jsKeyframes;
     out.close();
 }
@@ -56,8 +56,6 @@ void Notation::print() {
         printf("Keyframe: id: %ld time: %f\t concurrent: %d\t\n", k.id, k.time, k.concurrent);
     }
 }
-
-std::string Notation::getName() { return m_name; }
 
 Keyframe Notation::getNextKeyframe(float time) {
     for (Keyframe k : m_keyframes)
@@ -79,5 +77,14 @@ Notation Notation::operator+=(std::vector<Keyframe> keyframes) {
     }
     return *this;
 }
+
+Notation Notation::operator=(Notation other) {
+    m_name = other.m_name.data();
+    for (Keyframe k : other.m_keyframes) {
+        m_keyframes.push_back(k);
+    }
+    return *this;
+}
+
 
 } // Namespace OK

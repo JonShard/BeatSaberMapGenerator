@@ -1,11 +1,11 @@
-// Base class for all UI panels. 
-// A panel typically contains lists of visual elements which it updates based on input from mouse and keyboard.
 #pragma once
 
 #include <SFML/Graphics.hpp>
 
 namespace OK {
 
+// Base class for all UI panels. 
+// A panel typically contains lists of visual elements which it updates based on input from mouse and keyboard.
 class Panel {
 protected:
 float m_UIScale = 1;

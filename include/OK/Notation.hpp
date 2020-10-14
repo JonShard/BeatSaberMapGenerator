@@ -1,4 +1,5 @@
-// Keyframe is a
+// Notation is the representation of a user input on the keyboard. 
+// Each of these will be generated into one or several notes, except if they are way too dense and some have to be removed.
 #pragma once
 #include <fstream>
 #include <iostream>
@@ -15,25 +16,22 @@ struct Keyframe {
     int concurrent;
 };
 
-class Notation {
-private:
+struct Notation {
     std::string m_name;
-
-public:
     std::vector<Keyframe> m_keyframes;
 
     Notation();
-    Notation(std::string fileName);
+    Notation(const std::string fileName);
 
-    bool load(std::string fileName);
-    void save();
+    bool load(const std::string fileName);
+    void save(const std::string fileName);
     void print();
 
-    std::string getName();
     Keyframe getNextKeyframe(float time);
 
     Notation operator+=(Keyframe k);
     Notation operator+=(std::vector<Keyframe> keyframes);
+    Notation operator=(Notation other);
 };
 
 } // Namespace OK

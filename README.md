@@ -7,7 +7,10 @@ The most important validator, the `MatrixValidator` uses an 8 dimentional transi
 The matrix can be of type `bool` to describe whether a transition is legal. Or `float` describing the probability of one note transitioning the a spesific state. For a note in the matrix, the sum of the probabilities of all notes it can transition to is 1, making the `TransitionMatrix<float>` **a markov chain**.  
 
 
-The plan is to have many kinds of factories to bring variety, along with many knobs and dials to change the outcome though config files. And many validators to cover the mapping errors that aren't picked up by implicitly the transition matrix validator among with edge cases (the maps used yo build the matrix may contain errors). 
+The plan is to have many kinds of factories to bring variety, along with many knobs and dials to change the outcome though config files. And many validators to cover the mapping errors that aren't picked up by implicitly the transition matrix validator among with edge cases (the maps used yo build the matrix may contain errors).  
+
+![](https://github.com/JonShard/BeatSaberMapGenerator/blob/master/documentation/doubleDownValidator.gif?raw=true)  
+(Generated map with MatrixValidator and DoubleDownValidator)
 
 ## Factories
 - Weighted Transition matrix. Build a markov chain with note transition pick random based on the weights going out of that node.
@@ -56,22 +59,35 @@ Format:
         "factories": {
             "maxAttempts": int - The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
             "randomFactory": {
-                "enabled": bool - is the random factory enabled.
+                "enabled": bool - Is the random factory enabled.
+            }
+            "symmetricalFactory": {
+                "enabled": bool - Is the symmetrical factory enabled.
+                "centerPointMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the pair of notes are complete opposites, mirrored accross a center point. If one note is top left with direction up, the other will be bottom right with direction down.
+                "horizontalMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the generated notes are symmertrical along a vertical plane. Two notes on same layer with same direction, but different lanes.
+                "verticalMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the generated notes are symmetrical along a horizontal plane. Two notes on same lane, top and bottom. 
+                "allowOffsetPlane": bool - Allow the symmmetry plane be offset one note left or right (only applicable to vertical mode).
+                "allowNotesInCenter": bool - Allow notes to be generatred in the two ceneter positions.  
             }
         },
         "validators": {
             "validateTimeAfterNote": float - Time after a note in which the validator will care if an illegal note is placed (seconds).
             "matrixValidator": {
-                "enabled": bool - is the matrix validator enabled.
+                "enabled": bool - Is the matrix validator enabled.
                 "binaryMatrixFilePath": string - Path to ascii file containing binary transition matrix containing only 1, 0 and whitespace.  
             },
             "doubleDownValidator": {
-                "enabled": bool - is the double down validator enabled.
+                "enabled": bool - Is the double down validator enabled.
                 "angleToBeDoubleDown": The difference in angles two notes have to be for theirs transition to qualify as a double down. Possible values: 0, 45, 90, 135. 180 would deny all notes always.
+            }
+            "adjacentValidator": {
+                "enabled": bool - Is the adjacent validator enabled.
+                "timeToBeAdjacent": float - The maximum a time difference between two notes in order for them to be considered adjacent.
             }
         }
     },
     "editor": {
+        "autosaveEnabled": bool
         "windowWidth": int - Amount of pixles of the editor window in X direction.
         "windowHeight": int - Amount of pixles of the editor window in Y direction.
     }
@@ -81,11 +97,19 @@ Example:
 ```json
 {
     "generator": {
-        "noteClusterTime": 0.05,
+        "noteClusterTime": 0.01,
         "factories": {
-            "maxAttempts": 10000,
+            "maxAttempts": 1000,
             "randomFactory": {
                 "enabled": true
+            },
+            "symmetricalFactory": {
+                "enabled": true,
+                "centerPointMode": true,
+                "horizontalMode": true,
+                "verticalMode": true,
+                "allowOffsetPlane": true,
+                "allowNotesInCenter": false
             }
         },
         "validators": {
@@ -97,10 +121,15 @@ Example:
             "doubleDownValidator": {
                 "enabled": true,
                 "angleToBeDoubleDown": 90
+            },
+            "adjacentValidator": {
+                "enabled": true,
+                "timeToBeAdjacent": 2
             }
         }
     },
     "editor": {
+        "autosaveEnabled": false,
         "windowWidth": 1600,
         "windowHeight": 900
     }
@@ -120,4 +149,6 @@ Create a keyframe by pressing one or several keys in the range A-Z + 0-9. Pressi
 | Numpad-     | Zoom out      |
 | Page up     | Speed up      |
 | Page down   | Speed down    |
+| End         | Reset speed   |
+
 

@@ -1,5 +1,3 @@
-// Input is an extention of SFML's input system.
-// It's main function is to keep track of which keys are pressed at the same time, as SFML didn't support this.
 #pragma once
 
 #include <SFML/Graphics.hpp>
@@ -10,6 +8,8 @@ namespace OK {
 
 const float c_downKeyWait = 0.02f;      // Time a key waits for other keys to be pressed.
 
+// Input is an extention of SFML's input system.
+// It's main function is to keep track of which keys are pressed at the same time, as SFML didn't support this.
 class Input {
 public:
 static float s_scrollDelta;

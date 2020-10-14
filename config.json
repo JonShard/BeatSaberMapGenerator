@@ -1,10 +1,18 @@
 {
     "generator": {
-        "noteClusterTime": 0.05,
+        "noteClusterTime": 0.01,
         "factories": {
-            "maxAttempts": 10000,
+            "maxAttempts": 1000,
             "randomFactory": {
                 "enabled": true
+            },
+            "symmetricalFactory": {
+                "enabled": true,
+                "centerPointMode": true,
+                "horizontalMode": true,
+                "verticalMode": true,
+                "allowOffsetPlane": true,
+                "allowNotesInCenter": false
             }
         },
         "validators": {
@@ -16,10 +24,16 @@
             "doubleDownValidator": {
                 "enabled": true,
                 "angleToBeDoubleDown": 90
+            },
+            "adjacentValidator": {
+                "enabled": true,
+                "timeToBeAdjacent": 0.35,
+                "timeToEnforceSameTrack": 0.20
             }
         }
     },
     "editor": {
+        "autosaveEnabled": false,
         "windowWidth": 1600,
         "windowHeight": 900
     }

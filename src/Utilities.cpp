@@ -3,6 +3,7 @@
 
 namespace OK::Util {
 
+// Returns random numer in the range min()inclusive to max(exclusive). 
 int rng(int min, int max) {
     return (min + random() % max);
 }
@@ -13,6 +14,20 @@ bool isFileExtention(const std::string file, const std::string ext) {
         return false;
     std::string splitExt = file.substr(pos, file.length());
     return splitExt == ext;
+}
+
+std::string extractDirectoryFromPath(std::string path) {
+    int pos = path.find_last_of("/");
+    if (pos < 0)
+        return "";
+    return path.substr(0, pos + 1); // + 1 to unclude the leading /
+}
+
+std::string extractFileNameFromPath(std::string path) {
+    int pos = path.find_last_of("/");
+    if (pos < 0)
+        return "";
+    return path.substr(pos + 1, path.size());
 }
 
 std::string removeFileExtention(const std::string file, const std::string ext) {
@@ -28,6 +43,13 @@ unsigned int integerSumString(std::string str) {
         sum += int(c);
     }
     return sum;
+}
+
+int angleDelta(int a, int b) {
+    int m = std::abs(a - b);
+    int n = std::abs(a - b + 360);
+    int o = std::abs(a - b + 360);
+    return std::min(m, std::min(n, o));
 }
 
 

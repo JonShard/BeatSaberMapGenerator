@@ -1,4 +1,3 @@
-// Map is a representaion of a single difficulty of a Beat Saber map.
 #pragma once
 #include <fstream>
 #include <iostream>
@@ -7,47 +6,35 @@
 
 #include "../nlohmann/json.hpp"
 
-#include "Config.hpp"
+#include "Note.hpp"
 
 namespace OK {
-
-enum Type { RED, BLUE, RED_DUP, BOMB}; // For some reason red appears twice in the types of note.
-enum CutDirection       { UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, DOT};
-const int CutAngle[] =  { 90, 270,  180,  0,     135,     45,       225,       315,        -1 };
-
-struct Note {
-    float time;
-    int lineIndex;
-    int lineLayer;
-    int type;
-    int cutDirection;
-
-    void print();
-};
-
-
-class Map {
-private:
-    std::string m_name;
-    std::string m_version;
-
-public:
-    static bool IsClusterMultiColor(std::vector<Note> cluster);    // Returns true if the cluster contains both colors.
-    static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type color);
-
-    std::vector<Note> m_notes;
     
-    Map();
-    Map(const std::string fileName);
+enum DifficultyRank { EASY, NORMAL, HARD, EXPERT, EXPERTPLUS };
 
-    bool load(const std::string fileName);
-    void save();
+// Map is a representaion of a single difficulty of a Beat Saber map.
+struct Map {
+    std::string m_version;
+    std::string m_name;
+    std::string m_difficultyText;
+    DifficultyRank m_difficultyRank;
+    float m_noteJumpMovementSpeed;
+    float m_noteJumpStartBeatOffset;
+    std::vector<Note> m_notes;
+
+    static bool IsClusterMultiColor(std::vector<Note> cluster);    // Returns true if the cluster contains both colors.
+    static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type type);
+
+    Map();
+    Map(const std::string name);
+
+    bool load(const std::string fileName, float bps);
+    void save(const std::string fileName, float bps);
     void print();
 
-    std::string getName();
     float getLatestTime();
     std::vector<Note> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
-    Note getPreviousNoteOfColor(int noteNr, Type color);
+    Note getPreviousNoteOfColor(int noteNr, Type type);
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);

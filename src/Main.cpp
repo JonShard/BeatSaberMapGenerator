@@ -3,6 +3,7 @@
 #include "../include/OK/Input.hpp"
 #include "../include/OK/factories/Factory.hpp"
 #include "../include/OK/validators/Validator.hpp"
+#include "../include/OK/Song.hpp"
 #include "../include/OK/MapAnalyzer.hpp"
 #include "../include/OK/Config.hpp"
 
@@ -14,9 +15,10 @@ const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
 float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
 std::vector<sf::Event::KeyEvent> Input::s_downKeys = std::vector<sf::Event::KeyEvent>();
-int Factory::s_totalProduceAttempts = 0;
-int Validator::s_passes = 0;
-int Validator::s_fails = 0;
+unsigned long Factory::s_totalProduceAttempts = 0;
+unsigned long Validator::s_totalPasses = 0;
+unsigned long Validator::s_totalFails = 0;
+unsigned long Generator::s_backtracks = 0;
 std::vector<Factory*> Generator::s_factories = std::vector<Factory*>();
 std::vector<Validator*> Generator::s_validators = std::vector<Validator*>();
 GeneratorConfig Config::generator = {};
@@ -33,55 +35,49 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
     if (append) {
         matrix.loadFromFile(OK::c_binaryMatrixFile);
     }
+    int countStart = matrix.getNonZeroCount();
     for (std::string file : mapFiles) {
         if (!OK::Util::isFileExtention(file, ".dat")) {
             printf("Error: Unexpected file extention: %s\nExpected .dat\n", file.data());
             return;
         }
+        printf("\n\nLoading mapFile %s\n\n", file.data());
         OK::Map map;
-        map.load(file);
+        map.load(file, 120);
         if (map.m_notes.size() == 0) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
-        matrix += OK::MapAnalyzer::AnalyzeMap(map);
+        matrix += OK::MapAnalyzer::RegisterTransitionsInMap(map);
+        printf("done\n");
     }
+    int nonZeroCount = matrix.getNonZeroCount();
+    float populatedRatio = nonZeroCount / (float)matrix.getTotalCount();
+    printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
+    countStart, nonZeroCount, matrix.getNonZeroCount() - countStart, matrix.getTotalCount(), populatedRatio);
     matrix.saveToFile(OK::c_binaryMatrixFile);
 }
 
-void generateFromNotation(std::string notationFile) {
-    if (!OK::Util::isFileExtention(notationFile, ".json")) {
-        printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
+void generateMapFromFile(std::string file) {
+    OK::Song song(file);
+    int notationIndex = song.loadNotation(file);
+    if (notationIndex == -1) {
+        notationIndex = song.createNotationFromMap(*song.getMap(song.loadMap(file)));  
+    }
+    if (notationIndex == -1) {
+        printf("Error: Invalid file extention or invalid file content: %s\n", file.data());
         return;
     }
-    OK::Notation notation(notationFile);
-    notation.load(notationFile);
-    OK::Map map = OK::Generator::GenerateMap(notation);
-    map.save();
+
+    int mapIndex = song.addMap(OK::Generator::GenerateMap(*song.getNotation(notationIndex)));
+    song.saveMap(mapIndex);
 }
 
 void openEditorWindow(std::string songFile, std::string notationFile = "") {
-    if (!OK::Util::isFileExtention(songFile, ".ogg")) {
-        printf("Error: Unexpected file extention: %s\nExpected .ogg\n", songFile.data());
-        return;
-    }
-
     OK::Window window(OK::Config::editor.windowWidth, OK::Config::editor.windowHeight);
-    OK::EditorPanel editorPanel;
+    OK::EditorPanel editorPanel(songFile, notationFile);
     window.m_activePanel = &editorPanel;
     
-    if (editorPanel.loadMusic(songFile)) {
-        printf("Loaded song %s\n", songFile.data());
-    }
-    if (notationFile.length() > 0) {
-        if (!OK::Util::isFileExtention(notationFile, ".json")) {
-            printf("Error: Unexpected file extention: %s\nExpected .json\n", notationFile.data());
-            return;
-        }
-        editorPanel.loadNotation(notationFile);
-        printf("Loaded notation %s\n", notationFile.data());
-    }
-
     while(window.isOpen()) {
         window.update();
         window.draw();
@@ -130,7 +126,7 @@ int main(int argc, char** argv) {
             }
 
         }
-        generateFromNotation(args[2]);
+        generateMapFromFile(args[2]);
     }
     else if (args.size() > 2){
         openEditorWindow(args[1], args[2]);

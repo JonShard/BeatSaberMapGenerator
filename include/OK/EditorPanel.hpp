@@ -1,11 +1,9 @@
-
 #pragma once
 
 #include <SFML/Audio.hpp>
 
 #include "Panel.hpp"
-#include "Map.hpp"
-#include "Notation.hpp"
+#include "Song.hpp"
 #include "Input.hpp"
 #include "Generator.hpp"
 
@@ -18,6 +16,7 @@ const float c_spaceModifier = 200;     // Spaceing between each node.
 const float c_textSize = 20;
 const float c_autoSavePeriod = 60;     // Seconds
 
+// EditorPanel is the user interface to create Keyframes which are used by the Generator to make a Map.
 class EditorPanel : public Panel {
 private:
     std::vector<sf::CircleShape> m_keyframeShapes;
@@ -25,18 +24,21 @@ private:
     sf::Music m_music;
     sf::RectangleShape m_timelineShape;
     sf::RectangleShape m_cursorShape;
-    Notation m_notation;
+    Song m_song;
     float m_autoSaveCountdown;
 
     void createKeyframe(int concurrent);
     void createKeyframeShape(Keyframe k);
     sf::Vector2f getPositionAtTime(float time);
 
+    void initSFML();
+
 public:
     EditorPanel();
+    EditorPanel(const std::string songFile, const std::string notationFile);
 
     bool loadMusic(const std::string fileName);
-    void loadNotation(const std::string fileName);
+    void loadNotation(Notation notation);
     void update(float dt);
     void draw(sf::RenderWindow & window);
     void setUIScale(float scale);

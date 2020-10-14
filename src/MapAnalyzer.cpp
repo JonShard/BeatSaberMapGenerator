@@ -2,7 +2,7 @@
 
 namespace OK {
 
-TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
+TransitionMatrix<bool> MapAnalyzer::RegisterTransitionsInMap(Map map) {
     TransitionMatrix<bool> matrix;
 
     for (int i = 0; i < map.m_notes.size() - 1; i++) {
@@ -13,7 +13,7 @@ TransitionMatrix<bool> MapAnalyzer::AnalyzeMap(Map map) {
         }
         std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
         // If two notes are far enough apart, it's not a transition because the player gets time to "reset" their pose.
-        if (cluster[0].time - clusterNext[0].time > Config::generator.validator.validateTimeAfterNote) {
+        if (std::abs(cluster[0].m_time - clusterNext[0].m_time) > Config::generator.validator.validateTimeAfterNote) {
             continue;
         }
 
