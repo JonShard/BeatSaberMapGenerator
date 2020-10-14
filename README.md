@@ -7,7 +7,10 @@ The most important validator, the `MatrixValidator` uses an 8 dimentional transi
 The matrix can be of type `bool` to describe whether a transition is legal. Or `float` describing the probability of one note transitioning the a spesific state. For a note in the matrix, the sum of the probabilities of all notes it can transition to is 1, making the `TransitionMatrix<float>` **a markov chain**.  
 
 
-The plan is to have many kinds of factories to bring variety, along with many knobs and dials to change the outcome though config files. And many validators to cover the mapping errors that aren't picked up by implicitly the transition matrix validator among with edge cases (the maps used yo build the matrix may contain errors). 
+The plan is to have many kinds of factories to bring variety, along with many knobs and dials to change the outcome though config files. And many validators to cover the mapping errors that aren't picked up by implicitly the transition matrix validator among with edge cases (the maps used yo build the matrix may contain errors).  
+
+![](https://github.com/JonShard/BeatSaberMapGenerator/blob/master/documentation/doubleDownValidator.gif?raw=true)  
+(Generated map with MatrixValidator and DoubleDownValidator)
 
 ## Factories
 - Weighted Transition matrix. Build a markov chain with note transition pick random based on the weights going out of that node.
