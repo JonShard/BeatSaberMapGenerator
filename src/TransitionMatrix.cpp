@@ -107,18 +107,26 @@ void TransitionMatrix<T>::normalize() {
         for (int dirFrom = 0; dirFrom < c_cutDirections; dirFrom++) {
             for (int floorFrom = 0; floorFrom < c_floors; floorFrom++) {
                 for (int laneFrom = 0; laneFrom < c_lanes; laneFrom++) {
-                    std::vector<T> transitions = getTransitionsFromNote(Note{0, laneFrom, floorFrom, (Type)typeFrom, (CutDirection)dirFrom});
+                    Note note;
+                    note.m_lineIndex = laneFrom;
+                    note.m_lineLayer = floorFrom; 
+                    note.m_type = (Type)typeFrom; 
+                    note.m_cutDirection = (CutDirection)dirFrom;
+                    std::vector<T> transitions = getTransitionsFromNote(note);
                     float sum = 0;
                     for (T t : transitions) {
                         sum += t;
                     }
-                    if (sum == 0) {
+                    if (sum == 0) { // Can't divide by zero
                         continue;
                     }
                     for (int typeTo = 0; typeTo < c_types; typeTo++) {
                         for (int dirTo = 0; dirTo < c_cutDirections; dirTo++) {
                             for (int floorTo = 0; floorTo < c_floors; floorTo++) {
                                 for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
+                                    if (m_matrix[typeTo][typeFrom][dirTo][dirFrom][floorTo][floorFrom][laneTo][laneFrom] == 0) {
+                                        continue;
+                                    }
                                     m_matrix[typeTo][typeFrom][dirTo][dirFrom][floorTo][floorFrom][laneTo][laneFrom] /= sum; 
                                 }
                             }

@@ -63,7 +63,7 @@ void analyseBinary(std::vector<std::string> mapFiles, bool append) {
 void analyseMarkov(std::vector<std::string> mapFiles, bool append) {
     OK::TransitionMatrix<float> matrix;
     if (append) {
-        matrix.loadFromFile(OK::c_binaryMatrixFile);
+        matrix.loadFromFile(OK::c_markovMatrixFile);
     }
     int countStart = matrix.getNonZeroCount();
     for (std::string file : mapFiles) {
@@ -78,10 +78,11 @@ void analyseMarkov(std::vector<std::string> mapFiles, bool append) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
-        // TODO: Fix
         matrix += OK::MapAnalyzer::RegisterMarkovTransitionsInMap(map);
+
         printf("done\n");
     }
+    matrix.normalize();
     int nonZeroCount = matrix.getNonZeroCount();
     float populatedRatio = nonZeroCount / (float)matrix.getTotalCount();
     printf("\n##### Result Markov #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
