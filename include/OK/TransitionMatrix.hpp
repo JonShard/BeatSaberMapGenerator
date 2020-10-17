@@ -20,9 +20,11 @@ struct TransitionMatrix {
     
     void setNoteTransition(Note n, Note nn, T value);
     T getNoteTransition(Note n, Note nn);
+    std::vector<T>getTransitionsFromNote(Note n);
     int getTransitionCountFromNote(Note n);
     int getNonZeroCount();
     int getTotalCount();
+    void normalize();
 
     bool loadFromFile(std::string file);
     void saveToFile(std::string file);

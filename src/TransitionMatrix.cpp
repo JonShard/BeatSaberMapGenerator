@@ -38,6 +38,22 @@ T TransitionMatrix<T>::getNoteTransition(Note n, Note nn) {
 }
 
 template<class T>
+std::vector<T> TransitionMatrix<T>::getTransitionsFromNote(Note n) {
+    std::vector<T> vector = std::vector<T>();
+    for (int typeTo = 0; typeTo < c_types; typeTo++) {
+        for (int dirTo = 0; dirTo < c_cutDirections; dirTo++) {
+            for (int floorTo = 0; floorTo < c_floors; floorTo++) {
+                for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
+                    vector.push_back(m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex]); 
+                }
+            }
+        }
+    }
+    return vector;
+}
+
+
+template<class T>
 int TransitionMatrix<T>::getTransitionCountFromNote(Note n) {
     int count = 0;
     for (int typeTo = 0; typeTo < c_types; typeTo++) {
@@ -85,6 +101,34 @@ int TransitionMatrix<T>::getTotalCount() {
     return c_types * c_types * c_cutDirections * c_cutDirections * c_floors * c_floors * c_lanes * c_lanes;
 }
 
+template<class T>
+void TransitionMatrix<T>::normalize() {
+    for (int typeFrom = 0; typeFrom < c_types; typeFrom++) {
+        for (int dirFrom = 0; dirFrom < c_cutDirections; dirFrom++) {
+            for (int floorFrom = 0; floorFrom < c_floors; floorFrom++) {
+                for (int laneFrom = 0; laneFrom < c_lanes; laneFrom++) {
+                    std::vector<T> transitions = getTransitionsFromNote(Note{0, laneFrom, floorFrom, (Type)typeFrom, (CutDirection)dirFrom});
+                    float sum = 0;
+                    for (T t : transitions) {
+                        sum += t;
+                    }
+                    if (sum == 0) {
+                        continue;
+                    }
+                    for (int typeTo = 0; typeTo < c_types; typeTo++) {
+                        for (int dirTo = 0; dirTo < c_cutDirections; dirTo++) {
+                            for (int floorTo = 0; floorTo < c_floors; floorTo++) {
+                                for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
+                                    m_matrix[typeTo][typeFrom][dirTo][dirFrom][floorTo][floorFrom][laneTo][laneFrom] /= sum; 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 template<class T>
 TransitionMatrix<T>::TransitionMatrix(const std::string file) {

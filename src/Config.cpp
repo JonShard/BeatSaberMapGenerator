@@ -27,6 +27,10 @@ bool Config::Load() {
                 jsSymmetricalFactory.at("allowOffsetPlane").get_to(generator.factory.symmetrical.allowOffsetPlane);
                 jsSymmetricalFactory.at("allowNotesInCenter").get_to(generator.factory.symmetrical.allowNotesInCenter);
 
+            nlohmann::json jsMarkovFactory = jsFactories["markovFactory"];
+                jsMarkovFactory.at("enabled").get_to(generator.factory.markov.enabled);
+                jsMarkovFactory.at("markovMatrixFilePath").get_to(generator.factory.markov.markovMatrixFilePath);
+
         nlohmann::json jsValidators = jsGenerator["validators"];
             jsValidators.at("validateTimeAfterNote").get_to(generator.validator.validateTimeAfterNote);
             

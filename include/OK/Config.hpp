@@ -7,6 +7,10 @@
 
 namespace OK {
 
+struct MarkovFactoryConfig {
+    bool enabled;
+    std::string markovMatrixFilePath; // Path to ascii file containing markov transition matrix containing floats between 1 and 0, and whitespace. 
+};
 
 struct SymmeticalFactoryConfig {
     bool enabled;
@@ -25,6 +29,7 @@ struct FactoryConfig {
     int maxAttempts; // The maximum amount of attempts to generate from note A, a valid note B before backtracking by removing note A.
     RandomFactoryConfig random;
     SymmeticalFactoryConfig symmetrical;
+    MarkovFactoryConfig markov;
 };
 
 

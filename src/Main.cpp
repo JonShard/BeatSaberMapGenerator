@@ -7,10 +7,12 @@
 #include "../include/OK/MapAnalyzer.hpp"
 #include "../include/OK/Config.hpp"
 
+// TODO: Add to readme
 enum ExitCode { DONE, MISSING_ARGUMENTS, BAD_CONFIG };
 
 namespace OK {
 const std::string c_binaryMatrixFile = "binaryTransitionMatrix.data";
+const std::string c_markovMatrixFile = "markovTransitionMatrix.data";
 // Statics:
 float Input::s_scrollDelta = 0;
 std::vector<std::pair<float, sf::Event::KeyEvent>> Input::s_keys = std::vector<std::pair<float, sf::Event::KeyEvent>>();
@@ -30,7 +32,7 @@ void printUsage() {
     std::printf("Usage: generator.out [AUDIO FILE] [JSON ANNOTATION]\nExample: generator.out song.ogg keyframe.json\n");
 }
 
-void analyseMaps(std::vector<std::string> mapFiles, bool append) {
+void analyseBinary(std::vector<std::string> mapFiles, bool append) {
     OK::TransitionMatrix<bool> matrix;
     if (append) {
         matrix.loadFromFile(OK::c_binaryMatrixFile);
@@ -48,14 +50,48 @@ void analyseMaps(std::vector<std::string> mapFiles, bool append) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
-        matrix += OK::MapAnalyzer::RegisterTransitionsInMap(map);
+        matrix += OK::MapAnalyzer::RegisterBinaryTransitionsInMap(map);
         printf("done\n");
     }
     int nonZeroCount = matrix.getNonZeroCount();
     float populatedRatio = nonZeroCount / (float)matrix.getTotalCount();
-    printf("\n##### Result #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
+    printf("\n##### Result Binary #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
     countStart, nonZeroCount, matrix.getNonZeroCount() - countStart, matrix.getTotalCount(), populatedRatio);
-    matrix.saveToFile(OK::c_binaryMatrixFile);
+    matrix.saveToFile(OK::c_binaryMatrixFile);  
+}
+
+void analyseMarkov(std::vector<std::string> mapFiles, bool append) {
+    OK::TransitionMatrix<float> matrix;
+    if (append) {
+        matrix.loadFromFile(OK::c_binaryMatrixFile);
+    }
+    int countStart = matrix.getNonZeroCount();
+    for (std::string file : mapFiles) {
+        if (!OK::Util::isFileExtention(file, ".dat")) {
+            printf("Error: Unexpected file extention: %s\nExpected .dat\n", file.data());
+            return;
+        }
+        printf("\n\nLoading mapFile %s\n\n", file.data());
+        OK::Map map;
+        map.load(file, 120);
+        if (map.m_notes.size() == 0) {
+            printf("Failed to load map: %s\n", file.data());
+            continue;
+        }
+        // TODO: Fix
+        matrix += OK::MapAnalyzer::RegisterMarkovTransitionsInMap(map);
+        printf("done\n");
+    }
+    int nonZeroCount = matrix.getNonZeroCount();
+    float populatedRatio = nonZeroCount / (float)matrix.getTotalCount();
+    printf("\n##### Result Markov #####\nTransition count before: %d\nTrasition count after: %d\nDifference: %d\nTotal cells: %d\nPoputlated cells ratio: %f\n", 
+    countStart, nonZeroCount, matrix.getNonZeroCount() - countStart, matrix.getTotalCount(), populatedRatio);
+    matrix.saveToFile(OK::c_markovMatrixFile);  
+}
+
+void analyseMaps(std::vector<std::string> mapFiles, bool append) {
+    analyseBinary(mapFiles, append);
+    analyseMarkov(mapFiles, append);
 }
 
 void generateMapFromFile(std::string file) {
