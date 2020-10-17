@@ -2,6 +2,7 @@
 
 #include "factories/RandomFactory.hpp"
 #include "factories/SymmetricalFactory.hpp"
+#include "factories/MarkovFactory.hpp"
 #include "validators/MatrixValidator.hpp"
 #include "validators/DoubleDownValidator.hpp"
 #include "validators/AdjacentValidator.hpp"

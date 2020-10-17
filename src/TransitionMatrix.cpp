@@ -38,13 +38,18 @@ T TransitionMatrix<T>::getNoteTransition(Note n, Note nn) {
 }
 
 template<class T>
-std::vector<T> TransitionMatrix<T>::getTransitionsFromNote(Note n) {
-    std::vector<T> vector = std::vector<T>();
+std::vector<std::pair<T, Note>> TransitionMatrix<T>::getTransitionsFromNote(Note n) {
+    std::vector<std::pair<T, Note>> vector = std::vector<std::pair<T, Note>>();
     for (int typeTo = 0; typeTo < c_types; typeTo++) {
         for (int dirTo = 0; dirTo < c_cutDirections; dirTo++) {
             for (int floorTo = 0; floorTo < c_floors; floorTo++) {
                 for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
-                    vector.push_back(m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex]); 
+                    Note noteTo;
+                    noteTo.m_lineIndex = laneTo;
+                    noteTo.m_lineLayer = floorTo; 
+                    noteTo.m_type = (Type)typeTo; 
+                    noteTo.m_cutDirection = (CutDirection)dirTo;
+                    vector.push_back(std::pair<T, Note>(m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex], noteTo)); 
                 }
             }
         }
@@ -112,10 +117,10 @@ void TransitionMatrix<T>::normalize() {
                     note.m_lineLayer = floorFrom; 
                     note.m_type = (Type)typeFrom; 
                     note.m_cutDirection = (CutDirection)dirFrom;
-                    std::vector<T> transitions = getTransitionsFromNote(note);
+                    std::vector<std::pair<T, Note>> transitions = getTransitionsFromNote(note);
                     float sum = 0;
-                    for (T t : transitions) {
-                        sum += t;
+                    for (std::pair<T, Note> pair : transitions) {
+                        sum += pair.first;
                     }
                     if (sum == 0) { // Can't divide by zero
                         continue;

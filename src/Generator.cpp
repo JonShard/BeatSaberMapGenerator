@@ -6,6 +6,7 @@ namespace OK {
     bool Generator::Init() {
         if (Config::generator.factory.random.enabled) s_factories.push_back(new RandomFactory);
         if (Config::generator.factory.symmetrical.enabled) s_factories.push_back(new SymmetricalFactory);
+        if (Config::generator.factory.markov.enabled) s_factories.push_back(new MarkovFactory);
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
         if (Config::generator.validator.adjacent.enabled) s_validators.push_back(new AdjacentValidator);

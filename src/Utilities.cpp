@@ -8,6 +8,12 @@ int rng(int min, int max) {
     return (min + random() % max);
 }
 
+// Returns a random float between 0 and 1.
+float rng0To1() {
+    return rng(0, INT16_MAX) / (float)INT16_MAX;
+}
+
+
 bool isFileExtention(const std::string file, const std::string ext) {
     int pos = file.find_last_of(".");
     if (pos < 0) 

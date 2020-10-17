@@ -20,7 +20,7 @@ struct TransitionMatrix {
     
     void setNoteTransition(Note n, Note nn, T value);
     T getNoteTransition(Note n, Note nn);
-    std::vector<T>getTransitionsFromNote(Note n);
+    std::vector<std::pair<T, Note>>getTransitionsFromNote(Note n);
     int getTransitionCountFromNote(Note n);
     int getNonZeroCount();
     int getTotalCount();

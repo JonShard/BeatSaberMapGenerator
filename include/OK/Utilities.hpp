@@ -9,6 +9,7 @@ const float D2R = 0.01745329251;
 const float R2D = 57.2958;
 
 int rng(int min, int max);
+float rng0To1();
 bool isFileExtention(const std::string file, const std::string ext);
 std::string extractDirectoryFromPath(std::string path);
 std::string extractFileNameFromPath(std::string path);
