@@ -56,14 +56,6 @@ public:
         }
 
         note.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
-
-        if (note.m_time < 0 || note.m_time > 1000 ||
-            note.m_lineIndex < 0 || note.m_lineIndex > 3 || 
-            note.m_lineLayer < 0 || note.m_lineLayer > 2 ||
-            note.m_type < 0 || note.m_type > 10 ||
-            note.m_cutDirection < 0 || note.m_cutDirection > 10) {
-                printf("Error: MarkovFactory generated invalid note: %s\n", note.toString().data());
-            }
         notes.push_back(note);
         return notes;
     }

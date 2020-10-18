@@ -24,6 +24,14 @@ void Note::randomize() {
     }
 }
 
+bool Note::isValid() {
+    return (m_time > 0 && m_time < 100000 &&
+        m_lineIndex >= 0 && m_lineIndex < 4 && 
+        m_lineLayer >= 0 && m_lineLayer < 3 &&
+        m_type >= 0 && m_type < 10 &&
+        m_cutDirection >= 0 && m_cutDirection < 10);
+}
+
 void Note::invertNote() {
     if      (m_type == BLUE) m_type = RED;
     else if (m_type == RED)  m_type = BLUE; // If bomb, keep as bomb.

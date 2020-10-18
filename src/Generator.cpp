@@ -20,8 +20,14 @@ namespace OK {
     }
 
     bool Generator::IsValid(Map map) {
+        for (Note n : map.m_notes) {
+            if (!n.isValid()) { // Something is seriously wrong if the note iself thinks it's invalid.
+                printf("Error: generated invalid note: %s\n", n.toString().data());
+                std::exit(4);
+            }
+        }
         for (Validator* v : s_validators) {
-            if (!v->validate(map)) 
+            if (!v->validate(map))
                 return false;
         }
         return true;
@@ -39,7 +45,6 @@ namespace OK {
         }
         printf("Blue to red ratio: %f\n", blueCount / (float)redCount);
     }
-
 
     Map Generator::GenerateMap(Notation notation) {
         printf("Generating map from nototion with keyframes: %ld\n", notation.m_keyframes.size());
