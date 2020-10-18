@@ -22,15 +22,15 @@
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": true,
+                "enabled": false,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {
-                "enabled": true,
+                "enabled": false,
                 "angleToBeDoubleDown": 90
             },
             "adjacentValidator": {
-                "enabled": true,
+                "enabled": false,
                 "timeToBeAdjacent": 0.35,
                 "timeToEnforceSameTrack": 0.20
             }

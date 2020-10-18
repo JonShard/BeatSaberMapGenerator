@@ -3,6 +3,27 @@
 namespace OK {
 
 
+void Note::randomize() {
+    m_type = (Type)(Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
+    m_cutDirection = (CutDirection)Util::rng(0, 8);    // Dot note is 9 none of those for now.
+    
+    // Notes are more likely to be towards the bottom.
+    int layer = Util::rng(0, 100);
+    if      (layer > 50) m_lineLayer = 0;
+    else if (layer > 20) m_lineLayer = 1;
+    else if (layer >= 0) m_lineLayer = 2;
+
+    // Blue is more likely to be on the right.
+    int number = Util::rng(0, 100);
+    if      (number < 30) m_lineIndex = 3; 
+    else if (number < 66) m_lineIndex = 2;
+    else if (number < 85) m_lineIndex = 1;
+    else m_lineIndex = 0;
+    if (m_type == 0) { // If red, invert location.
+        m_lineIndex = 3 - m_lineIndex;
+    }
+}
+
 void Note::invertNote() {
     if      (m_type == BLUE) m_type = RED;
     else if (m_type == RED)  m_type = BLUE; // If bomb, keep as bomb.
