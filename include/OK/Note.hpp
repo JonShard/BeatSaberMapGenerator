@@ -17,6 +17,7 @@ struct Note {
     int m_lineLayer;
     Type m_type;
     CutDirection m_cutDirection;
+    std::string m_parentFactory;
 
     void randomize();
     bool isValid();

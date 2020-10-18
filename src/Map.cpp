@@ -73,6 +73,7 @@ void Map::save(const std::string fileName, float bps) {
         jn["_lineLayer"] = n.m_lineLayer;
         jn["_type"] = n.m_type;
         jn["_cutDirection"] = n.m_cutDirection;
+        jn["_parentFactory"] = n.m_parentFactory.data();
         jsNotes.push_back(jn);
     }
 

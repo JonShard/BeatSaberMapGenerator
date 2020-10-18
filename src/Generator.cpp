@@ -58,10 +58,10 @@ namespace OK {
             do {
                 mapNext = map;
                 if (notation.m_keyframes[i].concurrent == 2) {
-                    mapNext += s_factories[1]->produce(notation, map);
+                    mapNext += s_factories[0]->produce(notation, map);
                 }
                 else {
-                    mapNext += s_factories[0]->produce(notation, map);
+                    mapNext += s_factories[1]->produce(notation, map);
                 }
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);

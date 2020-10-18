@@ -14,6 +14,7 @@ public:
     static unsigned long getTotalProduceAttempts() {
         return s_totalProduceAttempts;
     }
+    virtual std::string getName() = 0;
     virtual std::vector<Note> produce(Notation notation, Map map) = 0;
 };
 

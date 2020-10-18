@@ -104,9 +104,9 @@ bool Note::isOnSamePlane(Note other) {
 }
 
 std::string Note::toString() {
-    std::string s; 
-    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d", 
-            m_time, m_lineIndex, m_lineLayer, m_type, m_cutDirection);
+    std::string s;
+    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d, \tparentFactory: %s", 
+            m_time, m_lineIndex, m_lineLayer, m_type, m_cutDirection, m_parentFactory.data());
     return s;
 }
 

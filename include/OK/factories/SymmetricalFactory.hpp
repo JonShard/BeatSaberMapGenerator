@@ -19,12 +19,15 @@ public:
         if (modesEnabled == 0) printf("Warning: SymmetricalFactory is enabled but has no modes enabled. It will not generate any notes.\n");
     }
 
+    virtual std::string getName() { return "SymmetricalFactory"; }
+
     virtual std::vector<Note> produce(Notation notation, Map map) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
         std::vector<Note> notes;
 
         Note noteBlue;
+        noteBlue.m_parentFactory = getName();
         noteBlue.m_time = nextKeyframe.time;
         noteBlue.m_type = BLUE;
         noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
@@ -52,10 +55,6 @@ public:
                     noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                 }
             }
-        }
-
-        if (noteBlue.m_time > 24 && noteBlue.m_cutDirection == UP && noteBlue.m_lineLayer == 1 && noteBlue.m_lineIndex == 2) {
-            printf("This one\n");
         }
 
         int modesEnabled = 0;
