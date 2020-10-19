@@ -53,7 +53,7 @@ public:
         }
         if (!isNoteSet) {
             m_absorbingNotesHit++;
-            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain picking a random transition\n");
+            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain picking a random transition (%d)\n", m_absorbingNotesHit);
             note.randomize();
         }
 
