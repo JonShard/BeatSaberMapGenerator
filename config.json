@@ -26,11 +26,11 @@
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {
-                "enabled": false,
+                "enabled": true,
                 "angleToBeDoubleDown": 90
             },
             "adjacentValidator": {
-                "enabled": false,
+                "enabled": true,
                 "timeToBeAdjacent": 0.35,
                 "timeToEnforceSameTrack": 0.20
             }

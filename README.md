@@ -42,7 +42,7 @@ Note that right now the generator requires a BPM of 120 in the info file as the 
 
 ### Parameters
 - `-a [MAP FILE...] [OPTIONAL --clean]` Analyse a map and build transition matrix. Stored in `binaryTransitionMatrix.data`. Optional falg `--clean` to discard existing matrix.
-- `-g [JSON NOTATIONS]` Generate map from existing keyframes file. Optional parameter `--seed 42`.
+- `-g [NOTATION | MAP FILE]` Generate map from existing keyframes file, keyframe file or exisitng map. Optional parameter `--seed 42`.
 
 ### Examples
 `./generator.out songs/createOW/create.ogg /songs/createOW/keyframes.json`  
@@ -68,6 +68,10 @@ Format:
                 "verticalMode": bool - Note: One of the three symmetry modes must be enabled. Allow outcomes where the generated notes are symmetrical along a horizontal plane. Two notes on same lane, top and bottom. 
                 "allowOffsetPlane": bool - Allow the symmmetry plane be offset one note left or right (only applicable to vertical mode).
                 "allowNotesInCenter": bool - Allow notes to be generatred in the two ceneter positions.  
+            },
+            "markovFactory": {
+                "enabled": bool . Is the markov factory enabled.
+                "markovMatrixFilePath": string - Path to ascii file containing weighted transition matrix containing floats between 0 and 1, and whitespace.  
             }
         },
         "validators": {
@@ -96,12 +100,13 @@ Format:
 Example:
 ```json
 {
+{
     "generator": {
         "noteClusterTime": 0.01,
         "factories": {
             "maxAttempts": 1000,
             "randomFactory": {
-                "enabled": true
+                "enabled": false
             },
             "symmetricalFactory": {
                 "enabled": true,
@@ -110,12 +115,16 @@ Example:
                 "verticalMode": true,
                 "allowOffsetPlane": true,
                 "allowNotesInCenter": false
+            },
+            "markovFactory": {
+                "enabled": true,
+                "markovMatrixFilePath": "markovTransitionMatrix.data"
             }
         },
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": true,
+                "enabled": false,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {
@@ -124,7 +133,8 @@ Example:
             },
             "adjacentValidator": {
                 "enabled": true,
-                "timeToBeAdjacent": 2
+                "timeToBeAdjacent": 0.35,
+                "timeToEnforceSameTrack": 0.20
             }
         }
     },
