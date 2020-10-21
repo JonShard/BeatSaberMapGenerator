@@ -4,7 +4,7 @@
         "factories": {
             "maxAttempts": 1000,
             "randomFactory": {
-                "enabled": false
+                "enabled": true
             },
             "symmetricalFactory": {
                 "enabled": true,

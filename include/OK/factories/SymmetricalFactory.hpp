@@ -21,7 +21,9 @@ public:
 
     virtual std::string getName() { return "SymmetricalFactory"; }
 
-    virtual std::vector<Note> produce(Notation notation, Map map) {
+    virtual bool canProduceAmount(int amount) { return (amount == 2); }
+
+    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
         std::vector<Note> notes;

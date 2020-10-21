@@ -23,42 +23,54 @@ public:
 
     virtual std::string getName() { return "MarkovFactory"; }
 
-    virtual std::vector<Note> produce(Notation notation, Map map) {
+    virtual bool canProduceAmount(int amount) { return (amount == 1); }
+
+    Note pickTransitionFromMarkovChain(Note fromNote) {
+        std::vector<std::pair<float, Note>> possibleTransitions = m_matrix.getTransitionsFromNote(fromNote);
+        Note noteTo;
+        if (possibleTransitions.size() == 0) {
+            m_absorbingNotesHit++;
+            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain picking a random transition (%d)\n", m_absorbingNotesHit);
+            noteTo.randomize();
+        }
+        else {
+            do {
+                noteTo = possibleTransitions[Util::rng(0, possibleTransitions.size())].second;
+            } while(noteTo.m_type == BOMB || noteTo.m_cutDirection == DOT);
+        }
+        return noteTo;
+    }
+
+    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
         std::vector<Note> notes;
         Note note;
-        note.m_parentFactory = getName();
-
         if (map.m_notes.size() == 0) {
             note.m_time= nextKeyframe.time;
             note.randomize();
             notes.push_back(note);
             return notes;
         }
-        
-        Note previous = map.m_notes[map.m_notes.size() - 1];
-        std::vector<std::pair<float, Note>> possibleTransitions = m_matrix.getTransitionsFromNote(previous);
 
-        float random = Util::rng0To1();
-        float number = 0;
-        bool isNoteSet = false;
-        for(std::pair<float, Note> pair : possibleTransitions) {
-            number += pair.first;
-            if (number >= random) {
-                note = pair.second;
-                isNoteSet = true;
-                break;
-            }
-        }
-        if (!isNoteSet) {
-            m_absorbingNotesHit++;
-            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain picking a random transition (%d)\n", m_absorbingNotesHit);
-            note.randomize();
-        }
-
+        note = pickTransitionFromMarkovChain(map.m_notes[map.m_notes.size() - 1]);
+        note.m_parentFactory = getName();
         note.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
         notes.push_back(note);
+        
+        if (amount == 2) {
+            int failsafe = 0;
+            Note secondNote;
+            do {
+                secondNote = pickTransitionFromMarkovChain(notes[0]);
+                failsafe++;
+            } while(secondNote.m_type == note.m_type && failsafe < 100000);
+            
+            secondNote.m_parentFactory = getName();
+            secondNote.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
+            notes.push_back(secondNote);
+        }
+
         return notes;
     }
 };

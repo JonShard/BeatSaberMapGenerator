@@ -1,16 +1,17 @@
 #pragma once
 
+#include "../TransitionMatrix.hpp"
 #include "Factory.hpp" 
 #include "../Utilities.hpp"
 
 namespace OK {
 
-// RandomFactory produces a random note based on some weights to get more notes far down and colors their side more often.
-class RandomFactory : public Factory {
+// MarkovFactory produces a random note from a Transition matrix of weights where the matrix is a markov chain.
+class MarkovFactory : public Factory {
 public:
-    virtual std::string getName() { return "RandomFactory"; }
+    virtual std::string getName() { return "LineFactory"; }
 
-    virtual bool canProduceAmount(int amount) { return (amount == 1); }
+    virtual bool canProduceAmount(int amount) { return (amount > 1 && amount < 5); }
 
     virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
@@ -20,10 +21,10 @@ public:
         for (int i = 0; i < amount; i++) {
             Note note;
             note.m_parentFactory = getName();
-            note.m_time= nextKeyframe.time;
-            note.randomize();
+            note.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
+            
             notes.push_back(note);
-        }
+        }        
         return notes;
     }
 };

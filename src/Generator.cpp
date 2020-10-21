@@ -43,7 +43,7 @@ namespace OK {
             if (n.m_type == BLUE) blueCount++;
             else if (n.m_type == RED) redCount++;
         }
-        printf("Blue to red ratio: %f\n", blueCount / (float)redCount);
+        printf("Blue to red ratio: %f\n\n", blueCount / (float)redCount);
     }
 
     Map Generator::GenerateMap(Notation notation) {
@@ -54,24 +54,37 @@ namespace OK {
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
             printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent: %d\tTime delta: %f\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent, (i) ? notation.m_keyframes[i].time - notation.m_keyframes[i-1].time: 0);
             int produceAttempts = 0;
+            int randomizedCount = 0;
             Map mapNext;
             do {
                 mapNext = map;
-                if (notation.m_keyframes[i].concurrent == 2) {
-                    mapNext += s_factories[0]->produce(notation, map);
+                int random;
+                int failSafe = 0;
+                do {
+                    random = Util::rng(0, s_factories.size());
+                    failSafe++;
+                }while(!s_factories[random]->canProduceAmount(notation.m_keyframes[i].concurrent) && failSafe < 100000);
+                std::vector<Note> cluster = s_factories[random]->produce(notation, map, notation.m_keyframes[i].concurrent);
+                if (produceAttempts > Config::generator.factory.maxAttempts * 0.8f) {
+                    for (Note n : cluster) {    // If generator has gotten stuck generating the same note every time, randomize.
+                        n.randomize();
+                    }
+                    randomizedCount++;
                 }
-                else {
-                    mapNext += s_factories[1]->produce(notation, map);
-                }
+                mapNext += cluster;
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
             
+            if (randomizedCount > 0) {
+                printf("\tRanomized notes beacuse factories spent too many attempts: %d\n", randomizedCount);
+            }
+
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 Generator::s_backtracks++;
                 printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
                 for (int j = 0; j < notesAddedLast; j++) {
-                    printf("\tAbsorbing note being removed: \t%s\n" ,map.m_notes.back().toString().data());
+                    printf("\tAbsorbing note being removed: \t%s\n", map.m_notes.back().toString().data());
                     map.m_notes.pop_back();
                 }
                 for (int k = 0; k < mapNext.m_notes.size() - map.m_notes.size(); k++) {
@@ -85,8 +98,8 @@ namespace OK {
             }
             notesAddedLast = mapNext.m_notes.size() - map.m_notes.size();
             map = mapNext;
-             printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
-             i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
+            printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
+            i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
         }
         PrintReport(map);
         return map;

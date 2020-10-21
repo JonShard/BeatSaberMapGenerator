@@ -44,12 +44,14 @@ std::vector<std::pair<T, Note>> TransitionMatrix<T>::getTransitionsFromNote(Note
         for (int dirTo = 0; dirTo < c_cutDirections; dirTo++) {
             for (int floorTo = 0; floorTo < c_floors; floorTo++) {
                 for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
-                    Note noteTo;
-                    noteTo.m_lineIndex = laneTo;
-                    noteTo.m_lineLayer = floorTo; 
-                    noteTo.m_type = (Type)typeTo; 
-                    noteTo.m_cutDirection = (CutDirection)dirTo;
-                    vector.push_back(std::pair<T, Note>(m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex], noteTo)); 
+                    if (m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex] != T()) {
+                        Note noteTo;
+                        noteTo.m_lineIndex = laneTo;
+                        noteTo.m_lineLayer = floorTo; 
+                        noteTo.m_type = (Type)typeTo; 
+                        noteTo.m_cutDirection = (CutDirection)dirTo;
+                        vector.push_back(std::pair<T, Note>(m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex], noteTo)); 
+                    }
                 }
             }
         }
