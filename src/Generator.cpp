@@ -7,6 +7,7 @@ namespace OK {
         if (Config::generator.factory.random.enabled) s_factories.push_back(new RandomFactory);
         if (Config::generator.factory.symmetrical.enabled) s_factories.push_back(new SymmetricalFactory);
         if (Config::generator.factory.markov.enabled) s_factories.push_back(new MarkovFactory);
+        if (Config::generator.factory.line.enabled) s_factories.push_back(new LineFactory);
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
         if (Config::generator.validator.adjacent.enabled) s_validators.push_back(new AdjacentValidator);
@@ -76,7 +77,7 @@ namespace OK {
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
             
             if (randomizedCount > 0) {
-                printf("\tRanomized notes beacuse factories spent too many attempts: %d\n", randomizedCount);
+                printf("\tRanomized notes beacuse factories spent too many attempts. Ranomized notes attempted: %d\n", randomizedCount);
             }
 
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.

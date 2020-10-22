@@ -68,6 +68,42 @@ void Note::invertVertical() {
     m_lineLayer = 2 - m_lineLayer;
 }
 
+int Note::getLongestLineLength() {
+    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
+    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
+    int length = 1;
+    Note copy = *this;
+    while (true) {
+        copy.m_lineIndex += index;
+        copy.m_lineLayer += layer;
+        if (!copy.isValid()) 
+            break;
+        length++;
+    }
+    copy.m_lineIndex = m_lineIndex;
+    copy.m_lineLayer = m_lineLayer;
+    while (true) {
+        copy.m_lineIndex -= index;
+        copy.m_lineLayer -= layer;
+        if (!copy.isValid()) 
+            break;
+        length++;
+    }
+    return length;
+}
+
+std::pair<int, int> Note::getPositionAbove() {
+    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
+    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
+    return std::pair<int, int>(m_lineIndex - index, m_lineLayer - layer);
+}
+
+std::pair<int, int> Note::getPositionBelow() {
+    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
+    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
+    return std::pair<int, int>(m_lineIndex + index, m_lineLayer + layer);
+}
+
 
 bool Note::isInCenter() {
     return (m_lineLayer == 1 && (m_lineIndex == 1 || m_lineIndex == 2));

@@ -7,6 +7,11 @@
 
 namespace OK {
 
+struct LineFactoryConfig {
+    bool enabled;
+    bool allowLinesOfFour; // Allow lines of notes to be generated of 4 notes in a line on the same cluster.
+};
+
 struct MarkovFactoryConfig {
     bool enabled;
     std::string markovMatrixFilePath; // Path to ascii file containing markov transition matrix containing floats between 1 and 0, and whitespace. 
@@ -30,6 +35,7 @@ struct FactoryConfig {
     RandomFactoryConfig random;
     SymmeticalFactoryConfig symmetrical;
     MarkovFactoryConfig markov;
+    LineFactoryConfig line;
 };
 
 

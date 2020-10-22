@@ -26,6 +26,9 @@ struct Note {
     void invertPosition(); // Invertes position of the note. Top left becomes bottom right. Everything else remains unchanged.
     void invertHorizontal();
     void invertVertical();
+    int getLongestLineLength(); // Returns the amount of notes can be placed in a line depending on cut direction an position.
+    std::pair<int, int> getPositionAbove(); // Returns the line index and layer of the above position relative to the notes cut direction.
+    std::pair<int, int> getPositionBelow(); // Returns the line index and layer of the below position relative to the notes cut direction.
     bool isInCenter();
     bool isHorizontal();
     bool isVertical();

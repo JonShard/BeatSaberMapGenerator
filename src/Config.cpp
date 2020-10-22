@@ -31,6 +31,11 @@ bool Config::Load() {
                 jsMarkovFactory.at("enabled").get_to(generator.factory.markov.enabled);
                 jsMarkovFactory.at("markovMatrixFilePath").get_to(generator.factory.markov.markovMatrixFilePath);
 
+            nlohmann::json jsLineFactory = jsFactories["lineFactory"];
+            jsLineFactory.at("enabled").get_to(generator.factory.line.enabled);
+            jsLineFactory.at("allowLinesOfFour").get_to(generator.factory.line.allowLinesOfFour);
+
+
         nlohmann::json jsValidators = jsGenerator["validators"];
             jsValidators.at("validateTimeAfterNote").get_to(generator.validator.validateTimeAfterNote);
             

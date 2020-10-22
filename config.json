@@ -4,7 +4,7 @@
         "factories": {
             "maxAttempts": 1000,
             "randomFactory": {
-                "enabled": true
+                "enabled": false
             },
             "symmetricalFactory": {
                 "enabled": true,
@@ -17,12 +17,16 @@
             "markovFactory": {
                 "enabled": true,
                 "markovMatrixFilePath": "markovTransitionMatrix.data"
+            },
+            "lineFactory": {
+                "enabled": true,
+                "allowLinesOfFour": false
             }
         },
         "validators": {
             "validateTimeAfterNote": 2,
             "matrixValidator": {
-                "enabled": false,
+                "enabled": true,
                 "binaryMatrixFilePath": "binaryTransitionMatrix.data"
             },
             "doubleDownValidator": {
