@@ -2,7 +2,7 @@
     "generator": {
         "noteClusterTime": 0.01,
         "factories": {
-            "maxAttempts": 1000,
+            "maxAttempts": 50,
             "randomFactory": {
                 "enabled": false
             },

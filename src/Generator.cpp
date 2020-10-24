@@ -71,20 +71,9 @@ namespace OK {
                     produceAttempts++;
                     continue;
                 }
-                if (produceAttempts > Config::generator.factory.maxAttempts * 0.8f) {
-                    for (Note n : cluster) {    // If generator has gotten stuck generating the same note every time, randomize.
-                        n.randomize();
-                    }
-                    randomizedCount++;
-                }
                 mapNext += cluster;
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
-            
-            if (randomizedCount > 0) {
-                printf("\tRanomized notes beacuse factories spent too many attempts. Ranomized notes attempted: %d\n", randomizedCount);
-            }
-
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
             if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 Generator::s_backtracks++;
