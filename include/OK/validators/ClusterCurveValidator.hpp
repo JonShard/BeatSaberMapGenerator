@@ -1,0 +1,1 @@
+// ClusterCurveValidator ensures that all notes in a cluster of the same color is in a line, no, curving the sabers.
