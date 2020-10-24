@@ -51,7 +51,9 @@ bool Config::Load() {
                 jsAdjacentValidator.at("enabled").get_to(generator.validator.adjacent.enabled);
                 jsAdjacentValidator.at("timeToBeAdjacent").get_to(generator.validator.adjacent.timeToBeAdjacent);
                 jsAdjacentValidator.at("timeToEnforceSameTrack").get_to(generator.validator.adjacent.timeToEnforceSameTrack);
-
+            
+            nlohmann::json jsClusterCurveValidator = jsValidators["clusterCurveValidator"];
+                jsClusterCurveValidator.at("enabled").get_to(generator.validator.clusterCurve.enabled);
 
     nlohmann::json jsEditor = jsConfig["editor"];
         jsEditor.at("autosaveEnabled").get_to(editor.autosaveEnabled);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Validator.hpp"
-#include "../TransitionMatrix.hpp"
 #include "../Config.hpp"
 
 namespace OK {
@@ -17,7 +16,7 @@ public:
     virtual std::string getName() { return "OverlapValidator"; }
 
     virtual bool validate(Map map) {
-        for (int i = 0; i < map.m_notes.size()-1; ) {
+        for (int i = 0; i < map.m_notes.size()-1; ) {   // For every cluster in the map:
             std::vector<Note> cluster = map.getNotesInCluster(i);
             i += cluster.size();
 

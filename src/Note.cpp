@@ -130,8 +130,8 @@ bool Note::isOnSamePlane(Note other) {
     int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
 
     for (int i = - 4,l  = -4; i < 4; i++, l++)
-    if (other.m_lineIndex == m_lineIndex + index * i && other.m_lineLayer == m_lineLayer + layer * l) {
-        return true;
+        if (other.m_lineIndex == m_lineIndex + index * i && other.m_lineLayer == m_lineLayer + layer * l) {
+            return true;
     }
     return false;
 }

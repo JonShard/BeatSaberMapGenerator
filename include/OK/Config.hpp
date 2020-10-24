@@ -38,6 +38,9 @@ struct FactoryConfig {
     LineFactoryConfig line;
 };
 
+struct ClusterCurveValidatorConfig {
+    bool enabled;
+};
 
 struct AdjacentValidatorConfig {
     bool enabled;
@@ -60,6 +63,7 @@ struct ValidatorConfig {
     MatrixValidatorConfig matrix;
     DoubleDownValidatorConfig doubleDown;
     AdjacentValidatorConfig adjacent;
+    ClusterCurveValidatorConfig clusterCurve;
 };
 
 struct GeneratorConfig {

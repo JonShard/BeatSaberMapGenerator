@@ -8,6 +8,8 @@
 #include "validators/DoubleDownValidator.hpp"
 #include "validators/AdjacentValidator.hpp"
 #include "validators/OverlapValidator.hpp"
+#include "validators/ClusterCurveValidator.hpp"
+
 
 namespace OK {
 

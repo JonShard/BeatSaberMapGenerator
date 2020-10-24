@@ -37,6 +37,9 @@
                 "enabled": true,
                 "timeToBeAdjacent": 0.35,
                 "timeToEnforceSameTrack": 0.20
+            },
+            "clusterCurveValidator": {
+                "enabled": true
             }
         }
     },

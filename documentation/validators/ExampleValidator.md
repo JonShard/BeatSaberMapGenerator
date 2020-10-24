@@ -1,5 +1,5 @@
 # ExampleValidator
-A validator is a an object that is given a map and verify that a single spesific rule is followed throughout the map. Validators can be disabled or configured to change the behaviour of the generator. Disableing vaidators will degrade the playablility of the maps generatred.
+A validator is a an object that is given a map and verify that a single spesific rule is followed throughout the map. Validators can be disabled or configured to change the behaviour of the generator. Disableing vaidators will degrade the playablility of the maps generatred. Some validators are mandatory, like OverlapValidator, it is never allowed to have two notes inside eachother.
 ```cpp
 #pragma once
 

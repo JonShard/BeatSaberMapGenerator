@@ -23,7 +23,7 @@ public:
 
     virtual std::string getName() { return "MarkovFactory"; }
 
-    virtual bool canProduceAmount(int amount) { return (amount == 1); }
+    virtual bool canProduceAmount(int amount) { return (amount != 0); }
 
     Note pickTransitionFromMarkovChain(Note fromNote) {
         std::vector<std::pair<float, Note>> possibleTransitions = m_matrix.getTransitionsFromNote(fromNote);
@@ -61,16 +61,21 @@ public:
         if (amount == 2) {
             int failsafe = 0;
             Note secondNote;
-            do {
-                secondNote = pickTransitionFromMarkovChain(notes[0]);
-                failsafe++;
-            } while(secondNote.m_type == note.m_type && failsafe < 100000);
             
+            // do {
+            //     secondNote = pickTransitionFromMarkovChain(notes[0]);
+            //     failsafe++;
+            // } while(secondNote.m_type == note.m_type && failsafe < 100000);
+            // if (failsafe < 100000) {
+            //     printf("Warning: MarkovFactory faild to produce two notes, none was produced\n\n");
+            //     return std::vector<Note>();
+            // }
+            
+            secondNote = pickTransitionFromMarkovChain(notes[0]);
             secondNote.m_parentFactory = getName();
             secondNote.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
             notes.push_back(secondNote);
         }
-
         return notes;
     }
 };
