@@ -39,6 +39,7 @@ struct Note {
     bool isVertical();
     bool isOppositeCutDirection(Note other);
     std::string toString();
+    bool operator==(Note other);
 };
 
 

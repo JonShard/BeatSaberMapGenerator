@@ -171,4 +171,12 @@ std::string Note::toString() {
     return s;
 }
 
+bool Note::operator==(Note other) {
+    return m_lineIndex == other.m_lineIndex &&
+        m_lineLayer == other.m_lineLayer &&
+        m_type == other.m_type &&
+        m_cutDirection == other.m_cutDirection;
+}
+
+
 } // Namespace OK
