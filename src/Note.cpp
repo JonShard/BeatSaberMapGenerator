@@ -3,6 +3,26 @@
 namespace OK {
 
 
+// Static funcitons:
+bool Note::IsClusterMultiColor(std::vector<Note> cluster) {
+    bool red = false;
+    bool blue = false;
+    for (Note n : cluster) {
+        if (n.m_type = BLUE) blue = true;
+        if (n.m_type = RED) red = true;
+    }
+    return red && blue;
+}
+
+std::vector<Note> Note::GetNotesOfColorInCluster(std::vector<Note> cluster, Type type) {
+    std::vector<Note> notes;
+    for (Note n : cluster) {
+        if (n.m_type == type)
+            notes.push_back(n);
+    }
+    return notes;
+}
+
 void Note::randomize() {
     m_type = (Type)(Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
     m_cutDirection = (CutDirection)Util::rng(0, 8);    // Dot note is 9 none of those for now.
@@ -104,6 +124,22 @@ std::pair<int, int> Note::getPositionBelow() {
     return std::pair<int, int>(m_lineIndex + index, m_lineLayer + layer);
 }
 
+bool Note::isOnSamePlane(Note other) {
+    std::fesetround(FE_TONEAREST);
+    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
+    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
+
+    for (int i = - 4,l  = -4; i < 4; i++, l++)
+    if (other.m_lineIndex == m_lineIndex + index * i && other.m_lineLayer == m_lineLayer + layer * l) {
+        return true;
+    }
+    return false;
+}
+
+bool Note::isInLine(Note other) {
+    return isOnSamePlane(other) && other.m_cutDirection == m_cutDirection;
+}
+
 
 bool Note::isInCenter() {
     return (m_lineLayer == 1 && (m_lineIndex == 1 || m_lineIndex == 2));
@@ -127,17 +163,6 @@ bool Note::isOppositeCutDirection(Note other) {
     return Util::angleDelta(CutAngle[other.m_cutDirection], CutAngle[m_cutDirection]) == 180;
 }
 
-bool Note::isOnSamePlane(Note other) {
-    std::fesetround(FE_TONEAREST);
-    int index = std::nearbyint(std::cos(Util::D2R * CutAngle[m_cutDirection]));
-    int layer = std::nearbyint(std::sin(Util::D2R * CutAngle[m_cutDirection]));
-
-    for (int i = - 4,l  = -4; i < 4; i++, l++)
-    if (other.m_lineIndex == m_lineIndex + index * i && other.m_lineLayer == m_lineLayer + layer * l) {
-        return true;
-    }
-    return false;
-}
 
 std::string Note::toString() {
     std::string s;

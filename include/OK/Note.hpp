@@ -19,6 +19,9 @@ struct Note {
     CutDirection m_cutDirection;
     std::string m_parentFactory;
 
+    static bool IsClusterMultiColor(std::vector<Note> cluster);    // Returns true if the cluster contains both colors.
+    static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type type);
+
     void randomize();
     bool isValid();
     void invertNote(); // Invertes the color and cutdirection of the note. Blue down becomes red up. Position and time remain unchanged.
@@ -29,11 +32,12 @@ struct Note {
     int getLongestLineLength(); // Returns the amount of notes can be placed in a line depending on cut direction an position.
     std::pair<int, int> getPositionAbove(); // Returns the line index and layer of the above position relative to the notes cut direction.
     std::pair<int, int> getPositionBelow(); // Returns the line index and layer of the below position relative to the notes cut direction.
+    bool isOnSamePlane(Note other);
+    bool isInLine(Note other);
     bool isInCenter();
     bool isHorizontal();
     bool isVertical();
     bool isOppositeCutDirection(Note other);
-    bool isOnSamePlane(Note other);
     std::string toString();
 };
 

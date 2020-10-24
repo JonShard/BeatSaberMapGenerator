@@ -22,9 +22,6 @@ struct Map {
     float m_noteJumpStartBeatOffset;
     std::vector<Note> m_notes;
 
-    static bool IsClusterMultiColor(std::vector<Note> cluster);    // Returns true if the cluster contains both colors.
-    static std::vector<Note> GetNotesOfColorInCluster(std::vector<Note> cluster, Type type);
-
     Map();
     Map(const std::string name);
 

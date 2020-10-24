@@ -21,11 +21,11 @@ TransitionMatrix<bool> MapAnalyzer::RegisterBinaryTransitionsInMap(Map map) {
         if (cluster.size() > 1 && clusterNext.size() > 1) {
             printf("Many(%ld) to Many(%ld): \n", cluster.size(), clusterNext.size());
             // If both clusters have both colors, seperate transitions by color, blue -> blue and red -> red.
-            if (Map::IsClusterMultiColor(cluster) && Map::IsClusterMultiColor(clusterNext)) {
-                std::vector<Note> clusterBlue = Map::GetNotesOfColorInCluster(cluster, BLUE);
-                std::vector<Note> clusterRed = Map::GetNotesOfColorInCluster(cluster, RED);
-                std::vector<Note> nextClusterBlue = Map::GetNotesOfColorInCluster(clusterNext, BLUE);
-                std::vector<Note> nextClusterRed = Map::GetNotesOfColorInCluster(clusterNext, RED);
+            if (Note::IsClusterMultiColor(cluster) && Note::IsClusterMultiColor(clusterNext)) {
+                std::vector<Note> clusterBlue = Note::GetNotesOfColorInCluster(cluster, BLUE);
+                std::vector<Note> clusterRed = Note::GetNotesOfColorInCluster(cluster, RED);
+                std::vector<Note> nextClusterBlue = Note::GetNotesOfColorInCluster(clusterNext, BLUE);
+                std::vector<Note> nextClusterRed = Note::GetNotesOfColorInCluster(clusterNext, RED);
                 for (Note cn : clusterBlue) {
                     for (Note cnn : nextClusterBlue) {
                         matrix.setNoteTransition(cn, cnn, true);
@@ -106,11 +106,11 @@ TransitionMatrix<float> MapAnalyzer::RegisterMarkovTransitionsInMap(Map map) {
         if (cluster.size() > 1 && clusterNext.size() > 1) {
             printf("Many(%ld) to Many(%ld): \n", cluster.size(), clusterNext.size());
             // If both clusters have both colors, seperate transitions by color, blue -> blue and red -> red.
-            if (Map::IsClusterMultiColor(cluster) && Map::IsClusterMultiColor(clusterNext)) {
-                std::vector<Note> clusterBlue = Map::GetNotesOfColorInCluster(cluster, BLUE);
-                std::vector<Note> clusterRed = Map::GetNotesOfColorInCluster(cluster, RED);
-                std::vector<Note> nextClusterBlue = Map::GetNotesOfColorInCluster(clusterNext, BLUE);
-                std::vector<Note> nextClusterRed = Map::GetNotesOfColorInCluster(clusterNext, RED);
+            if (Note::IsClusterMultiColor(cluster) && Note::IsClusterMultiColor(clusterNext)) {
+                std::vector<Note> clusterBlue = Note::GetNotesOfColorInCluster(cluster, BLUE);
+                std::vector<Note> clusterRed = Note::GetNotesOfColorInCluster(cluster, RED);
+                std::vector<Note> nextClusterBlue = Note::GetNotesOfColorInCluster(clusterNext, BLUE);
+                std::vector<Note> nextClusterRed = Note::GetNotesOfColorInCluster(clusterNext, RED);
                 for (Note cn : clusterBlue) {
                     for (Note cnn : nextClusterBlue) {
                         markovMatrix.setNoteTransition(cn, cnn, markovMatrix.getNoteTransition(cn, cnn) + 1);

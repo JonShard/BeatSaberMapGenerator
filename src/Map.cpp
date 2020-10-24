@@ -2,28 +2,6 @@
 
 namespace OK {
 
-// Static funcitons:
-bool Map::IsClusterMultiColor(std::vector<Note> cluster) {
-    bool red = false;
-    bool blue = false;
-    for (Note n : cluster) {
-        if (n.m_type = BLUE) blue = true;
-        if (n.m_type = RED) red = true;
-    }
-    return red && blue;
-}
-
-std::vector<Note> Map::GetNotesOfColorInCluster(std::vector<Note> cluster, Type type) {
-    std::vector<Note> notes;
-    for (Note n : cluster) {
-        if (n.m_type == type)
-            notes.push_back(n);
-    }
-    return notes;
-}
-
-
-
 Map::Map() {
     m_name = "";
     m_notes = std::vector<Note>();
