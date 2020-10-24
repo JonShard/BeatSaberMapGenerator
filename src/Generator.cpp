@@ -66,6 +66,10 @@ namespace OK {
                     failSafe++;
                 }while(!s_factories[random]->canProduceAmount(notation.m_keyframes[i].concurrent) && failSafe < 100000);
                 std::vector<Note> cluster = s_factories[random]->produce(notation, map, notation.m_keyframes[i].concurrent);
+                if (cluster.size() == 0) {
+                    produceAttempts++;
+                    continue;
+                }
                 if (produceAttempts > Config::generator.factory.maxAttempts * 0.8f) {
                     for (Note n : cluster) {    // If generator has gotten stuck generating the same note every time, randomize.
                         n.randomize();
