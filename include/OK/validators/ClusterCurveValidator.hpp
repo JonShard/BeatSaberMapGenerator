@@ -41,7 +41,7 @@ public:
             // Make sure notes of the opposite color is not in a line unless on left and right edges:  
             for (Note m : clusterBlue) {    
                 for (Note n : clusterRed) {
-                    if (m.isInLine(n) && std::abs(m.m_lineIndex - n.m_lineIndex) < 3) {
+                    if (m.isOnSamePlane(n) && std::abs(m.m_lineIndex - n.m_lineIndex) < 3) {
                         m_fails++;
                         Validator::s_totalFails++;
                         return false;                        
