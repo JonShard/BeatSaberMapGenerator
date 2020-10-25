@@ -45,7 +45,7 @@ std::vector<std::pair<T, Note>> TransitionMatrix<T>::getTransitionsFromNote(Note
             for (int floorTo = 0; floorTo < c_floors; floorTo++) {
                 for (int laneTo = 0; laneTo < c_lanes; laneTo++) {
                     if (m_matrix[typeTo][n.m_type][dirTo][n.m_cutDirection][floorTo][n.m_lineLayer][laneTo][n.m_lineIndex] != T()) {
-                        Note noteTo;
+                        Note noteTo{};
                         noteTo.m_lineIndex = laneTo;
                         noteTo.m_lineLayer = floorTo; 
                         noteTo.m_type = (Type)typeTo; 
@@ -114,7 +114,7 @@ void TransitionMatrix<T>::normalize() {
         for (int dirFrom = 0; dirFrom < c_cutDirections; dirFrom++) {
             for (int floorFrom = 0; floorFrom < c_floors; floorFrom++) {
                 for (int laneFrom = 0; laneFrom < c_lanes; laneFrom++) {
-                    Note note;
+                    Note note{};
                     note.m_lineIndex = laneFrom;
                     note.m_lineLayer = floorFrom; 
                     note.m_type = (Type)typeFrom; 

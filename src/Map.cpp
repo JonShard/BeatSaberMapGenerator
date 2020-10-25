@@ -123,7 +123,7 @@ Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
             return m_notes[i];
         }
     }
-    return Note();
+    return Note{};
 }
 
 
