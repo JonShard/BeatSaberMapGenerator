@@ -4,12 +4,20 @@ namespace OK {
 
 Map::Map() {
     m_name = "";
-    m_notes = std::vector<Note>();
+    m_clusters = std::vector<Cluster>();
 }
 
 Map::Map(const std::string name) {
     m_name = name;
-    m_notes = std::vector<Note>();
+    m_clusters = std::vector<Cluster>();
+}
+
+int Map::getNoteCount() {
+    int count = 0;
+    for (Cluster c : m_clusters) {
+        count += c.m_notes.size();
+    }
+    return count;
 }
 
 bool Map::load(const std::string fileName, float bps) {
@@ -24,6 +32,7 @@ bool Map::load(const std::string fileName, float bps) {
     
     nlohmann::json jsNotes = jsMap["_notes"];
 
+    Cluster c;
     for (nlohmann::json jn : jsNotes) {
         Note n {
             jn.at("_time").get_to(n.m_time) / (bps / 60.0f),
@@ -32,29 +41,36 @@ bool Map::load(const std::string fileName, float bps) {
             jn.at("_type").get_to(n.m_type),
             jn.at("_cutDirection").get_to(n.m_cutDirection)
         };
-        m_notes.push_back(n);
+
+        if (c.m_notes.size() > 0 && n.m_time - c.m_notes[0].m_time > Config::generator.noteClusterTime) {
+            m_clusters.push_back(c);
+            c = Cluster();
+        }
+
+        c.m_notes.push_back(n);
     }
     return true;
     
 }
 void Map::save(const std::string fileName, float bps) {
-    printf("Saving map with notes: %ld\n", m_notes.size());
+    printf("Saving map with notes: %ld\n", getNoteCount());
 
     nlohmann::json jsNotes;
     nlohmann::json jsMap;
     
-    for (Note n : m_notes) {
-        //printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
-        nlohmann::json jn;
-        jn["_time"] = n.m_time * (bps / 60.0f);
-        jn["_lineIndex"] = n.m_lineIndex;
-        jn["_lineLayer"] = n.m_lineLayer;
-        jn["_type"] = n.m_type;
-        jn["_cutDirection"] = n.m_cutDirection;
-        jn["_parentFactory"] = n.m_parentFactory.data();
-        jsNotes.push_back(jn);
+    for (Cluster c : m_clusters) {
+        for (Note n : c.m_notes) {
+            //printf("Adding note at time (Adjusted for BPM): %f\n", n.m_time * (120.0f / 60.0f)); // TODO: dynamically get BPS (110)
+            nlohmann::json jn;
+            jn["_time"] = n.m_time * (bps / 60.0f);
+            jn["_lineIndex"] = n.m_lineIndex;
+            jn["_lineLayer"] = n.m_lineLayer;
+            jn["_type"] = n.m_type;
+            jn["_cutDirection"] = n.m_cutDirection;
+            jn["_parentFactory"] = n.m_parentFactory.data();
+            jsNotes.push_back(jn);
+        }
     }
-
     jsMap["_version"] = "2.0.0";
     jsMap["_notes"] = jsNotes;
     printf("Saving map file to: %s\n", fileName.data());
@@ -66,61 +82,29 @@ void Map::save(const std::string fileName, float bps) {
 void Map::print() {
     printf("Map: %s\n", m_name.data());
     std::string dir = "";
-    for (Note n : m_notes) {
-        switch (n.m_cutDirection)
-        {
-            case CutDirection::UP: dir = "UP"; break;
-            case CutDirection::DOWN: dir = "DOWN"; break;
-            case CutDirection::LEFT: dir = "LEFT"; break;
-            case CutDirection::RIGHT: dir = "RIGHT"; break;
-            case CutDirection::UP_LEFT: dir = "UP LEFT"; break;
-            case CutDirection::UP_RIGHT: dir = "UP RIGHT"; break;
-            case CutDirection::DOWN_LEFT: dir = "DOWN LEFT"; break;
-            case CutDirection::DOWN_RIGHT: dir = "DOWN RIGHT"; break;
-            default: dir = "UNKNOW"; break;
-        }
-        printf("Note: time: %f\ttype: %s\tcut direction: %s\t\n", n.m_time, (n.m_type == Type::BLUE)?"BLUE":"RED", dir.data());
+    for (Cluster c : m_clusters) {
+        c.print();
     }
 }
 
 
 float Map::getLatestTime() {
-    if (m_notes.size() == 0)
+    if (m_clusters.size() == 0) {
         return 0;
-    else 
-        return m_notes.back().m_time;
-}
-
-std::vector<Note> Map::getNotesInCluster(int noteNr) {
-    std::vector<Note> cluster;
-    // Search forwards from note.
-    for (int i = noteNr; i < m_notes.size(); i++) {
-        if (std::abs(m_notes[i].m_time - m_notes[noteNr].m_time) < Config::generator.noteClusterTime) {
-            cluster.push_back(m_notes[i]);
-        }
-        else {
-            break;
-        }
     }
-    // Search bachwards from note.
-    for (int i = noteNr -1; i > 0; i--) {
-        if (std::abs(m_notes[noteNr].m_time - m_notes[i].m_time) < Config::generator.noteClusterTime) {
-            cluster.push_back(m_notes[i]);
-        }
-        else {
-            break;
-        }
+    else {
+        return m_clusters.back().m_notes.back().m_time;
     }
-    return cluster;
 }
 
 Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
-    if (m_notes.size() == 0 || noteNr <= 0)
+    if (m_clusters.size() == 0 || noteNr <= 0)
         return Note();
 
-    for (int i = noteNr - 1; i >= 0; i--) {
-        if (m_notes[i].m_type == type) {
-            return m_notes[i];
+    for (int i = m_clusters.size() - 1; i >= 0; i--) {
+        Cluster c = m_clusters[i].getNotesOfTypeInCluster(type);
+        if (c.m_notes.size() > 0) {
+            return c.m_notes.back();
         }
     }
     return Note{};
@@ -128,13 +112,29 @@ Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
 
 
 Map Map::operator+=(Note n) {
-    m_notes.push_back(n);
+    Cluster c;
+    c.m_notes.push_back(n);
+    m_clusters.push_back(c);
     return *this;
 }
 
 Map Map::operator+=(std::vector<Note> notes) {
     for (Note n : notes) {
-        m_notes.push_back(n);
+        Cluster c;
+        c.m_notes.push_back(n);
+        m_clusters.push_back(c);    
+    }
+    return *this;
+}
+
+Map Map::operator+=(Cluster c) {
+    m_clusters.push_back(c);
+    return *this;
+}
+
+Map Map::operator+=(std::vector<Cluster> clusters) {
+    for (Cluster c : clusters) {
+        m_clusters.push_back(c);
     }
     return *this;
 }

@@ -6,7 +6,7 @@
 
 #include "../nlohmann/json.hpp"
 
-#include "Note.hpp"
+#include "Cluster.hpp"
 
 namespace OK {
     
@@ -20,21 +20,25 @@ struct Map {
     DifficultyRank m_difficultyRank;
     float m_noteJumpMovementSpeed;
     float m_noteJumpStartBeatOffset;
-    std::vector<Note> m_notes;
+    std::vector<Cluster> m_clusters;
 
     Map();
     Map(const std::string name);
 
+    int getNoteCount();
     bool load(const std::string fileName, float bps);
     void save(const std::string fileName, float bps);
     void print();
 
     float getLatestTime();
-    std::vector<Note> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
+    std::vector<Cluster> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
     Note getPreviousNoteOfColor(int noteNr, Type type);
 
     Map operator+=(Note n);
     Map operator+=(std::vector<Note> notes);
+    Map operator+=(Cluster c);
+    Map operator+=(std::vector<Cluster> clusters);
+
 };
 
 } // Namespace OK

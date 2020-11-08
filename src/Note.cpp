@@ -2,27 +2,6 @@
 
 namespace OK {
 
-
-// Static funcitons:
-bool Note::IsClusterMultiColor(std::vector<Note> cluster) {
-    bool red = false;
-    bool blue = false;
-    for (Note n : cluster) {
-        if (n.m_type = BLUE) blue = true;
-        if (n.m_type = RED) red = true;
-    }
-    return red && blue;
-}
-
-std::vector<Note> Note::GetNotesOfColorInCluster(std::vector<Note> cluster, Type type) {
-    std::vector<Note> notes;
-    for (Note n : cluster) {
-        if (n.m_type == type)
-            notes.push_back(n);
-    }
-    return notes;
-}
-
 void Note::randomize() {
     m_type = (Type)(Util::rng(0, 100) < 60);   // Type 0 = red, 1 = blue
     m_cutDirection = (CutDirection)Util::rng(0, 8);    // Dot note is 9 none of those for now.
@@ -140,7 +119,6 @@ bool Note::isInLine(Note other) {
     return isOnSamePlane(other) && other.m_cutDirection == m_cutDirection;
 }
 
-
 bool Note::isInCenter() {
     return (m_lineLayer == 1 && (m_lineIndex == 1 || m_lineIndex == 2));
 }
@@ -164,11 +142,31 @@ bool Note::isOppositeCutDirection(Note other) {
 }
 
 
-std::string Note::toString() {
-    std::string s;
-    sprintf (&s[0], "Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %d \tcutDirection: %d, \tparentFactory: %s", 
-            m_time, m_lineIndex, m_lineLayer, m_type, m_cutDirection, m_parentFactory.data());
-    return s;
+void Note::print() {
+    std::string dir;
+    switch (m_cutDirection)
+    {
+        case CutDirection::UP: dir = "UP"; break;
+        case CutDirection::DOWN: dir = "DOWN"; break;
+        case CutDirection::LEFT: dir = "LEFT"; break;
+        case CutDirection::RIGHT: dir = "RIGHT"; break;
+        case CutDirection::UP_LEFT: dir = "UP LEFT"; break;
+        case CutDirection::UP_RIGHT: dir = "UP RIGHT"; break;
+        case CutDirection::DOWN_LEFT: dir = "DOWN LEFT"; break;
+        case CutDirection::DOWN_RIGHT: dir = "DOWN RIGHT"; break;
+        default: dir = "UNKNOWN"; break;
+    }
+    std::string type;
+    switch (m_type)
+    {
+        case Type::RED: type = "RED"; break;
+        case Type::BLUE: type = "BLUE"; break;
+        case Type::RED_DUP: type = "RED_DUP"; break;
+        case Type::BOMB: type = "BOMB"; break;
+        default: type = "UNKNOWN"; break;
+    }
+    printf("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %s \tcutDirection: %s, \tparentFactory: %s", 
+            m_time, m_lineIndex, m_lineLayer, type, dir, m_parentFactory.c_str());
 }
 
 bool Note::operator==(Note other) {
