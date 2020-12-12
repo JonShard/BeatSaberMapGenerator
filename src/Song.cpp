@@ -46,7 +46,7 @@ int Song::addMap(Map map) {
         printf("Warning: Can not add a map to song without a name\n");
         return -1;
     }
-    if (map.m_notes.size() == 0) {
+    if (map.getNoteCount() == 0) {
         printf("Warning: Can not add a map to song without any notes\n");
         return -1;
     }
@@ -79,7 +79,7 @@ int Song::loadMap(const std::string fileName) {
         printf("Warning: Failed to load file: %s\n", fileName.data());
         return -1;
     }
-    if (map.m_notes.size() == 0) {
+    if (map.getNoteCount() == 0) {
         printf("Warning: Can not load map file that doesn't contain any notes: %s\n", fileName.data());
         return -1;
     }
@@ -98,7 +98,7 @@ bool Song::saveMap(int index) {
 
 bool Song::saveMap(const std::string name) {
     Map map = *getMap(name);
-    if (map.m_notes.size() <= 0) {
+    if (map.getNoteCount() <= 0) {
         printf("Warning: Can not save map without any notes\n");
         return false;
     }
@@ -140,15 +140,15 @@ Notation* Song::getNotation(const std::string name) {
 }
 
 int Song::createNotationFromMap(Map map) {
-    if (map.m_notes.size() == 0) {
+    if (map.getNoteCount() == 0) {
         printf("Warning: Can not create notation from empty map\n");
         return -1;
     }
     
     Notation notation(map.m_name);
 
-    for (int i = 0; i < map.m_notes.size(); i++) {
-        std::vector<Note> cluster = map.getNotesInCluster(i);
+    for (int i = 0; i < map.getNoteCount(); i++) {
+        Cluster cluster = map.getNotesInCluster(i);
         Keyframe k;
         k.id = notation.m_keyframes.size();
         k.time = cluster[0].m_time;

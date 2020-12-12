@@ -13,7 +13,7 @@ struct Cluster {
 
     Cluster getNotesOfTypeInCluster(Type type);
     
-    bool isClusterMultiColor();    // Returns true if the cluster contains both colors.
+    bool isMultiColor();    // Returns true if the cluster contains both colors.
 
     void print();
     Cluster operator+=(Note n);
