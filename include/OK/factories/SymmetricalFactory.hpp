@@ -7,33 +7,39 @@ namespace OK {
 
 enum SymmertyMode { CENTER_POINT, HORIZONTAL, VERTICAL };
 
-// SymmetricalFactory Generates
+// SymmetricalFactory generates a pair of a blue and a red note in symmery. Symmetrical either around a point, or to a line, horizontal or vertical.
 class SymmetricalFactory : public Factory {
 public:
 
     SymmetricalFactory() {
-        int modesEnabled = 0;
-        if (Config::generator.factory.symmetrical.centerPointMode) modesEnabled++;
-        if (Config::generator.factory.symmetrical.horizontalMode) modesEnabled++;
-        if (Config::generator.factory.symmetrical.verticalMode) modesEnabled++;
-        if (modesEnabled == 0) printf("Warning: SymmetricalFactory is enabled but has no modes enabled. It will not generate any notes.\n");
+        if (Config::generator.factory.symmetrical.centerPointMode == false  &&
+            Config::generator.factory.symmetrical.horizontalMode == false  &&
+            Config::generator.factory.symmetrical.verticalMode == false) {
+            printf("Warning: SymmetricalFactory is enabled but has no modes enabled. It will not generate any notes.\n");
+        }
     }
 
     virtual std::string getName() { return "SymmetricalFactory"; }
 
     virtual bool canProduceAmount(int amount) { return (amount == 2); }
 
-    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
+    virtual Cluster produce(Notation notation, Map map, int amount) {        
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
-        std::vector<Note> notes;
+        Cluster cluster;
+
+        if (Config::generator.factory.symmetrical.centerPointMode == false  &&
+            Config::generator.factory.symmetrical.horizontalMode == false  &&
+            Config::generator.factory.symmetrical.verticalMode == false) {
+            return cluster;
+        }
 
         Note noteBlue;
         noteBlue.m_parentFactory = getName();
         noteBlue.m_time = nextKeyframe.time;
         noteBlue.m_type = BLUE;
         noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
-        noteBlue.m_lineLayer = Util::rng(0, 2);
+        noteBlue.m_lineLayer = Util::rng(0, 3);
         
         // Blue is more likely to be on the right.
         int number = Util::rng(0, 100);
@@ -58,12 +64,6 @@ public:
                 }
             }
         }
-
-        int modesEnabled = 0;
-        if (Config::generator.factory.symmetrical.centerPointMode) modesEnabled++;
-        if (Config::generator.factory.symmetrical.horizontalMode) modesEnabled++;
-        if (Config::generator.factory.symmetrical.verticalMode) modesEnabled++;
-        if (modesEnabled == 0) return std::vector<Note>();
         
         Note noteRed = noteBlue;
         while (true)
@@ -73,13 +73,13 @@ public:
                 noteRed.invertNote();
                 noteRed.invertPosition();
                 break;
-            } 
+            }
             else if (mode == HORIZONTAL && Config::generator.factory.symmetrical.horizontalMode) {
                 while (noteBlue.isVertical()) { // Ensure horizontal.
                     noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                 }
-                if (noteBlue.m_lineLayer == 1) {      // If in center, move one up or down.
-                    noteBlue.m_lineLayer += 1 - Util::rng(0, 3);
+                if (noteBlue.m_lineLayer == 1) { // If in center, move one up or down.
+                    noteBlue.m_lineLayer += (Util::cointoss()) ? 1 : -1;
                 }
                 noteRed = noteBlue;
                 noteRed.invertColor();
@@ -88,10 +88,10 @@ public:
             } 
             else if (mode == VERTICAL && Config::generator.factory.symmetrical.verticalMode) {
                 if (!Config::generator.factory.symmetrical.allowOffsetPlane) { // If offset not allowed, blue note is one one of the horizontal edges.
-                    noteBlue.m_lineIndex = (Util::rng(0, 2) == 0) ? 0 : 3;
+                    noteBlue.m_lineIndex = (Util::cointoss()) ? 0 : 3;
                 }
-                if (std::abs(noteBlue.m_lineIndex - noteRed.m_lineIndex) < 2) {
-                    while (noteBlue.isHorizontal()) { // Ensure vertical.
+                if (std::abs(noteBlue.m_lineIndex - noteRed.m_lineIndex) < 2) { // If both notes not on horizontal edges, ensure they are not horizontal.
+                    while (noteBlue.isHorizontal()) {                           // It's very hard to get a straight hit on the block then. Example: [<]_[>]_
                         noteBlue.m_cutDirection = (CutDirection)Util::rng(0, 8);
                     }
                 }
@@ -102,9 +102,9 @@ public:
             }
         }
 
-        notes.push_back(noteBlue);
-        notes.push_back(noteRed);
-        return notes;
+        cluster += noteBlue;
+        cluster += noteRed;
+        return cluster;
     }
 };
 
