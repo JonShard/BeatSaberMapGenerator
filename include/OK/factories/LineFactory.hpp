@@ -13,10 +13,10 @@ public:
 
     virtual bool canProduceAmount(int amount) { return (amount > 1 && amount < 5); }
 
-    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
+    virtual Cluster produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
-        std::vector<Note> cluster;
+        Cluster cluster;
 
         Note noteMain;
         noteMain.m_parentFactory = getName();
@@ -24,23 +24,23 @@ public:
         do {
             noteMain.randomize();
         } while (noteMain.getLongestLineLength() < amount);
-        cluster.push_back(noteMain);
+        cluster += noteMain;
         
         // TODO: Fix. Can get stuck if noteMain is diagonal corner perpendicualar to diagonal. or you tell it to make 3 then longest line possible is 2.
         for (int i = 1; i < amount; i++) {
             Note note = noteMain;
             std::pair<int, int> pos;
             do {
-                if (Util::rng(0, 2)) 
-                    pos = cluster.front().getPositionAbove();
+                if (Util::cointoss)
+                    pos = cluster.m_notes.front().getPositionAbove();
                 else
-                    pos = cluster.back().getPositionBelow();
+                    pos = cluster.m_notes.back().getPositionBelow();
             
                 note.m_lineIndex = pos.first;      
                 note.m_lineLayer = pos.second;      
             } while (!note.isValid());
-            cluster.push_back(note);
-        }        
+            cluster += note;
+        }
         return cluster;
     }
 };

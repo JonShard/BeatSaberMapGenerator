@@ -15,6 +15,10 @@ float rng0To1() {
     return rng(0, INT16_MAX) / (float)INT16_MAX;
 }
 
+// Returns true half of the time.
+bool cointoss() {
+    return rng(0, 2) == 1;
+}
 
 bool isFileExtention(const std::string file, const std::string ext) {
     int pos = file.find_last_of(".");

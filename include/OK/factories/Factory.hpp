@@ -16,7 +16,7 @@ public:
     }
     virtual std::string getName() = 0;
     virtual bool canProduceAmount(int amount) = 0;
-    virtual std::vector<Note> produce(Notation notation, Map map, int amount) = 0;
+    virtual Cluster produce(Notation notation, Map map, int amount) = 0;
 };
 
 } // namespace OK
