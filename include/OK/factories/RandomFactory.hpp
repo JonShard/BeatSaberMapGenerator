@@ -12,19 +12,19 @@ public:
 
     virtual bool canProduceAmount(int amount) { return (amount == 1); }
 
-    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
+    virtual Cluster produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
-        std::vector<Note> notes;
+        Cluster cluster;
 
         for (int i = 0; i < amount; i++) {
             Note note;
             note.m_parentFactory = getName();
             note.m_time= nextKeyframe.time;
             note.randomize();
-            notes.push_back(note);
+            cluster += note;
         }
-        return notes;
+        return cluster;
     }
 };
 
