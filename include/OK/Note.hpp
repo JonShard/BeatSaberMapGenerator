@@ -19,7 +19,7 @@ struct Note {
     CutDirection m_cutDirection;
     std::string m_parentFactory;
 
-    void randomize();
+    void randomize(); // Randomizes color, type and position of the note.
     bool isValid();
     void invertNote(); // Invertes the color and cutdirection of the note. Blue down becomes red up. Position and time remain unchanged.
     void invertColor();

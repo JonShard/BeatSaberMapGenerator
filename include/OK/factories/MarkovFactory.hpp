@@ -41,22 +41,22 @@ public:
         return noteTo;
     }
 
-    virtual std::vector<Note> produce(Notation notation, Map map, int amount) {
+    virtual Cluster produce(Notation notation, Map map, int amount) {
         Factory::s_totalProduceAttempts++;
         Keyframe nextKeyframe = notation.getNextKeyframe(map.getLatestTime());
-        std::vector<Note> notes;
+        Cluster cluster;
         Note note;
-        if (map.m_notes.size() == 0) {
+        if (map.m_clusters.size() == 0) {
             note.m_time= nextKeyframe.time;
             note.randomize();
-            notes.push_back(note);
-            return notes;
+            cluster += note;
+            return cluster;
         }
 
-        note = pickTransitionFromMarkovChain(map.m_notes[map.m_notes.size() - 1]);
+        note = pickTransitionFromMarkovChain(map.getLatestNote());
         note.m_parentFactory = getName();
         note.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
-        notes.push_back(note);
+        cluster += note;
         
         if (amount == 2) {
             int failsafe = 0;
@@ -71,12 +71,12 @@ public:
             //     return std::vector<Note>();
             // }
             
-            secondNote = pickTransitionFromMarkovChain(notes[0]);
+            secondNote = pickTransitionFromMarkovChain(note);
             secondNote.m_parentFactory = getName();
             secondNote.m_time = nextKeyframe.time; // Needs to be set this late or it might be overwritten with -nan
-            notes.push_back(secondNote);
+            cluster += secondNote;
         }
-        return notes;
+        return cluster;
     }
 };
 

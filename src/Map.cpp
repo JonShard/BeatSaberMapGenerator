@@ -97,12 +97,19 @@ float Map::getLatestTime() {
     }
 }
 
+Note Map::getLatestNote() {
+    if (m_clusters.size() > 0) {
+        return m_clusters.back().m_notes.back();
+    }
+    return Note{};
+}
+
 Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
     if (m_clusters.size() == 0 || noteNr <= 0)
         return Note();
 
     for (int i = m_clusters.size() - 1; i >= 0; i--) {
-        Cluster c = m_clusters[i].getNotesOfTypeInCluster(type);
+        Cluster c = m_clusters[i].getNotesOfType(type);
         if (c.m_notes.size() > 0) {
             return c.m_notes.back();
         }
