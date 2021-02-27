@@ -5,13 +5,13 @@
 
 
 namespace OK {
-    
+
 struct Cluster {
     std::vector<Note> m_notes;
 
     Cluster();
 
-    Cluster getNotesOfTypeInCluster(Type type);
+    Cluster getNotesOfType(Type type);
     
     bool isMultiColor();    // Returns true if the cluster contains both colors.
 

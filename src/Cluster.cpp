@@ -6,7 +6,7 @@ Cluster::Cluster() {
     m_notes = std::vector<Note>();
 }
 
-bool Cluster::isClusterMultiColor() {
+bool Cluster::isMultiColor() {
     bool red = false;
     bool blue = false;
     for (Note n : m_notes) {
@@ -16,7 +16,7 @@ bool Cluster::isClusterMultiColor() {
     return red && blue;
 }
 
-Cluster Cluster::getNotesOfTypeInCluster(Type type) {
+Cluster Cluster::getNotesOfType(Type type) {
     Cluster notesOfType;
     for (Note n : m_notes) {
         if (n.m_type == type)
@@ -42,7 +42,5 @@ Cluster Cluster::operator+=(std::vector<Note> notes) {
     }
     return *this;
 }
-
-
 
 } // Namespace OK
