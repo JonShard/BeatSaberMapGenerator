@@ -1,7 +1,8 @@
 #pragma once
 
-#include <SFML/Audio.hpp>
+#include <math.h>
 
+#include <SFML/Audio.hpp>
 #include "Panel.hpp"
 #include "Song.hpp"
 #include "Input.hpp"
@@ -26,6 +27,8 @@ private:
     sf::RectangleShape m_cursorShape;
     Song m_song;
     float m_autoSaveCountdown;
+    float m_noteSnap;
+    float m_noteSnapOffset;
 
     void createKeyframe(int concurrent);
     void createKeyframeShape(Keyframe k);

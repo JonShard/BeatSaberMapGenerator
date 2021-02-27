@@ -5,6 +5,8 @@ namespace OK {
 EditorPanel::EditorPanel() : Panel() {
     initSFML();
     m_autoSaveCountdown = c_autoSavePeriod;
+    m_noteSnap = 1;
+    m_noteSnapOffset = 0;
 }
 
 EditorPanel::EditorPanel(std::string songFile, std::string notationFile) : Panel() {
@@ -123,8 +125,21 @@ void EditorPanel::setUIScale(float scale) {
 }
 
 void EditorPanel::createKeyframe(int concurrent) {
+    float time = m_music.getPlayingOffset().asSeconds();
+    float timeDelta = std::fmod(time + m_noteSnapOffset, m_noteSnap);
+    if (timeDelta > m_noteSnap / 2.0f) {
+        printf("round up time: %f", time);
+        time += m_noteSnap - timeDelta;
+    }
+    else
+    {
+        printf("round down time: %f", time);
+        time -= m_noteSnap - timeDelta;
+    }
+    printf("new time: %f\n", time);
+
     Keyframe k;
-    k.time = m_music.getPlayingOffset().asSeconds() - 0.1f; // 0.1 random offset I think the editor is causing. 
+    k.time = time;
     k.concurrent = concurrent;                              //TODO: Fix BPM not considered.
     if (m_song.getNotation(0)->m_keyframes.size() > 0) 
         k.id = m_song.getNotation(0)->m_keyframes.back().id + 1; //TODO: duplicates possible!!
