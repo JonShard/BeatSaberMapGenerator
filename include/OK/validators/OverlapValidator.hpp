@@ -16,23 +16,20 @@ public:
     virtual std::string getName() { return "OverlapValidator"; }
 
     virtual bool validate(Map map) {
-        for (int i = 0; i < map.m_notes.size()-1; ) {   // For every cluster in the map:
-            std::vector<Note> cluster = map.getNotesInCluster(i);
-            i += cluster.size();
-
-            for (int m = 0; m < cluster.size(); m++) {
-                for (int n = 0; n < cluster.size(); n++) {  // Are two different notes in the cluster in the same position?
-                    if (m == n) {
-                        continue;
-                    }
-                    if (cluster[m].m_lineIndex == cluster[n].m_lineIndex && cluster[m].m_lineLayer == cluster[n].m_lineLayer) {
-                        m_fails++;
-                        Validator::s_totalFails++;
-                        return false;                        
-                    }
+        std::vector<Note> notes = map.getNotes();
+        for (int i = notes.size()-1; i >= 0; i--) { // For every note in the map starting at the back
+            for (int j = i -1; j >= 0; j--) {
+                if (notes[i].m_lineIndex == notes[j].m_lineIndex && 
+                    notes[i].m_lineLayer == notes[j].m_lineLayer) {
+                    m_fails++;
+                    Validator::s_totalFails++;
+                    return false;                        
+                }
+                // Stop looking if the notes are separated enough.
+                if (notes[i].m_time - notes[j].m_time > Config::generator.noteClusterTime) {
+                    break;
                 }
             }
-
         }
         m_passes++;
         Validator::s_totalPasses++;
