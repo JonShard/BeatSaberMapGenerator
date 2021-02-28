@@ -166,7 +166,7 @@ void Note::print() {
         default: type = "UNKNOWN"; break;
     }
     printf("Time: %f \tlineIndex: %d \tlineLayer: %d \ttype: %s \tcutDirection: %s, \tparentFactory: %s", 
-            m_time, m_lineIndex, m_lineLayer, type, dir, m_parentFactory.c_str());
+            m_time, m_lineIndex, m_lineLayer, type.c_str(), dir.c_str(), m_parentFactory.c_str());
 }
 
 bool Note::operator==(Note other) {

@@ -147,21 +147,15 @@ int Song::createNotationFromMap(Map map) {
     
     Notation notation(map.m_name);
 
-    for (int i = 0; i < map.getNoteCount(); i++) {
-        Cluster cluster = map.getNotesInCluster(i);
+    for (Cluster cluster : map.m_clusters) {
         Keyframe k;
         k.id = notation.m_keyframes.size();
-        k.time = cluster[0].m_time;
-        k.concurrent = cluster.size();
+        k.time = cluster.m_notes[0].m_time;
+        k.concurrent = cluster.m_notes.size();
         notation.m_keyframes.push_back(k);
-
-        if (i + cluster.size() > map.m_notes.size() -1) {
-            break;
-        }
-        i += cluster.size();
     }
-    printf("Created notation from map\n");
     notation.print();
+    printf("Created notation from map\n");
     m_notations.push_back(notation);
     return m_notations.size() -1;
 }

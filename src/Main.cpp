@@ -46,7 +46,7 @@ void analyseBinary(std::vector<std::string> mapFiles, bool append) {
         printf("\n\nLoading mapFile %s\n\n", file.data());
         OK::Map map;
         map.load(file, 120);
-        if (map.m_notes.size() == 0) {
+        if (map.getNoteCount() == 0) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }
@@ -74,7 +74,7 @@ void analyseMarkov(std::vector<std::string> mapFiles, bool append) {
         printf("\n\nLoading mapFile %s\n\n", file.data());
         OK::Map map;
         map.load(file, 120);
-        if (map.m_notes.size() == 0) {
+        if (map.getNoteCount() == 0) {
             printf("Failed to load map: %s\n", file.data());
             continue;
         }

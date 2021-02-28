@@ -53,7 +53,7 @@ bool Map::load(const std::string fileName, float bps) {
     
 }
 void Map::save(const std::string fileName, float bps) {
-    printf("Saving map with notes: %ld\n", getNoteCount());
+    printf("Saving map with notes: %d\n", getNoteCount());
 
     nlohmann::json jsNotes;
     nlohmann::json jsMap;
