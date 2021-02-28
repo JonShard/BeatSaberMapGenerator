@@ -25,28 +25,30 @@ public:
     virtual std::string getName() { return "MatrixValidator"; }
 
     virtual bool validate(Map map) {
-        for (int i = 0; i < map.m_notes.size()-1; i++) {
-            std::vector<Note> cluster = map.getNotesInCluster(i);
-            // If the last two or more notes are in a cluster, return because the next note(s) doesn't exist.
-            if (i + cluster.size() > map.m_notes.size() -1) {
-                return true;
+        for (int i = 0; i < map.m_clusters.size()-2; i++) { // For every cluster in the map except the last one:
+            Cluster cluster = map.m_clusters[i];
+            Cluster clusterNext = map.m_clusters[i+1];
+
+            if (cluster.m_notes.size() == 0 || clusterNext.m_notes.size() == 0) {
+                printf("\nWarning MatrixValidator encountered an empty cluster\n");
+                return false;
             }
 
-            std::vector<Note> clusterNext = map.getNotesInCluster(i + cluster.size());
-            if (std::abs(clusterNext[0].m_time - cluster[0].m_time) > Config::generator.validator.validateTimeAfterNote) {
+            // Skip cluster if the notes are separated enough from the last.
+            if (std::abs(clusterNext.m_notes[0].m_time - cluster.m_notes[0].m_time) > Config::generator.validator.validateTimeAfterNote) {
                 continue;
             }
 
             // If transitioning from cluster to another cluster. 
-            if (cluster.size() > 1 && clusterNext.size() > 1) {
+            if (cluster.m_notes.size() > 1 && clusterNext.m_notes.size() > 1) {
                 // If both clusters have both colors, seperate transitions by color, blue -> blue and red -> red.
-                if (Note::IsClusterMultiColor(cluster) && Note::IsClusterMultiColor(clusterNext)) {
-                    std::vector<Note> clusterBlue = Note::GetNotesOfColorInCluster(cluster, BLUE);
-                    std::vector<Note> clusterRed = Note::GetNotesOfColorInCluster(cluster, RED);
-                    std::vector<Note> nextClusterBlue = Note::GetNotesOfColorInCluster(clusterNext, BLUE);
-                    std::vector<Note> nextClusterRed = Note::GetNotesOfColorInCluster(clusterNext, RED);
-                    for (Note cn : clusterBlue) {
-                        for (Note cnn : nextClusterBlue) {
+                if (cluster.isMultiColor() && clusterNext.isMultiColor()) {
+                    Cluster clusterBlue = cluster.getNotesOfType(BLUE);
+                    Cluster clusterRed = cluster.getNotesOfType(RED);
+                    Cluster nextClusterBlue = clusterNext.getNotesOfType(BLUE);
+                    Cluster nextClusterRed = clusterNext.getNotesOfType(RED);
+                    for (Note cn : clusterBlue.m_notes) {
+                        for (Note cnn : nextClusterBlue.m_notes) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
                                 m_fails++;
                                 Validator::s_totalFails++;
@@ -54,8 +56,8 @@ public:
                             }
                         }
                     }
-                    for (Note cn : clusterRed) {
-                        for (Note cnn : nextClusterRed) {
+                    for (Note cn : clusterRed.m_notes) {
+                        for (Note cnn : nextClusterRed.m_notes) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
                                 m_fails++;
                                 Validator::s_totalFails++;
@@ -65,8 +67,8 @@ public:
                     }
                 }
                 else {
-                    for (Note cn : cluster) {
-                        for (Note cnn : clusterNext) {
+                    for (Note cn : cluster.m_notes) {
+                        for (Note cnn : clusterNext.m_notes) {
                             if (!m_matrix.getNoteTransition(cn, cnn)) {
                                 m_fails++;
                                 Validator::s_totalFails++;
@@ -75,14 +77,13 @@ public:
                         }
                     }
                 }
-                i += cluster.size();
                 continue;
             }
 
             // If transitioning from a single note to a cluster.
-            if (clusterNext.size() > 1) {
-                for (Note cn : clusterNext) {
-                    if (!m_matrix.getNoteTransition(cluster[0], cn)) {
+            if (cluster.m_notes.size() == 1 && clusterNext.m_notes.size() > 1) {
+                for (Note cnn : clusterNext.m_notes) {
+                    if (!m_matrix.getNoteTransition(cluster.m_notes[0], cnn)) {
                         m_fails++;
                         Validator::s_totalFails++;
                         return false;
@@ -91,33 +92,28 @@ public:
                 continue;
             }
 
-            // If transitioning from inside a cluster, consider each node in cluster as a transition to the next note:
-            if (cluster.size() > 1) {
-                int firstAfterCluster = i + cluster.size(); 
-                for (int j = i; j < firstAfterCluster; j++) {
-                    Note cn = map.m_notes[j];
-                    Note cnn = map.m_notes[firstAfterCluster];
-                    if (!m_matrix.getNoteTransition(cn, cnn)) {
+            // If transitioning from cluster to single note, consider each node in cluster as a transition to the next note:
+            if (cluster.m_notes.size() > 1 && clusterNext.m_notes.size() == 1) {
+                for (Note cn : cluster.m_notes) {
+                    if (!m_matrix.getNoteTransition(cn, clusterNext.m_notes.back())) {
                         m_fails++;
                         Validator::s_totalFails++;
                         return false;
                     }                
                 }
-                i = firstAfterCluster - 1;
                 continue;
             }
 
-
-            if (m_matrix.getNoteTransition(cluster[0], clusterNext[0]) == false) {
+            // Single to single:
+            if (m_matrix.getNoteTransition(cluster.m_notes[0], clusterNext.m_notes[0]) == false) {
                 m_fails++;
                 Validator::s_totalFails++;
                 return false;
             }
 
-            int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext[0]);
+            int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext.m_notes[0]);
             if (transitionsFromNext == 0) {
                 printf("MatrixValidator: No possible ways to transition from the next node. Will become absorbing.\n");
-                
                 Validator::s_totalFails++;
                 return false;
             }

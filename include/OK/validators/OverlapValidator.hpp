@@ -17,7 +17,7 @@ public:
 
     virtual bool validate(Map map) {
         std::vector<Note> notes = map.getNotes();
-        for (int i = notes.size()-1; i >= 0; i--) { // For every note in the map starting at the back
+        for (int i = notes.size()-1; i >= 0; i--) { // For every note in the map starting at the back:
             for (int j = i -1; j >= 0; j--) {
                 if (notes[i].m_lineIndex == notes[j].m_lineIndex && 
                     notes[i].m_lineLayer == notes[j].m_lineLayer) {
