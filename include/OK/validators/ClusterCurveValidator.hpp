@@ -16,17 +16,14 @@ public:
     virtual std::string getName() { return "ClusterCurveValidator"; }
 
     virtual bool validate(Map map) {
-        for (int i = 0; i < map.m_notes.size()-1; ) {   // For every cluster in the map:
-            std::vector<Note> cluster = map.getNotesInCluster(i);
-            i += cluster.size();
-
+        for (Cluster cluster : map.m_clusters) {   // For every cluster in the map:
             // Make sure notes of the same color in the cluster is on a line:
-            std::vector<Note> clusterBlue = Note::GetNotesOfColorInCluster(cluster, BLUE);
-            std::vector<Note> clusterRed = Note::GetNotesOfColorInCluster(cluster, RED);
-            for (int c = 0; c < 2; c++) {
-                std::vector<Note> clusterColor = (c == 0) ? clusterBlue : clusterRed;                    
-                for (Note m : clusterColor) {    
-                    for (Note n : clusterColor) {
+            std::vector<Cluster> colorClusters = std::vector<Cluster>(); 
+            colorClusters.push_back(cluster.getNotesOfType(BLUE));
+            colorClusters.push_back(cluster.getNotesOfType(RED));
+            for (Cluster c : colorClusters) {
+                for (Note m : c.m_notes) {    
+                    for (Note n : c.m_notes) {
                         if (m == n) {
                             continue;
                         }
@@ -39,8 +36,8 @@ public:
                 }
             }
             // Make sure notes of the opposite color is not in a line unless on left and right edges:  
-            for (Note m : clusterBlue) {    
-                for (Note n : clusterRed) {
+            for (Note m : colorClusters.back().m_notes) {    
+                for (Note n : colorClusters.front().m_notes) {
                     if (m.isOnSamePlane(n) && std::abs(m.m_lineIndex - n.m_lineIndex) < 3) {
                         m_fails++;
                         Validator::s_totalFails++;
