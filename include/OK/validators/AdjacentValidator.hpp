@@ -23,8 +23,8 @@ public:
     virtual std::string getName() { return "AdjacentValidator"; }
 
     virtual bool validate(Map map) {
-        for (int i = map.m_notes.size()-1; i > 1; i--) {
-            Note current = map.m_notes[i];
+        for (int i = map.getNoteCount()-1; i > 1; i--) {
+            Note current = map.getNoteAt(i);
             Note previous = map.getPreviousNoteOfColor(i, (OK::Type)current.m_type);
 
             float timeDelta = std::abs(previous.m_time - current.m_time);

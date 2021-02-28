@@ -104,6 +104,31 @@ Note Map::getLatestNote() {
     return Note{};
 }
 
+Note Map::getNoteAt(int index) {
+    Note note;
+    int i = 0;
+    for (Cluster c : m_clusters) {
+        for (Note n : c.m_notes){
+            if (i == index) {
+                return n;
+            }
+            i++;
+        }
+    }
+    return note;
+}
+
+std::vector<Note> Map::getNotes() {
+    std::vector<Note> notes;
+    for (Cluster c : m_clusters) {
+        for (Note n : c.m_notes){
+            notes.push_back(n);
+        }
+    }
+    return notes;
+}
+
+
 Note Map::getPreviousNoteOfColor(int noteNr, Type type) {
     if (m_clusters.size() == 0 || noteNr <= 0)
         return Note();

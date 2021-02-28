@@ -32,7 +32,9 @@ struct Map {
 
     float getLatestTime();
     Note getLatestNote();
-    std::vector<Cluster> getNotesInCluster(int noteNr);        // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
+    Note getNoteAt(int index); // Returns the note with the index counted from the start.
+    std::vector<Note> getNotes();
+    std::vector<Cluster> getNotesInCluster(int noteNr); // Returns all notes in the same cluter as note in position noteNr (when there are several per "frame").
     Note getPreviousNoteOfColor(int noteNr, Type type);
 
     Map operator+=(Note n);
