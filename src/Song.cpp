@@ -89,7 +89,7 @@ int Song::loadMap(const std::string fileName) {
 
 bool Song::saveMap(int index) {
     if (index < 0 || index > m_maps.size()) {
-        printf("Warning: can not save map with out of bounds index %d, size: %ld", index, m_maps.size());
+        printf("Warning: Can not save map with out of bounds index %d, size: %ld\n", index, m_maps.size());
         return false;
     }
     return saveMap(m_maps[index].m_name);
@@ -179,7 +179,7 @@ int Song::loadNotation(const std::string fileName) {
 
 bool Song::saveNotation(int index) {
     if (index < 0 || index > m_notations.size()) {
-        printf("Warning: can not save notation with out of bounds index %d, size: %ld", index, m_notations.size());
+        printf("Warning: Can not save notation with out of bounds index %d, size: %ld\n", index, m_notations.size());
         return false;
     }
     return saveNotation(m_notations[index].m_name);
