@@ -18,11 +18,14 @@ namespace OK {
 class Generator {
 protected:
     static unsigned long s_backtracks;
-    static std::vector<Factory*> s_factories; // Weights
+    static std::map<int, std::vector<Factory*>> s_factories;
     static std::vector<Validator*> s_validators;
 
+    static void RegisterFactory(Factory* factory);
     static bool IsValid(Map map);
     static void PrintReport(Map map);
+    static Factory* PickFactoryWithDesiredSize(int desiredSize);
+
 public:
     Generator();
     static bool Init();

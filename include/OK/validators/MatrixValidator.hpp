@@ -26,6 +26,9 @@ public:
 
     virtual bool validate(Map map) {
         for (int i = 0; i < map.m_clusters.size()-2; i++) { // For every cluster in the map except the last one:
+            if (map.m_clusters.size() < 2) {
+                return true;
+            }
             Cluster cluster = map.m_clusters[i];
             Cluster clusterNext = map.m_clusters[i+1];
 

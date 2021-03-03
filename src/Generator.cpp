@@ -4,10 +4,15 @@
 namespace OK {
 
     bool Generator::Init() {
-        if (Config::generator.factory.random.enabled) s_factories.push_back(new RandomFactory);
-        if (Config::generator.factory.symmetrical.enabled) s_factories.push_back(new SymmetricalFactory);
-        if (Config::generator.factory.markov.enabled) s_factories.push_back(new MarkovFactory);
-        if (Config::generator.factory.line.enabled) s_factories.push_back(new LineFactory);
+        s_factories.clear();
+        for (int i = 1; i <= c_maxNotesInCluster; i++) {
+            s_factories.insert({i, std::vector<Factory*>()});
+        }
+
+        if (Config::generator.factory.random.enabled) RegisterFactory(new RandomFactory);
+        if (Config::generator.factory.symmetrical.enabled) RegisterFactory(new SymmetricalFactory);
+        if (Config::generator.factory.markov.enabled) RegisterFactory(new MarkovFactory);
+        if (Config::generator.factory.line.enabled) RegisterFactory(new LineFactory);
         if (Config::generator.validator.matrix.enabled) s_validators.push_back(new MatrixValidator);
         if (Config::generator.validator.doubleDown.enabled) s_validators.push_back(new DoubleDownValidator);
         if (Config::generator.validator.adjacent.enabled) s_validators.push_back(new AdjacentValidator);
@@ -19,6 +24,14 @@ namespace OK {
         }
 
         return true;
+    }
+
+    void Generator::RegisterFactory(Factory* factory) {
+        for (int i = 1; i <= c_maxNotesInCluster; i++) {
+            if (factory->canProduceAmount(i)) {
+                s_factories.at(i).push_back(factory);
+            }
+        }
     }
 
     bool Generator::IsValid(Map map) {
@@ -37,6 +50,14 @@ namespace OK {
     }
  
     void Generator::PrintReport(Map map) {
+        printf("=== Report ===\nFactories for each custer size:\n");
+        for (int i = 1; i <= c_maxNotesInCluster; i++) {
+            printf("%d - ", i);
+            for (Factory* f : s_factories.at(i)) {
+                printf("%s, ",f->getName().c_str());
+            }
+            printf("\n");
+        }
         for (Validator* v : s_validators) {
             v->printReport();
         }
@@ -49,55 +70,61 @@ namespace OK {
         printf("Blue to red ratio: %f\n\n", blueCount / (float)redCount);
     }
 
+    Factory* Generator::PickFactoryWithDesiredSize(int desiredSize) {
+        for (int i = desiredSize; i > 0; i--) {
+            if (s_factories.at(i).size() > 0) { 
+                if (i != desiredSize) {
+                    printf("\tWarning: No factories for desired cluster size of %d, using next best: %d", desiredSize, i);
+                }
+                return s_factories.at(i)[Util::rng(0, s_factories.at(i).size())];
+            }
+        }
+        return nullptr;
+    }
+
     Map Generator::GenerateMap(Notation notation) {
         printf("Generating map from nototion with keyframes: %ld\n", notation.m_keyframes.size());
         Map map(notation.m_name);
-        int notesAddedLast = 0;
 
-        for (int i = 0; i < notation.m_keyframes.size(); i++) {
-            printf("Start keyframe %d \tTime: %f\t\tMap length: %d \tConcurrent: %d\tTime delta: %f\n", i, notation.m_keyframes[i].time, map.getNoteCount(), notation.m_keyframes[i].concurrent, (i) ? notation.m_keyframes[i].time - notation.m_keyframes[i-1].time: 0);
+        Keyframe previousKeyframe;
+        for (Keyframe k : notation.m_keyframes) {
+            printf("Start keyframe id: %ld \tTime: %f\t\tMap length: %d \tConcurrent: %d\tTime delta: %f\n", k.id, k.time, map.getNoteCount(), k.concurrent, k.time - previousKeyframe.time);
             int produceAttempts = 0;
-            int randomizedCount = 0;
             Map mapNext;
             do {
+                produceAttempts++;
                 mapNext = map;
-                int random;
-                int failSafe = 0;
-                do {
-                    random = Util::rng(0, s_factories.size());
-                    failSafe++;
-                }while(!s_factories[random]->canProduceAmount(notation.m_keyframes[i].concurrent) && failSafe < 100000);
-                Cluster cluster = s_factories[random]->produce(notation, map, notation.m_keyframes[i].concurrent);
+                Factory* factory = PickFactoryWithDesiredSize(k.concurrent);
+                if (factory == nullptr) {
+                    printf("Error: Could not find a factory that can produce a cluster of size %d or smaller. Unable to continue\n", k.concurrent);
+                    return map;
+                }
+                Cluster cluster = factory->produce(notation, map, k.concurrent);
                 if (cluster.m_notes.size() == 0) {
                     produceAttempts++;
+                    printf("\tWarning: %s produced an empty cluster", factory->getName().c_str());
                     continue;
                 }
                 mapNext += cluster;
-                produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
-            // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
-            if (map.getNoteCount() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
+            
+            // If the last note in map is an absorbing state that can't be transitioned away from, pop it, try again.
+            if (map.m_clusters.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 Generator::s_backtracks++;
-                printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
-                for (int j = 0; j < notesAddedLast; j++) {
-                    printf("\tAbsorbing note being removed: \t");
-                    map.getNotes().back().print();
-                   // map.get.pop_back(); Depricated, map.getNotes() returns copy.
-                }
-                for (int k = 0; k < mapNext.getNoteCount() - map.getNoteCount(); k++) {
-                    printf("\tLast attempted transition:    \t");
-                    mapNext.getNotes().back().print();
-                    // mapNext.m_notes.pop_back(); Depricated, map.getNotes() returns copy.
-                }
-                printf("\n");
+                printf("\tFailed to produce valid cluster in attempts: %d. Removing absorbing cluster: \n", produceAttempts);
+                map.m_clusters.back().print();
+                map.m_clusters.pop_back();
+                
+                printf("\tLast attempted cluster:\n");
+                mapNext.getNotes().back().print();
                 PrintReport(map);
-                i-= 2;
                 continue;
             }
-            notesAddedLast = mapNext.getNoteCount() - map.getNoteCount();
+            printf("End keyframe   id: %ld\tProduce attempts: %d\tMap length: %d\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
+                k.id, produceAttempts, map.getNoteCount(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
+            
             map = mapNext;
-            printf("End keyframe   %d\tProduce attempts: %d\tMap length: %d\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
-            i, produceAttempts, map.getNoteCount(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
+            previousKeyframe = k;
         }
         PrintReport(map);
         return map;

@@ -28,6 +28,7 @@ Cluster Cluster::getNotesOfType(Type type) {
 void Cluster::print() {
     for (Note n : m_notes) {
         n.print();
+        printf("\n");
     }
 }
 

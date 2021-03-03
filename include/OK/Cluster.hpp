@@ -6,6 +6,8 @@
 
 namespace OK {
 
+const int c_maxNotesInCluster = 12; // Maximum number of notes a cluster can contain. 4 lanes x 3 layers = 12 
+
 struct Cluster {
     std::vector<Note> m_notes;
 
