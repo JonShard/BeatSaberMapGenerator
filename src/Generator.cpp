@@ -22,9 +22,10 @@ namespace OK {
     }
 
     bool Generator::IsValid(Map map) {
-        for (Note n : map.m_notes) {
-            if (!n.isValid()) { // Something is seriously wrong if the note iself thinks it's invalid.
-                printf("Error: generated invalid note: %s\n", n.toString().data());
+        for (Note n : map.getNotes()) {
+            if (!n.isValid()) { // Something is seriously wrong if the note itself thinks it's invalid.
+                printf("Error: generated invalid note:");
+                n.print();
                 std::exit(4);
             }
         }
@@ -41,7 +42,7 @@ namespace OK {
         }
         int blueCount = 0;
         int redCount = 0;
-        for (Note n : map.m_notes) {
+        for (Note n : map.getNotes()) {
             if (n.m_type == BLUE) blueCount++;
             else if (n.m_type == RED) redCount++;
         }
@@ -54,7 +55,7 @@ namespace OK {
         int notesAddedLast = 0;
 
         for (int i = 0; i < notation.m_keyframes.size(); i++) {
-            printf("Start keyframe %d \tTime: %f\t\tMap length: %ld \tConcurrent: %d\tTime delta: %f\n", i, notation.m_keyframes[i].time, map.m_notes.size(), notation.m_keyframes[i].concurrent, (i) ? notation.m_keyframes[i].time - notation.m_keyframes[i-1].time: 0);
+            printf("Start keyframe %d \tTime: %f\t\tMap length: %d \tConcurrent: %d\tTime delta: %f\n", i, notation.m_keyframes[i].time, map.getNoteCount(), notation.m_keyframes[i].concurrent, (i) ? notation.m_keyframes[i].time - notation.m_keyframes[i-1].time: 0);
             int produceAttempts = 0;
             int randomizedCount = 0;
             Map mapNext;
@@ -66,8 +67,8 @@ namespace OK {
                     random = Util::rng(0, s_factories.size());
                     failSafe++;
                 }while(!s_factories[random]->canProduceAmount(notation.m_keyframes[i].concurrent) && failSafe < 100000);
-                std::vector<Note> cluster = s_factories[random]->produce(notation, map, notation.m_keyframes[i].concurrent);
-                if (cluster.size() == 0) {
+                Cluster cluster = s_factories[random]->produce(notation, map, notation.m_keyframes[i].concurrent);
+                if (cluster.m_notes.size() == 0) {
                     produceAttempts++;
                     continue;
                 }
@@ -75,26 +76,28 @@ namespace OK {
                 produceAttempts++;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
             // If the last note in map is an absorbing node that can't be transitioned away from, pop it, try again.
-            if (map.m_notes.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
+            if (map.getNoteCount() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 Generator::s_backtracks++;
                 printf("\tRan out of max attempts: %d. Escaping absorbing state: \n", produceAttempts);
                 for (int j = 0; j < notesAddedLast; j++) {
-                    printf("\tAbsorbing note being removed: \t%s\n", map.m_notes.back().toString().data());
-                    map.m_notes.pop_back();
+                    printf("\tAbsorbing note being removed: \t");
+                    map.getNotes().back().print();
+                   // map.get.pop_back(); Depricated, map.getNotes() returns copy.
                 }
-                for (int k = 0; k < mapNext.m_notes.size() - map.m_notes.size(); k++) {
-                    printf("\tLast attempted transition:    \t%s\n", mapNext.m_notes.back().toString().data());
-                    mapNext.m_notes.pop_back();
+                for (int k = 0; k < mapNext.getNoteCount() - map.getNoteCount(); k++) {
+                    printf("\tLast attempted transition:    \t");
+                    mapNext.getNotes().back().print();
+                    // mapNext.m_notes.pop_back(); Depricated, map.getNotes() returns copy.
                 }
                 printf("\n");
                 PrintReport(map);
                 i-= 2;
                 continue;
             }
-            notesAddedLast = mapNext.m_notes.size() - map.m_notes.size();
+            notesAddedLast = mapNext.getNoteCount() - map.getNoteCount();
             map = mapNext;
-            printf("End keyframe   %d\tProduce attempts: %d\tMap length: %ld\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
-            i, produceAttempts, map.m_notes.size(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
+            printf("End keyframe   %d\tProduce attempts: %d\tMap length: %d\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 
+            i, produceAttempts, map.getNoteCount(), Generator::s_backtracks, Factory::getTotalProduceAttempts(), Validator::getTotalPasses(), Validator::getTotalFails());
         }
         PrintReport(map);
         return map;

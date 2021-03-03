@@ -35,7 +35,7 @@ public:
             }
 
             // Skip cluster if the notes are separated enough from the last.
-            if (std::abs(clusterNext.m_notes[0].m_time - cluster.m_notes[0].m_time) > Config::generator.validator.validateTimeAfterNote) {
+            if (std::abs(clusterNext.m_notes.front().m_time - cluster.m_notes.front().m_time) > Config::generator.validator.validateTimeAfterNote) {
                 continue;
             }
 
@@ -83,7 +83,7 @@ public:
             // If transitioning from a single note to a cluster.
             if (cluster.m_notes.size() == 1 && clusterNext.m_notes.size() > 1) {
                 for (Note cnn : clusterNext.m_notes) {
-                    if (!m_matrix.getNoteTransition(cluster.m_notes[0], cnn)) {
+                    if (!m_matrix.getNoteTransition(cluster.m_notes.front(), cnn)) {
                         m_fails++;
                         Validator::s_totalFails++;
                         return false;
@@ -95,7 +95,7 @@ public:
             // If transitioning from cluster to single note, consider each node in cluster as a transition to the next note:
             if (cluster.m_notes.size() > 1 && clusterNext.m_notes.size() == 1) {
                 for (Note cn : cluster.m_notes) {
-                    if (!m_matrix.getNoteTransition(cn, clusterNext.m_notes.back())) {
+                    if (!m_matrix.getNoteTransition(cn, clusterNext.m_notes.front())) {
                         m_fails++;
                         Validator::s_totalFails++;
                         return false;
@@ -105,13 +105,13 @@ public:
             }
 
             // Single to single:
-            if (m_matrix.getNoteTransition(cluster.m_notes[0], clusterNext.m_notes[0]) == false) {
+            if (m_matrix.getNoteTransition(cluster.m_notes.front(), clusterNext.m_notes.front()) == false) {
                 m_fails++;
                 Validator::s_totalFails++;
                 return false;
             }
 
-            int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext.m_notes[0]);
+            int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext.m_notes.front());
             if (transitionsFromNext == 0) {
                 printf("MatrixValidator: No possible ways to transition from the next node. Will become absorbing.\n");
                 Validator::s_totalFails++;
