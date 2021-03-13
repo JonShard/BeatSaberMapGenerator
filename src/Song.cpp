@@ -92,9 +92,13 @@ bool Song::saveMap(int index) {
         printf("Warning: Can not save map with out of bounds index %d, size: %ld\n", index, m_maps.size());
         return false;
     }
-    return saveMap(m_maps[index].m_name);
+    if (m_maps[index].getNoteCount() <= 0) {
+        printf("Warning: Can not save map without any notes\n");
+        return false;
+    }
+    m_maps[index].save(m_path + m_maps[index].m_name + c_mapFileExtention,  m_info.beatsPerMinute);
+    return true;
 }
-
 
 bool Song::saveMap(const std::string name) {
     Map map = *getMap(name);

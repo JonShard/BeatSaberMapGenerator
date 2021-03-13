@@ -50,7 +50,7 @@ namespace OK {
     }
  
     void Generator::PrintReport(Map map) {
-        printf("=== Report ===\nFactories for each custer size:\n");
+        printf("\n=== Report ===\nFactories for each custer size:\n");
         for (int i = 1; i <= c_maxNotesInCluster; i++) {
             printf("%d - ", i);
             for (Factory* f : s_factories.at(i)) {
@@ -84,9 +84,9 @@ namespace OK {
 
     Map Generator::GenerateMap(Notation notation) {
         printf("Generating map from nototion with keyframes: %ld\n", notation.m_keyframes.size());
-        Map map(notation.m_name);
+        Map map(notation.m_name + "_generated");
 
-        Keyframe previousKeyframe;
+        Keyframe previousKeyframe{};
         for (Keyframe k : notation.m_keyframes) {
             printf("Start keyframe id: %ld \tTime: %f\t\tMap length: %d \tConcurrent: %d\tTime delta: %f\n", k.id, k.time, map.getNoteCount(), k.concurrent, k.time - previousKeyframe.time);
             int produceAttempts = 0;
@@ -97,6 +97,7 @@ namespace OK {
                 Factory* factory = PickFactoryWithDesiredSize(k.concurrent);
                 if (factory == nullptr) {
                     printf("Error: Could not find a factory that can produce a cluster of size %d or smaller. Unable to continue\n", k.concurrent);
+                    PrintReport(map);
                     return map;
                 }
                 Cluster cluster = factory->produce(notation, map, k.concurrent);
