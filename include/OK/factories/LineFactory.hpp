@@ -31,7 +31,7 @@ public:
             Note note = noteMain;
             std::pair<int, int> pos;
             do {
-                if (Util::cointoss)
+                if (Util::cointoss())
                     pos = cluster.m_notes.front().getPositionAbove();
                 else
                     pos = cluster.m_notes.back().getPositionBelow();
