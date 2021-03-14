@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "../include/OK/Window.hpp"
 #include "../include/OK/EditorPanel.hpp"
 #include "../include/OK/Input.hpp"
@@ -122,6 +124,7 @@ void openEditorWindow(std::string songFile, std::string notationFile = "") {
 }
 
 int main(int argc, char** argv) {
+    srandom(time(NULL));
     if (argc == 1) {
         std::printf("Error: expected arguments.\n");
         printUsage();
