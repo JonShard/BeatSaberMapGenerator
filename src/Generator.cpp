@@ -87,7 +87,8 @@ namespace OK {
         Map map(notation.m_name + "_generated");
 
         Keyframe previousKeyframe{};
-        for (Keyframe k : notation.m_keyframes) {
+        for (int i = 0; i < notation.m_keyframes.size(); i++) {
+            Keyframe k = notation.m_keyframes[i];
             printf("Start keyframe id: %ld \tTime: %f\t\tMap length: %d \tConcurrent: %d\tTime delta: %f\n", k.id, k.time, map.getNoteCount(), k.concurrent, k.time - previousKeyframe.time);
             int produceAttempts = 0;
             Map mapNext;
@@ -106,6 +107,8 @@ namespace OK {
                     printf("\tWarning: %s produced an empty cluster", factory->getName().c_str());
                     continue;
                 }
+                printf("\tGenerated cluster(keyframe id: %ld):\n", k.id);
+                cluster.print("\t");
                 mapNext += cluster;
             } while (!IsValid(mapNext) && produceAttempts < Config::generator.factory.maxAttempts);
             
@@ -113,12 +116,20 @@ namespace OK {
             if (map.m_clusters.size() > 0 && produceAttempts >= Config::generator.factory.maxAttempts) {
                 Generator::s_backtracks++;
                 printf("\tFailed to produce valid cluster in attempts: %d. Removing absorbing cluster: \n", produceAttempts);
-                map.m_clusters.back().print();
+                map.m_clusters.back().print("\t");
                 map.m_clusters.pop_back();
-                
+                map.m_clusters.pop_back();
+
                 printf("\tLast attempted cluster:\n");
                 mapNext.getNotes().back().print();
                 PrintReport(map);
+                
+                i -= 2;
+                if (i < 0) {
+                    i = 0;
+                    previousKeyframe = Keyframe{};
+                    map.m_clusters.clear();
+                }
                 continue;
             }
             printf("End keyframe   id: %ld\tProduce attempts: %d\tMap length: %d\t\tBacktracks: %lu\tFactory runs: %lu\tValidator passes: %lu, \tValidator fails: %lu\n\n", 

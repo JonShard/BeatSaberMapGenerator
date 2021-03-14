@@ -2,12 +2,12 @@
     "generator": {
         "noteClusterTime": 0.01,
         "factories": {
-            "maxAttempts": 50,
+            "maxAttempts": 200,
             "randomFactory": {
                 "enabled": false
             },
             "symmetricalFactory": {
-                "enabled": true,
+                "enabled": false,
                 "centerPointMode": true,
                 "horizontalMode": true,
                 "verticalMode": true,
@@ -19,7 +19,7 @@
                 "markovMatrixFilePath": "markovTransitionMatrix.data"
             },
             "lineFactory": {
-                "enabled": true,
+                "enabled": false,
                 "allowLinesOfFour": false
             }
         },
