@@ -17,7 +17,7 @@ struct Cluster {
     
     bool isMultiColor();    // Returns true if the cluster contains both colors.
 
-    void print();
+    void print(std::string prefix = "");
     Cluster operator+=(Note n);
     Cluster operator+=(std::vector<Note> notes);
 };

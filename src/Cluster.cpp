@@ -25,8 +25,9 @@ Cluster Cluster::getNotesOfType(Type type) {
     return notesOfType;
 }
 
-void Cluster::print() {
+void Cluster::print(std::string prefix) {
     for (Note n : m_notes) {
+        printf("%s", prefix.c_str());
         n.print();
         printf("\n");
     }
