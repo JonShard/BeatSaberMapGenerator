@@ -58,8 +58,9 @@ public:
         Cluster cluster;
         Note note;
         if (map.m_clusters.size() == 0) {
-            note.m_time= nextKeyframe.time;
             note.randomize();
+            note.m_time= nextKeyframe.time;
+            note.m_parentFactory = getName();
             cluster += note;
             return cluster;
         }
