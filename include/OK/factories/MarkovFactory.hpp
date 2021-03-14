@@ -30,13 +30,24 @@ public:
         Note noteTo;
         if (possibleTransitions.size() == 0) {
             m_absorbingNotesHit++;
-            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain picking a random transition (%d)\n", m_absorbingNotesHit);
+            printf("Warning: MarkovFactory encountered an absorbing state in the markov chain, picking a random transition (%d)\n", m_absorbingNotesHit);
             noteTo.randomize();
         }
         else {
-            do {
-                noteTo = possibleTransitions[Util::rng(0, possibleTransitions.size())].second;
-            } while(noteTo.m_type == BOMB || noteTo.m_cutDirection == DOT);
+            bool onlyBombsAndDot = true;
+            for (std::pair<float, Note> trans : possibleTransitions) 
+                if (trans.second.m_type != BOMB && trans.second.m_cutDirection != DOT) 
+                    onlyBombsAndDot = false;
+            
+            if (onlyBombsAndDot) {
+                printf("Warning: MarkovFactory encountered a state in the markov chain that only transitions to bombs or dot, picking a random transition (%d)\n", m_absorbingNotesHit);
+                noteTo.randomize();
+            }
+            else {
+                do {
+                    noteTo = possibleTransitions[Util::rng(0, possibleTransitions.size())].second;
+                } while(noteTo.m_type == BOMB || noteTo.m_cutDirection == DOT);
+            }
         }
         return noteTo;
     }
