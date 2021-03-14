@@ -24,6 +24,20 @@ public:
 
     virtual std::string getName() { return "MatrixValidator"; }
 
+    inline bool validateTransition(Note cn, Note cnn) {
+        if (!m_matrix.getNoteTransition(cn, cnn)) {
+            m_fails++;
+            Validator::s_totalFails++;
+            printf("\tMatrixValidator: failed cluster, no such transition in matrix:\n\t\tFrom: ");
+            cn.print();
+            printf("\n\t\tTo: ");
+            cnn.print();
+            printf("\n");
+            return false;
+        }
+        return true;
+    }
+
     virtual bool validate(Map map) {
         for (int i = 0; i < map.m_clusters.size()-2; i++) { // For every cluster in the map except the last one:
             if (map.m_clusters.size() < 2) {
@@ -52,29 +66,23 @@ public:
                     Cluster nextClusterRed = clusterNext.getNotesOfType(RED);
                     for (Note cn : clusterBlue.m_notes) {
                         for (Note cnn : nextClusterBlue.m_notes) {
-                            if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                m_fails++;
-                                Validator::s_totalFails++;
+                            if (!validateTransition(cn, cnn)) {
                                 return false;
                             }
                         }
                     }
                     for (Note cn : clusterRed.m_notes) {
                         for (Note cnn : nextClusterRed.m_notes) {
-                            if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                m_fails++;
-                                Validator::s_totalFails++;
+                            if (!validateTransition(cn, cnn)) {
                                 return false;
-                            }                        
+                            }
                         }
                     }
                 }
                 else {
                     for (Note cn : cluster.m_notes) {
                         for (Note cnn : clusterNext.m_notes) {
-                            if (!m_matrix.getNoteTransition(cn, cnn)) {
-                                m_fails++;
-                                Validator::s_totalFails++;
+                            if (!validateTransition(cn, cnn)) {
                                 return false;
                             }
                         }
@@ -86,11 +94,9 @@ public:
             // If transitioning from a single note to a cluster.
             if (cluster.m_notes.size() == 1 && clusterNext.m_notes.size() > 1) {
                 for (Note cnn : clusterNext.m_notes) {
-                    if (!m_matrix.getNoteTransition(cluster.m_notes.front(), cnn)) {
-                        m_fails++;
-                        Validator::s_totalFails++;
+                    if (!validateTransition(cluster.m_notes.front(), cnn)) {
                         return false;
-                    }                
+                    }           
                 }
                 continue;
             }
@@ -98,21 +104,17 @@ public:
             // If transitioning from cluster to single note, consider each node in cluster as a transition to the next note:
             if (cluster.m_notes.size() > 1 && clusterNext.m_notes.size() == 1) {
                 for (Note cn : cluster.m_notes) {
-                    if (!m_matrix.getNoteTransition(cn, clusterNext.m_notes.front())) {
-                        m_fails++;
-                        Validator::s_totalFails++;
+                    if (!validateTransition(cn, clusterNext.m_notes.front())) {
                         return false;
-                    }                
+                    }           
                 }
                 continue;
             }
 
             // Single to single:
-            if (m_matrix.getNoteTransition(cluster.m_notes.front(), clusterNext.m_notes.front()) == false) {
-                m_fails++;
-                Validator::s_totalFails++;
-                return false;
-            }
+            if (!validateTransition(cluster.m_notes.front(), clusterNext.m_notes.front())) {
+                    return false;
+            }           
 
             int transitionsFromNext = m_matrix.getTransitionCountFromNote(clusterNext.m_notes.front());
             if (transitionsFromNext == 0) {
